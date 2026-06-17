@@ -315,6 +315,46 @@
   .person .check .ct h3{font-size:14px;}
   .common{margin-top:22px;}
 
+  /* ---- editable packing controls ---- */
+  .check.pk{align-items:center;}
+  .check.pk .ct{flex:1; min-width:0;}
+  .pk-act{display:flex; gap:5px; flex:none; align-self:center;}
+  .pk-edit,.pk-del{flex:none; width:30px; height:30px; display:grid; place-items:center; border:1px solid var(--line); background:var(--card); border-radius:8px; color:var(--ink-soft); cursor:pointer; transition:.16s; padding:0;}
+  .pk-edit svg,.pk-del svg{width:15px; height:15px;}
+  .pk-edit:hover{border-color:var(--pine-2); color:var(--pine);}
+  .pk-del:hover{border-color:var(--clay); color:var(--clay);}
+  .check.pk.on .pk-act{opacity:1;}
+  .pk-add{display:inline-flex; align-items:center; gap:7px; margin:4px 0 6px; cursor:pointer; font-family:inherit; font-size:13px; font-weight:600; color:var(--pine); background:var(--teal-wash); border:1px dashed var(--pine-2); border-radius:10px; padding:9px 14px; transition:.16s;}
+  .pk-add svg{width:15px; height:15px;}
+  .pk-add:hover{background:var(--pine); color:#EAF2EF; border-style:solid;}
+
+  /* ---- sync pill ---- */
+  .syncpill{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; border-radius:999px; padding:6px 13px; margin:0 0 16px;}
+  .syncpill::before{content:""; width:8px; height:8px; border-radius:50%; background:currentColor; flex:none;}
+  .syncpill.on{background:var(--teal-wash); color:var(--pine);}
+  .syncpill.off{background:var(--amber-wash); color:#9A6519;}
+
+  /* ---- add / edit modal ---- */
+  .modal-ov{position:fixed; inset:0; z-index:1000; background:rgba(22,36,31,.5); backdrop-filter:blur(3px); display:grid; place-items:center; padding:18px; animation:fade .18s ease;}
+  @keyframes fade{from{opacity:0;}to{opacity:1;}}
+  .modal{background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:0 24px 60px rgba(22,36,31,.3); width:100%; max-width:420px; padding:22px 22px 20px; animation:rise .25s cubic-bezier(.2,.7,.3,1);}
+  .modal h3{font-family:"Instrument Serif",serif; font-size:25px; margin-bottom:4px;}
+  .modal label{display:block; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--pine-2); margin:14px 0 6px;}
+  .modal input[type=text]{width:100%; font-family:inherit; font-size:14.5px; color:var(--ink); background:var(--paper-2); border:1px solid var(--line); border-radius:10px; padding:10px 12px;}
+  .modal input[type=text]:focus{outline:none; border-color:var(--pine-2); box-shadow:0 0 0 3px var(--teal-wash);}
+  .m-bags{display:flex; gap:8px; flex-wrap:wrap;}
+  .m-bag{cursor:pointer; font-family:inherit; font-size:12.5px; font-weight:700; border:1px solid transparent; border-radius:999px; padding:8px 13px; opacity:.5; transition:.16s;}
+  .m-bag.bag1{background:var(--teal-wash); color:var(--pine);}
+  .m-bag.bag2{background:var(--amber-wash); color:#9A6519;}
+  .m-bag.bag3{background:var(--clay-wash); color:var(--clay);}
+  .m-bag.on{opacity:1; box-shadow:0 0 0 2px currentColor inset;}
+  .m-actions{display:flex; gap:8px; margin-top:22px; align-items:center;}
+  .m-actions button{cursor:pointer; font-family:inherit; font-size:14px; font-weight:600; border-radius:10px; padding:10px 16px; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); transition:.16s;}
+  .m-actions .m-del{margin-right:auto; color:var(--clay); background:var(--clay-wash); border-color:#E6C2B3;}
+  .m-actions .m-cancel:hover{border-color:var(--ink-soft); color:var(--ink);}
+  .m-actions .m-save{background:var(--pine); color:#EAF2EF; border-color:var(--pine);}
+  .m-actions .m-save:hover{background:var(--pine-2);}
+
   @media (max-width:600px){ #map2{height:360px;} .phrase td{padding:9px 11px; font-size:12.5px;} }
 
   footer{padding:34px 0 56px; text-align:center; color:var(--ink-soft); font-size:13.5px; border-top:1px solid var(--line);}
@@ -562,7 +602,8 @@
 
 <section><div class="wrap">
   <div class="sec-head"><span class="sec-num">01</span><h2>Cosa mettere in valigia</h2><span class="sub">Per lei e per lui, con la valigia giusta su ogni voce.</span></div>
-  <p class="subtle">Il piano: una valigia piccola condivisa va in aereo a Belgrado; tutto il resto per il mare resta in auto all’aeroporto e parte con voi verso Peschici. Ogni voce dice in quale bagaglio metterla.</p>
+  <p class="subtle">Il piano: una valigia piccola condivisa va in aereo a Belgrado; tutto il resto per il mare resta in auto all’aeroporto e parte con voi verso Peschici. Ogni voce dice in quale bagaglio metterla. La lista è modificabile: usate <b>＋ Aggiungi</b>, la matita per cambiare una voce e il cestino per toglierla.</p>
+  <span class="syncpill off" id="syncpill">Solo su questo dispositivo</span>
   <div class="baglegend">
     <span><span class="bagkey bag1">Valigia BG</span> piccola condivisa, in aereo</span>
     <span><span class="bagkey bag2">Mare · auto</span> resta in macchina</span>
@@ -593,6 +634,8 @@
 </div></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script>
 /* ---------- helpers ---------- */
 const G = (id,name) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name||'') + '&query_place_id=' + id;
@@ -605,30 +648,201 @@ const CHK = '<svg viewBox="0 0 24 24" fill="none" stroke="#EAF2EF" stroke-width=
 const _d = new Date();
 const TODAY = `${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,'0')}-${String(_d.getDate()).padStart(2,'0')}`;
 
-/* ---------- generic checklist ---------- */
-function buildChecks(host, items, key, fillEl, countEl){
-  let saved={}; try{ saved=JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
-  const total=items.length;
-  function upd(){
-    const n=items.reduce((a,_,i)=>a+(saved[i]?1:0),0);
-    if(countEl) countEl.textContent = n+' / '+total;
-    if(fillEl) fillEl.style.width = (total? n/total*100:0)+'%';
-  }
-  items.forEach((it,i)=>{
-    const d=document.createElement('div');
-    d.className='check'+(saved[i]?' on':'');
-    const tag = it.tag ? `<span class="tag ${it.tag}">${it.tagLabel}</span>` : '';
-    const sub = it.sub ? `<p>${it.sub}</p>` : '';
+/* ====================================================================
+   SHARED STATE  ·  Firebase Realtime Database (con fallback locale)
+   ====================================================================
+   ▼▼▼  INCOLLA QUI LA CONFIG DEL TUO PROGETTO FIREBASE  ▼▼▼
+   Console Firebase → ⚙ Impostazioni progetto → "Le tue app" (web) → Config.
+   Attiva poi "Realtime Database" (modalità test). Finché i campi restano
+   vuoti, il sito funziona in locale (solo su questo dispositivo).            */
+const FIREBASE_CONFIG = {
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  appId: ""
+};
+const ROOT = 'belgrado2026';
+const SHARED = !!(FIREBASE_CONFIG.databaseURL && FIREBASE_CONFIG.apiKey && typeof firebase !== 'undefined');
+let db = null;
+let STATE = { checks:{}, packing:{} };
+
+const PENCIL='<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>';
+const TRASH ='<path d="M3 6h18"/><path d="M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/>';
+const PLUS  ='<path d="M12 5v14M5 12h14"/>';
+
+function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function normalizeState(){ STATE=STATE||{}; STATE.checks=STATE.checks||{}; STATE.packing=STATE.packing||{}; }
+function loadLocal(){ try{ STATE=JSON.parse(localStorage.getItem(ROOT))||{}; }catch(e){ STATE={}; } normalizeState(); }
+function saveLocal(){ try{ localStorage.setItem(ROOT, JSON.stringify(STATE)); }catch(e){} }
+function seedPacking(){
+  ['lei','lui','com'].forEach(k=>{
+    if(!Array.isArray(STATE.packing[k]) || !STATE.packing[k].length){
+      STATE.packing[k]=PACK_SEED[k].map((it,i)=>({id:k+'-'+i, cat:it[0], label:it[1], bag:it[2], note:it[3]||''}));
+    }
+  });
+}
+function newId(k){ return k+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+/* ---- writes ---- */
+function persistCheck(listKey, itemKey, val){
+  STATE.checks[listKey]=STATE.checks[listKey]||{};
+  STATE.checks[listKey][itemKey]=val;
+  saveLocal();
+  if(SHARED && db) db.ref(ROOT+'/checks/'+listKey+'/'+itemKey).set(val);
+  renderAll();
+}
+function persistPacking(listKey){
+  saveLocal();
+  if(SHARED && db) db.ref(ROOT+'/packing/'+listKey).set(STATE.packing[listKey]);
+  renderAll();
+}
+function regroup(listKey){
+  const arr=STATE.packing[listKey]||[]; const order=[];
+  arr.forEach(i=>{ if(!order.includes(i.cat)) order.push(i.cat); });
+  arr.sort((a,b)=>order.indexOf(a.cat)-order.indexOf(b.cat));
+}
+function addItem(listKey, data){
+  STATE.packing[listKey]=STATE.packing[listKey]||[];
+  const item={id:newId(listKey), cat:data.cat, label:data.label, bag:data.bag, note:data.note};
+  const arr=STATE.packing[listKey]; let idx=-1;
+  for(let i=0;i<arr.length;i++){ if(arr[i].cat===item.cat) idx=i; }
+  if(idx>=0) arr.splice(idx+1,0,item); else arr.push(item);
+  persistPacking(listKey);
+}
+function updateItem(listKey, id, data){
+  const it=(STATE.packing[listKey]||[]).find(x=>x.id===id); if(!it) return;
+  Object.assign(it, data); regroup(listKey); persistPacking(listKey);
+}
+function deleteItem(listKey, id){
+  STATE.packing[listKey]=(STATE.packing[listKey]||[]).filter(x=>x.id!==id);
+  if(STATE.checks[listKey]) delete STATE.checks[listKey][id];
+  saveLocal();
+  if(SHARED && db){ db.ref(ROOT+'/packing/'+listKey).set(STATE.packing[listKey]); db.ref(ROOT+'/checks/'+listKey+'/'+id).remove(); }
+  renderAll();
+}
+
+/* ---- render: static checklists ---- */
+function renderCheckList(host, items, listKey, fillEl, countEl){
+  if(!host) return;
+  host.innerHTML='';
+  const ch=STATE.checks[listKey]||{}; let n=0;
+  items.forEach(it=>{
+    const on=!!ch[it.key]; if(on)n++;
+    const d=document.createElement('div'); d.className='check'+(on?' on':'');
+    const tag=it.tag?`<span class="tag ${it.tag}">${it.tagLabel}</span>`:'';
+    const sub=it.sub?`<p>${it.sub}</p>`:'';
     d.innerHTML=`<div class="box">${CHK}</div><div class="ct"><h3>${it.label}${tag}</h3>${sub}</div>`;
-    d.addEventListener('click',()=>{
-      d.classList.toggle('on');
-      saved[i]=d.classList.contains('on');
-      try{ localStorage.setItem(key,JSON.stringify(saved)); }catch(e){}
-      upd();
-    });
+    d.addEventListener('click',()=>persistCheck(listKey, it.key, !(STATE.checks[listKey]&&STATE.checks[listKey][it.key])));
     host.appendChild(d);
   });
-  upd();
+  if(countEl) countEl.textContent=n+' / '+items.length;
+  if(fillEl) fillEl.style.width=(items.length? n/items.length*100:0)+'%';
+}
+
+/* ---- render: editable packing list ---- */
+function renderPacking(listKey, host, fillEl, countEl){
+  if(!host) return;
+  host.innerHTML='';
+  const items=STATE.packing[listKey]||[];
+  const ch=STATE.checks[listKey]||{};
+  let n=0, lastCat=null;
+  items.forEach(it=>{
+    if(it.cat!==lastCat){ const hc=document.createElement('div'); hc.className='pcat'; hc.textContent=it.cat; host.appendChild(hc); lastCat=it.cat; }
+    const on=!!ch[it.id]; if(on)n++;
+    const row=document.createElement('div'); row.className='check pk'+(on?' on':'');
+    const note=it.note?`<p>${escapeHtml(it.note)}</p>`:'';
+    row.innerHTML=`<div class="box">${CHK}</div>`+
+      `<div class="ct"><h3>${escapeHtml(it.label)}<span class="tag ${it.bag}">${BAGLAB[it.bag]||''}</span></h3>${note}</div>`+
+      `<div class="pk-act"><button class="pk-edit" title="Modifica" aria-label="Modifica">${ico(PENCIL)}</button><button class="pk-del" title="Elimina" aria-label="Elimina">${ico(TRASH)}</button></div>`;
+    row.addEventListener('click',e=>{ if(e.target.closest('.pk-act')) return; persistCheck(listKey, it.id, !(STATE.checks[listKey]&&STATE.checks[listKey][it.id])); });
+    row.querySelector('.pk-edit').addEventListener('click',e=>{ e.stopPropagation(); openItemForm(listKey, it); });
+    row.querySelector('.pk-del').addEventListener('click',e=>{ e.stopPropagation(); deleteItem(listKey, it.id); });
+    host.appendChild(row);
+  });
+  const add=document.createElement('button'); add.className='pk-add'; add.type='button';
+  add.innerHTML=ico(PLUS)+'Aggiungi un oggetto';
+  add.addEventListener('click',()=>openItemForm(listKey, null));
+  host.appendChild(add);
+  if(countEl) countEl.textContent=n+' / '+items.length;
+  if(fillEl) fillEl.style.width=(items.length? n/items.length*100:0)+'%';
+}
+
+/* ---- add / edit modal ---- */
+function openItemForm(listKey, item){
+  const editing=!!item;
+  const cats=[...new Set((STATE.packing[listKey]||[]).map(i=>i.cat))];
+  const ov=document.createElement('div'); ov.className='modal-ov';
+  ov.innerHTML=`<div class="modal" role="dialog" aria-modal="true">
+      <h3>${editing?'Modifica oggetto':'Aggiungi oggetto'}</h3>
+      <label>Cosa portare</label>
+      <input id="m-label" type="text" value="${escapeHtml(editing?item.label:'')}" placeholder="Es. Crema solare" autocomplete="off">
+      <label>Categoria</label>
+      <input id="m-cat" type="text" list="m-cats" value="${escapeHtml(editing?item.cat:(cats[0]||''))}" placeholder="Es. Mare &amp; spiaggia" autocomplete="off">
+      <datalist id="m-cats">${cats.map(c=>`<option value="${escapeHtml(c)}"></option>`).join('')}</datalist>
+      <label>In quale bagaglio</label>
+      <div class="m-bags">${['bag1','bag2','bag3'].map(b=>`<button type="button" class="m-bag ${b}${(editing?item.bag:'bag2')===b?' on':''}" data-bag="${b}">${BAGLAB[b]}</button>`).join('')}</div>
+      <label>Nota (facoltativa)</label>
+      <input id="m-note" type="text" value="${escapeHtml(editing?(item.note||''):'')}" placeholder="Un dettaglio in più" autocomplete="off">
+      <div class="m-actions">${editing?'<button type="button" class="m-del">Elimina</button>':''}<button type="button" class="m-cancel">Annulla</button><button type="button" class="m-save">${editing?'Salva':'Aggiungi'}</button></div>
+    </div>`;
+  document.body.appendChild(ov);
+  let bag=editing?item.bag:'bag2';
+  ov.querySelectorAll('.m-bag').forEach(b=>b.addEventListener('click',()=>{ bag=b.dataset.bag; ov.querySelectorAll('.m-bag').forEach(x=>x.classList.toggle('on',x===b)); }));
+  const close=()=>{ document.removeEventListener('keydown', onKey); ov.remove(); };
+  const onKey=e=>{ if(e.key==='Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  ov.addEventListener('click',e=>{ if(e.target===ov) close(); });
+  ov.querySelector('.m-cancel').addEventListener('click', close);
+  const del=ov.querySelector('.m-del'); if(del) del.addEventListener('click',()=>{ deleteItem(listKey, item.id); close(); });
+  ov.querySelector('.m-save').addEventListener('click',()=>{
+    const label=ov.querySelector('#m-label').value.trim();
+    const cat=ov.querySelector('#m-cat').value.trim()||'Altro';
+    const note=ov.querySelector('#m-note').value.trim();
+    if(!label){ ov.querySelector('#m-label').focus(); return; }
+    if(editing) updateItem(listKey, item.id, {label,cat,bag,note});
+    else addItem(listKey, {label,cat,bag,note});
+    close();
+  });
+  const li=ov.querySelector('#m-label'); if(li) li.focus();
+}
+
+/* ---- render everything that depends on shared state ---- */
+function renderAll(){
+  renderCheckList(document.getElementById('checklist'),
+    CHECK.map((c,i)=>({key:String(i), label:c[1], sub:c[2], tag:c[0], tagLabel:tagName[c[0]]})),
+    'bgd_check', document.getElementById('pfill'), document.getElementById('pcount'));
+  renderCheckList(document.getElementById('pechecklist'),
+    PE_CHECK.map((c,i)=>({key:String(i), label:c[1], sub:c[2], tag:c[0], tagLabel:tagName[c[0]]})),
+    'pe_check', document.getElementById('pefill'), document.getElementById('pecount'));
+  renderPacking('lei', document.getElementById('leilist'), document.getElementById('leifill'), document.getElementById('leicount'));
+  renderPacking('lui', document.getElementById('luilist'), document.getElementById('luifill'), document.getElementById('luicount'));
+  renderPacking('com', document.getElementById('comlist'), document.getElementById('comfill'), document.getElementById('comcount'));
+}
+function setSyncState(on){
+  const el=document.getElementById('syncpill'); if(!el) return;
+  el.className='syncpill '+(on?'on':'off');
+  el.textContent=on?'Sincronizzato tra tutti i dispositivi':'Solo su questo dispositivo';
+}
+function storeInit(){
+  if(SHARED){
+    try{
+      firebase.initializeApp(FIREBASE_CONFIG);
+      db=firebase.database();
+      loadLocal(); seedPacking(); renderAll();          // istantaneo dalla cache locale
+      db.ref(ROOT).on('value', snap=>{
+        const remote=snap.val();
+        if(remote && (remote.checks || remote.packing)){
+          STATE=remote; normalizeState();
+          if(!Object.keys(STATE.packing).length) seedPacking();
+        } else { normalizeState(); seedPacking(); db.ref(ROOT).set(STATE); }
+        saveLocal(); renderAll();
+      });
+      setSyncState(true);
+      return;
+    }catch(e){ console.warn('Firebase non disponibile, modalità locale.', e); }
+  }
+  loadLocal(); seedPacking(); renderAll(); setSyncState(false);
 }
 
 /* ---------- themes (interests) ---------- */
@@ -844,13 +1058,6 @@ const CHECK = [
   ["info","Registrazione in Serbia (beli karton)","Ogni straniero va registrato entro 24h. Negli alloggi ufficiali la fa la struttura: chiedi all’host la conferma e tienila con te fino all’uscita."]
 ];
 const tagName = {crit:"Critico",warn:"Importante",info:"Utile"};
-buildChecks(
-  document.getElementById('checklist'),
-  CHECK.map(c=>({label:c[1], sub:c[2], tag:c[0], tagLabel:tagName[c[0]]})),
-  'bgd_check',
-  document.getElementById('pfill'),
-  document.getElementById('pcount')
-);
 
 /* ---------- Peschici / Gargano checklist ---------- */
 const PE_CHECK = [
@@ -861,13 +1068,6 @@ const PE_CHECK = [
   ["info","Kit spiaggia: scarpette, crema, ombrellone","Vignanotica e diverse cale sono a ciottoli e il sole è forte: scarpe da scoglio, crema alta e qualcosa per l’ombra."],
   ["info","Controllare meduse, bandiere e orari di sole","Luglio è pieno: arrivate in spiaggia la mattina presto per i posti migliori e un mare più calmo."]
 ];
-buildChecks(
-  document.getElementById('pechecklist'),
-  PE_CHECK.map(c=>({label:c[1], sub:c[2], tag:c[0], tagLabel:tagName[c[0]]})),
-  'pe_check',
-  document.getElementById('pefill'),
-  document.getElementById('pecount')
-);
 
 /* ---------- Belgrade cards ---------- */
 const SEE = [
@@ -1107,25 +1307,6 @@ PE_CONSIGLI.forEach(c=>{
 /* ---------- packing (per person, grouped by category) ----------
    item: [category, label, bag('bag1'|'bag2'|'bag3'), note?] */
 const BAGLAB = {bag1:'Valigia BG', bag2:'Mare · auto', bag3:'A mano'};
-function buildPacking(host, items, key, fillEl, countEl){
-  let saved={}; try{ saved=JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
-  const total=items.length;
-  function upd(){
-    const n=items.reduce((a,_,i)=>a+(saved[i]?1:0),0);
-    if(countEl) countEl.textContent=n+' / '+total;
-    if(fillEl) fillEl.style.width=(total?n/total*100:0)+'%';
-  }
-  let lastCat=null;
-  items.forEach((it,i)=>{
-    if(it[0]!==lastCat){ const h=document.createElement('div'); h.className='pcat'; h.textContent=it[0]; host.appendChild(h); lastCat=it[0]; }
-    const d=document.createElement('div'); d.className='check'+(saved[i]?' on':'');
-    const note=it[3]?`<p>${it[3]}</p>`:'';
-    d.innerHTML=`<div class="box">${CHK}</div><div class="ct"><h3>${it[1]}<span class="tag ${it[2]}">${BAGLAB[it[2]]}</span></h3>${note}</div>`;
-    d.addEventListener('click',()=>{ d.classList.toggle('on'); saved[i]=d.classList.contains('on'); try{localStorage.setItem(key,JSON.stringify(saved));}catch(e){} upd(); });
-    host.appendChild(d);
-  });
-  upd();
-}
 const LEI = [
   ["Documenti & soldi","Carta d’identità/passaporto per l’espatrio","bag3"],
   ["Documenti & soldi","Tessera sanitaria + polizza viaggio","bag3"],
@@ -1192,9 +1373,7 @@ const COM = [
   ["In comune","Borracce e snack per il viaggio","bag2"],
   ["In comune","Mini kit pronto soccorso","bag2"]
 ];
-buildPacking(document.getElementById('leilist'), LEI, 'pack_lei', document.getElementById('leifill'), document.getElementById('leicount'));
-buildPacking(document.getElementById('luilist'), LUI, 'pack_lui', document.getElementById('luifill'), document.getElementById('luicount'));
-buildPacking(document.getElementById('comlist'), COM, 'pack_com', document.getElementById('comfill'), document.getElementById('comcount'));
+const PACK_SEED = {lei:LEI, lui:LUI, com:COM};
 
 /* ---------- Belgrade map ---------- */
 const PINS = [
@@ -1265,6 +1444,9 @@ function showView(v){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 vbtns.forEach(b=>b.addEventListener('click',()=>showView(b.dataset.v)));
+
+/* boot the shared store (Firebase if configured, else local) */
+storeInit();
 </script>
 </body>
 </html>
