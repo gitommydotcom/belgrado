@@ -72,31 +72,36 @@
   .title-block h1 em{font-style:italic; color:var(--pine-2);}
   .title-block p{color:var(--ink-soft); max-width:560px; margin:14px auto 0;}
 
-  /* ---- hero road trip (Peschici) ---- */
-  .road{background:linear-gradient(125deg,#0E4A43 0%,#15665C 55%,#1E7E72 100%); color:#EAF2EF; border-radius:20px; padding:28px 30px; box-shadow:var(--shadow); position:relative; overflow:hidden;}
-  .road::after{content:""; position:absolute; right:-40px; top:-40px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle,rgba(216,145,58,.32),transparent 70%);}
-  .road-top{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; position:relative; z-index:1;}
-  .sign{text-align:center;}
-  .sign .code{font-family:"Instrument Serif",serif; font-size:46px; line-height:.9;}
-  .sign .place{font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:#A6D0C8; margin-top:6px;}
-  .road-mid{display:flex; flex-direction:column; align-items:center; min-width:128px;}
-  .road-mid .car{width:30px; height:30px; color:#F6EAD3; margin-bottom:3px;}
-  .roadline{width:100%; height:0; border-top:3px dashed rgba(216,145,58,.85); border-radius:2px;}
-  .road-mid .km{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#CFE3DD; margin-top:7px; text-align:center;}
-  .road-bottom{display:flex; flex-wrap:wrap; gap:16px 34px; margin-top:20px; padding-top:18px; border-top:1px solid rgba(234,242,239,.18); position:relative; z-index:1;}
-  .rb-item .l{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#A6D0C8;}
-  .rb-item .v{font-size:16px; margin-top:3px; color:#F2F8F6;}
+  /* ---- hero Gargano (Peschici) ---- */
+  .garhero{position:relative; overflow:hidden; border-radius:20px; box-shadow:var(--shadow); color:#F2F8F6;
+    background:linear-gradient(150deg,#0E4A43 0%,#15756B 58%,#1E8C82 100%); padding:30px 30px 30px;}
+  .garhero .sun{position:absolute; right:-26px; top:-26px; width:150px; height:150px; border-radius:50%;
+    background:radial-gradient(circle at 50% 50%, rgba(216,145,58,.95), rgba(216,145,58,.28) 55%, transparent 72%);}
+  .garhero .waves{position:absolute; left:0; right:0; bottom:-1px; height:42px; opacity:.45; color:#0A3B35; pointer-events:none;}
+  .garhero .waves svg{width:100%; height:100%; display:block;}
+  .gh-top{position:relative; z-index:2;}
+  .gh-eyebrow{font-size:12px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:#A6D0C8;}
+  .gh-dest{font-family:"Instrument Serif",serif; font-size:clamp(42px,9vw,66px); line-height:.95; margin:6px 0 0;}
+  .gh-lead{max-width:560px; margin:12px 0 0; font-size:15px; line-height:1.55; color:#DCEEE9;}
+  .gh-facts{position:relative; z-index:2; display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+  .gh-fact{display:flex; align-items:center; gap:11px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16);
+    border-radius:13px; padding:11px 14px; min-width:0; flex:1 1 180px;}
+  .gh-fact svg{width:22px; height:22px; flex:none; color:#F6EAD3;}
+  .gh-fact .ft{min-width:0;}
+  .gh-fact b{display:block; font-size:14.5px; font-weight:600; line-height:1.25; overflow-wrap:anywhere;}
+  .gh-fact span{font-size:12px; color:#BFE0D9; overflow-wrap:anywhere;}
 
   /* ---- hero luggage (Valigia) ---- */
   .lug{display:flex; align-items:stretch; gap:10px; flex-wrap:wrap;}
-  .lug-step{flex:1; min-width:200px; display:flex; align-items:center; gap:13px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:15px 17px; box-shadow:var(--shadow);}
+  .lug-step{flex:1 1 220px; min-width:0; display:flex; align-items:center; gap:13px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:15px 17px; box-shadow:var(--shadow);}
+  .lug-step>div{min-width:0;}
   .lug-ic{flex:none; width:44px; height:44px; border-radius:12px; display:grid; place-items:center; background:var(--teal-wash); color:var(--pine);}
   .lug-ic svg{width:23px; height:23px;}
   .lug-ic.i2{background:var(--amber-wash); color:#9A6519;}
   .lug-ic.i3{background:var(--clay-wash); color:var(--clay);}
-  .lug-step b{display:block; font-size:15px; font-weight:600; line-height:1.25;}
-  .lug-step span{font-size:12.5px; color:var(--ink-soft);}
-  .lug-arrow{display:flex; align-items:center; color:var(--pine-2);}
+  .lug-step b{display:block; font-size:15px; font-weight:600; line-height:1.25; overflow-wrap:anywhere;}
+  .lug-step span{display:block; font-size:12.5px; color:var(--ink-soft); overflow-wrap:anywhere;}
+  .lug-arrow{display:flex; align-items:center; justify-content:center; color:var(--pine-2); flex:none;}
   .lug-arrow svg{width:22px; height:22px;}
 
   /* ---- section frame ---- */
@@ -153,44 +158,44 @@
   .pref-reset{cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:999px; padding:6px 12px; transition:.16s;}
   .pref-reset:hover{border-color:var(--clay); color:var(--clay);}
 
-  /* ---- timeline ---- */
-  .tl{position:relative; padding-left:30px;}
-  .tl::before{content:""; position:absolute; left:7px; top:6px; bottom:6px; width:2px; background:var(--line);}
-  .day{position:relative; margin-bottom:24px;}
-  .day::before{content:""; position:absolute; left:-30px; top:5px; width:16px; height:16px; border-radius:50%; background:var(--paper); border:3px solid var(--pine-2);}
-  .day.birthday::before{border-color:var(--clay); background:var(--clay-wash);}
-  .day.today::before{border-color:var(--clay); background:var(--clay); box-shadow:0 0 0 5px var(--clay-wash); animation:pulse 1.8s ease-in-out infinite;}
-  @keyframes pulse{0%,100%{box-shadow:0 0 0 5px var(--clay-wash);}50%{box-shadow:0 0 0 9px rgba(188,79,54,.12);}}
-  .day .dh{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px;}
-  .day .chip{font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; background:var(--pine); color:#EAF2EF; padding:4px 10px; border-radius:999px;}
-  .day .chip.bday-chip{background:var(--clay);}
-  .day .chip.today-chip{background:var(--clay); animation:pulse2 1.8s ease-in-out infinite;}
-  @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:.62;}}
-  .day h3{font-family:"Instrument Serif",serif; font-size:24px;}
-  .spine{margin:10px 0 0; padding:0; list-style:none;}
-  .spine li{position:relative; padding-left:18px; font-size:14.5px; color:var(--ink-soft); margin-bottom:6px; line-height:1.55;}
-  .spine li::before{content:""; position:absolute; left:0; top:10px; width:6px; height:6px; border-radius:50%; background:var(--amber);}
-  .spine li b{color:var(--ink); font-weight:600;}
-
-  /* ---- tailored slots ---- */
-  .tailor{margin-top:14px;}
-  .tailor-h{font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--pine-2); margin-bottom:8px; display:flex; align-items:center; gap:8px;}
-  .tailor-h svg{width:15px; height:15px;}
-  .tslot{margin-bottom:6px;}
-  .tslot-l{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin:8px 0 2px;}
-  .slot{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:11px 14px; margin-top:7px; transition:.18s; animation:slotin .35s ease;}
-  @keyframes slotin{from{opacity:0; transform:translateY(6px);}to{opacity:1; transform:none;}}
-  .slot:hover{border-color:var(--pine-2);}
-  .slot b{font-weight:600; font-size:14.5px;}
-  .slot a.slink{color:inherit; text-decoration:none;}
-  .slot a.slink:hover{color:var(--pine-2);}
-  .slot p{margin:5px 0 0; font-size:13px; color:var(--ink-soft); line-height:1.5;}
-  .thtag{display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px; border-radius:6px; margin-left:6px; vertical-align:middle;}
+  /* ---- day cards (giorno per giorno) ---- */
+  .daylist{display:block;}
+  .day{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:16px; box-shadow:var(--shadow);}
+  .day.birthday{border-color:#E6C2B3;}
+  .day.today{border-color:var(--clay); box-shadow:0 0 0 2px var(--clay-wash), var(--shadow);}
+  .day-when{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;}
+  .day-date{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:var(--pine); color:#EAF2EF; padding:4px 11px; border-radius:999px;}
+  .day.birthday .day-date{background:var(--clay);}
+  .badge-bday,.badge-today{font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:4px 10px; border-radius:999px;}
+  .badge-bday{background:var(--clay-wash); color:var(--clay);}
+  .badge-today{background:var(--clay); color:#fff; animation:pulse2 1.8s ease-in-out infinite;}
+  @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:.6;}}
+  .day-title{font-family:"Instrument Serif",serif; font-size:26px; line-height:1.05;}
+  .block-lab{display:flex; align-items:center; gap:7px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pine-2); margin:17px 0 9px;}
+  .block-lab svg{width:15px; height:15px; flex:none;}
+  .block-lab .cnt{margin-left:2px; background:var(--teal-wash); color:var(--pine); border-radius:999px; padding:1px 9px; font-size:11px; letter-spacing:0;}
+  .sched{margin:0; padding:12px 14px; list-style:none; background:var(--paper-2); border:1px solid var(--line); border-radius:12px;}
+  .sched li{position:relative; padding-left:18px; font-size:14px; color:var(--ink-soft); margin-bottom:7px; line-height:1.5;}
+  .sched li:last-child{margin-bottom:0;}
+  .sched li::before{content:""; position:absolute; left:1px; top:8px; width:6px; height:6px; border-radius:50%; background:var(--amber);}
+  .sched li b{color:var(--ink); font-weight:600;}
+  .tgroup{margin-bottom:14px;}
+  .tgroup:last-child{margin-bottom:0;}
+  .tg-lab{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
+  .tg-lab svg{width:14px; height:14px; color:var(--amber); flex:none;}
+  .idea{display:block; text-decoration:none; color:inherit; background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:11px 14px; margin-bottom:8px; transition:.16s;}
+  .idea:last-child{margin-bottom:0;}
+  a.idea:hover{border-color:var(--pine-2); background:#fff;}
+  .idea-main{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .idea-name{font-weight:600; font-size:14.5px; display:inline-flex; align-items:center; gap:6px;}
+  .idea-name .ext{flex:none;}
+  .idea-desc{display:block; margin-top:4px; font-size:13px; color:var(--ink-soft); line-height:1.5;}
+  .day-empty{font-size:13.5px; color:var(--ink-soft); background:var(--paper-2); border:1px dashed var(--line); border-radius:12px; padding:13px 15px;}
+  .thtag{display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 8px; border-radius:6px; vertical-align:middle; flex:none;}
   .th-storia,.th-relax,.th-natura{background:var(--teal-wash); color:var(--pine);}
   .th-mare{background:#DCEAF0; color:#1C5E78;}
   .th-cibo,.th-shopping{background:var(--amber-wash); color:#9A6519;}
   .th-notte,.th-avventura{background:var(--clay-wash); color:var(--clay);}
-  .tailor.empty{font-size:13px; color:var(--ink-soft); background:var(--paper-2); border:1px dashed var(--line); border-radius:12px; padding:12px 14px;}
 
   /* ---- cards grid ---- */
   .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;}
@@ -301,8 +306,10 @@
     .packing{grid-template-columns:1fr;}
     .pref-lab{min-width:auto; width:100%;}
     .pref-count{margin-left:0; width:100%;}
-    .lug-arrow{transform:rotate(90deg); margin:0 auto;}
-    .lug-step{min-width:0;}
+    .lug{flex-direction:column;}
+    .lug-step{width:100%;}
+    .lug-arrow{transform:rotate(90deg); margin:2px auto;}
+    .gh-fact{flex:1 1 100%;}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important; transition:none!important; scroll-behavior:auto!important;}
@@ -344,29 +351,22 @@
     </div>
   </div></div>
 
-  <!-- HERO PESCHICI (road trip) -->
+  <!-- HERO PESCHICI (Gargano) -->
   <div id="hero-peschici" class="hero is-hidden"><div class="wrap">
     <div class="kicker"><span class="serif">Dal finestrino, verso il mare di casa</span></div>
-    <div class="road">
-      <div class="road-top">
-        <div class="sign"><div class="code">FCO</div><div class="place">Fiumicino · ritiro auto</div></div>
-        <div class="road-mid">
-          <svg class="car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M4 11h16v5H4z"/><circle cx="7.5" cy="16.5" r="1.5"/><circle cx="16.5" cy="16.5" r="1.5"/></svg>
-          <div class="roadline"></div>
-          <span class="km">~370 km · A14 → SS89</span>
-        </div>
-        <div class="sign"><div class="code">PSC</div><div class="place">Peschici · Gargano</div></div>
+    <div class="garhero">
+      <div class="sun"></div>
+      <div class="gh-top">
+        <span class="gh-eyebrow">Gargano · Puglia</span>
+        <h1 class="gh-dest">Peschici</h1>
+        <p class="gh-lead">Si atterra a Fiumicino, si carica l’auto e si punta a sud: ~370 km fino al borgo bianco a picco sul mare. Si arriva, si scarica e via in spiaggia.</p>
       </div>
-      <div class="road-bottom">
-        <div class="rb-item"><div class="l">Si parte</div><div class="v">Gio 16 lug · ~09:30</div></div>
-        <div class="rb-item"><div class="l">In strada</div><div class="v">~4h 30 · sosta pranzo</div></div>
-        <div class="rb-item"><div class="l">Bagagli</div><div class="v">Mare già in auto</div></div>
-        <div class="rb-item"><div class="l">A bordo</div><div class="v">Carmela & Tomas</div></div>
+      <div class="gh-facts">
+        <div class="gh-fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M4 11h16v5H4z"/><circle cx="7.5" cy="16.5" r="1.5"/><circle cx="16.5" cy="16.5" r="1.5"/></svg><div class="ft"><b>~4h 30 in auto</b><span>Fiumicino → Peschici · A14, poi SS89</span></div></div>
+        <div class="gh-fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><div class="ft"><b>Gio 16 → Dom 19 lug</b><span>Quattro giorni sul Gargano</span></div></div>
+        <div class="gh-fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg><div class="ft"><b>Bagagli già in auto</b><span>Il mare è pronto: niente da rifare</span></div></div>
       </div>
-    </div>
-    <div class="title-block">
-      <h1>Il <em>Gargano</em></h1>
-      <p>Quattro giorni sul mare di casa, valigie già caricate e il compleanno di Carmela nel mezzo. Il bello comincia appena spegni il motore.</p>
+      <div class="waves"><svg viewBox="0 0 1200 42" preserveAspectRatio="none"><path fill="currentColor" d="M0 26 C150 8 300 8 450 22 C600 36 750 36 900 22 C1050 8 1150 14 1200 22 L1200 42 L0 42 Z"/></svg></div>
     </div>
   </div></div>
 
@@ -416,7 +416,7 @@
   <div class="sec-head"><span class="sec-num">01</span><h2>Giorno per giorno</h2><span class="sub">Il vostro filo conduttore, su misura.</span></div>
   <p class="subtle">Voli e orari sono fissi; il resto si adatta a voi. Scegliete cosa vi piace e a che ritmo: ogni giornata mette in evidenza le idee giuste, dalle più iconiche alle extra.</p>
   <div class="prefs" id="prefs-bg"></div>
-  <div class="tl" id="timeline-bg"></div>
+  <div class="daylist" id="timeline-bg"></div>
 </div></section>
 
 <section id="belgrado"><div class="wrap">
@@ -458,7 +458,7 @@
     <summary>
       <span class="s-ic" style="background:var(--teal-wash); color:var(--pine)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18q3 -3 6 0t6 0 6 0"/><path d="M3 12q3 -3 6 0t6 0 6 0"/><path d="M3 6q3 -3 6 0t6 0 6 0"/></svg></span>
       <span class="s-tx"><b>Checklist del Gargano</b><span>Check-in, parcheggio nel borgo, prenotazioni, spiaggia</span></span>
-      <span class="s-count" id="pecount">0 / 7</span>
+      <span class="s-count" id="pecount">0 / 6</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
     </summary>
     <div class="fold-body">
@@ -470,9 +470,9 @@
 
 <section><div class="wrap">
   <div class="sec-head"><span class="sec-num">01</span><h2>Giorno per giorno</h2><span class="sub">Dal rientro all’ultimo bagno a Peschici.</span></div>
-  <p class="subtle">Le stesse preferenze di Belgrado valgono anche qui: mare, natura, sapori o avventura — il programma si adatta a voi.</p>
+  <p class="subtle">Qui scegliete in autonomia cosa vi va di fare sul Gargano e a che ritmo: queste preferenze sono indipendenti da quelle di Belgrado.</p>
   <div class="prefs" id="prefs-pe"></div>
-  <div class="tl" id="timeline-pe"></div>
+  <div class="daylist" id="timeline-pe"></div>
 </div></section>
 
 <section><div class="wrap">
@@ -606,15 +606,24 @@ const THEMES = {
 };
 const PACELAB = {relax:'Relax', bilanciato:'Bilanciato', intenso:'Intenso'};
 
-/* ---------- preferences state ---------- */
-let prefs={interests:new Set(), pace:'bilanciato'};
-try{
-  const s=JSON.parse(localStorage.getItem('bgd_prefs')||'{}');
-  if(Array.isArray(s.interests)) prefs.interests=new Set(s.interests);
-  if(s.pace) prefs.pace=s.pace;
-}catch(e){}
-function savePrefs(){
-  try{ localStorage.setItem('bgd_prefs',JSON.stringify({interests:[...prefs.interests], pace:prefs.pace})); }catch(e){}
+/* ---------- preferences state (independent per location) ---------- */
+const PREF_THEMES = {
+  belgrado: ['storia','cibo','notte','relax','natura','shopping'],
+  peschici: ['mare','natura','relax','avventura','cibo','storia','shopping']
+};
+const prefs = {
+  belgrado:{interests:new Set(), pace:'bilanciato'},
+  peschici:{interests:new Set(), pace:'bilanciato'}
+};
+['belgrado','peschici'].forEach(leg=>{
+  try{
+    const s=JSON.parse(localStorage.getItem('prefs_'+leg)||'{}');
+    if(Array.isArray(s.interests)) prefs[leg].interests=new Set(s.interests);
+    if(s.pace) prefs[leg].pace=s.pace;
+  }catch(e){}
+});
+function savePrefs(leg){
+  try{ localStorage.setItem('prefs_'+leg, JSON.stringify({interests:[...prefs[leg].interests], pace:prefs[leg].pace})); }catch(e){}
 }
 
 /* ---------- day-by-day data ----------
@@ -697,35 +706,28 @@ const DAYS = [
 ];
 
 /* ---------- preferences UI + render ---------- */
-function paceThreshold(){ return prefs.pace==='relax'?1 : prefs.pace==='intenso'?3 : 2; }
-function slotVisible(s){
-  if(s.prio > paceThreshold()) return false;
-  if(prefs.interests.size===0) return true;
-  return s.th.some(t=>prefs.interests.has(t));
+const TIMEMETA = {
+  mattina:{lab:'Mattina', ic:'<path d="M12 3v4M5.6 9.6 8 11M2 15h2M22 15h-2M16 11l2.4-1.4M4 19h16M8 19a4 4 0 0 1 8 0"/>'},
+  pomeriggio:{lab:'Pomeriggio', ic:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/>'},
+  sera:{lab:'Sera', ic:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'}
+};
+const STAR = '<path d="M12 2l2.4 5 5.6.8-4 3.9 1 5.6L12 20l-5 2.3 1-5.6-4-3.9 5.6-.8z"/>';
+const CLOCK = '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>';
+function paceThreshold(leg){ const p=prefs[leg].pace; return p==='relax'?1 : p==='intenso'?3 : 2; }
+function slotVisible(s, leg){
+  if(s.prio > paceThreshold(leg)) return false;
+  if(prefs[leg].interests.size===0) return true;
+  return s.th.some(t=>prefs[leg].interests.has(t));
 }
-function slotLink(s){
-  if(s.gid) return `<a class="slink" href="${G(s.gid,s.name)}" target="_blank" rel="noopener">${s.name} ${EXT}</a>`;
-  if(s.q)   return `<a class="slink" href="${Q(s.q)}" target="_blank" rel="noopener">${s.name} ${EXT}</a>`;
-  return s.name;
-}
-function renderSlot(s){
-  const tags = s.th.map(t=>`<span class="thtag th-${t}">${THEMES[t].short}</span>`).join('');
-  return `<div class="slot"><b>${slotLink(s)}</b>${tags}<p>${s.desc}</p></div>`;
-}
-function buildPrefBar(id){
-  const el=document.getElementById(id); if(!el) return;
-  const which = id.endsWith('pe') ? 'pe' : 'bg';
-  const chips = Object.entries(THEMES).map(([k,v])=>`<button class="pref-chip" data-th="${k}">${ico(v.icon)}${v.label}</button>`).join('');
-  const paces = ['relax','bilanciato','intenso'].map(p=>`<button class="pace-btn" data-pace="${p}">${PACELAB[p]}</button>`).join('');
-  el.innerHTML =
-    `<div class="pref-row"><span class="pref-lab">Cosa vi piace?</span><div class="pref-chips">${chips}</div></div>`+
-    `<div class="pref-row"><span class="pref-lab">Che ritmo?</span><div class="pace">${paces}</div>`+
-    `<button class="pref-reset" data-reset="1">Azzera</button>`+
-    `<span class="pref-count"><b data-count="${which}">0</b> idee su misura</span></div>`;
-}
-function syncPrefUI(){
-  document.querySelectorAll('.pref-chip').forEach(c=>c.classList.toggle('on', prefs.interests.has(c.dataset.th)));
-  document.querySelectorAll('.pace-btn').forEach(b=>b.classList.toggle('on', b.dataset.pace===prefs.pace));
+function ideaHref(s){ return s.gid ? G(s.gid,s.name) : s.q ? Q(s.q) : null; }
+function renderIdea(s){
+  const href = ideaHref(s);
+  const tag  = `<span class="thtag th-${s.th[0]}">${THEMES[s.th[0]].short}</span>`;
+  const name = `<span class="idea-name">${s.name}${href?(' '+EXT):''}</span>`;
+  const inner= `<span class="idea-main">${name}${tag}</span><span class="idea-desc">${s.desc}</span>`;
+  return href
+    ? `<a class="idea" href="${href}" target="_blank" rel="noopener">${inner}</a>`
+    : `<div class="idea">${inner}</div>`;
 }
 const tlBG=document.getElementById('timeline-bg');
 const tlPE=document.getElementById('timeline-pe');
@@ -733,42 +735,60 @@ function renderDays(){
   tlBG.innerHTML=''; tlPE.innerHTML='';
   let cBG=0,cPE=0;
   DAYS.forEach(day=>{
-    const vis=day.slots.filter(slotVisible);
+    const vis=day.slots.filter(s=>slotVisible(s, day.leg));
     if(day.leg==='belgrado') cBG+=vis.length; else cPE+=vis.length;
-    const el=document.createElement('div');
-    el.className='day'+(day.birthday?' birthday':'')+(day.date===TODAY?' today':'');
+    const art=document.createElement('article');
+    art.className='day'+(day.birthday?' birthday':'')+(day.date===TODAY?' today':'');
     let badges='';
-    if(day.date===TODAY) badges+='<span class="chip today-chip">Oggi</span>';
-    if(day.birthday)     badges+='<span class="chip bday-chip">🎂 Compleanno</span>';
-    const spine = day.fixed.length ? `<ul class="spine">${day.fixed.map(f=>`<li>${f}</li>`).join('')}</ul>` : '';
-    let tailor='';
+    if(day.date===TODAY) badges+='<span class="badge-today">Oggi</span>';
+    if(day.birthday)     badges+='<span class="badge-bday">🎂 Compleanno</span>';
+    const head=`<div class="day-hd"><div class="day-when"><span class="day-date">${day.chip}</span>${badges}</div><h3 class="day-title">${day.title}</h3></div>`;
+    let sched='';
+    if(day.fixed.length){
+      sched=`<div class="block-lab">${ico(CLOCK)}In programma</div><ul class="sched">${day.fixed.map(f=>`<li>${f}</li>`).join('')}</ul>`;
+    }
+    let ideas='';
     if(vis.length){
       const order=['mattina','pomeriggio','sera'];
-      const lab={mattina:'Mattina',pomeriggio:'Pomeriggio',sera:'Sera'};
-      const blocks=order.filter(k=>vis.some(s=>(s.time||'mattina')===k)).map(k=>
-        `<div class="tslot"><span class="tslot-l">${lab[k]}</span>`+
-        vis.filter(s=>(s.time||'mattina')===k).map(renderSlot).join('')+`</div>`).join('');
-      tailor=`<div class="tailor"><div class="tailor-h">${ico('<path d="M12 2l2.4 5 5.6.8-4 3.9 1 5.6L12 20l-5 2.3 1-5.6-4-3.9 5.6-.8z"/>')}Su misura per voi</div>${blocks}</div>`;
+      const groups=order.filter(k=>vis.some(s=>(s.time||'mattina')===k)).map(k=>
+        `<div class="tgroup"><span class="tg-lab">${ico(TIMEMETA[k].ic)}${TIMEMETA[k].lab}</span>`+
+        vis.filter(s=>(s.time||'mattina')===k).map(renderIdea).join('')+`</div>`).join('');
+      ideas=`<div class="block-lab">${ico(STAR)}Idee per voi <span class="cnt">${vis.length}</span></div>${groups}`;
     } else {
-      tailor=`<div class="tailor empty">Nessuna attività con questi filtri — allarga gli interessi o alza il ritmo.</div>`;
+      ideas=`<div class="block-lab">${ico(STAR)}Idee per voi</div><div class="day-empty">Nessuna idea con questi filtri. Tocca <b>Azzera</b> o scegli un ritmo più alto.</div>`;
     }
-    el.innerHTML=`<div class="dh">${badges}<span class="chip">${day.chip}</span><h3>${day.title}</h3></div>${spine}${tailor}`;
-    (day.leg==='belgrado'?tlBG:tlPE).appendChild(el);
+    art.innerHTML=head+sched+ideas;
+    (day.leg==='belgrado'?tlBG:tlPE).appendChild(art);
   });
   document.querySelectorAll('[data-count="bg"]').forEach(e=>e.textContent=cBG);
   document.querySelectorAll('[data-count="pe"]').forEach(e=>e.textContent=cPE);
 }
+function buildPrefBar(leg, id){
+  const el=document.getElementById(id); if(!el) return;
+  const which = leg==='belgrado'?'bg':'pe';
+  const chips = PREF_THEMES[leg].map(k=>`<button class="pref-chip" data-leg="${leg}" data-th="${k}">${ico(THEMES[k].icon)}${THEMES[k].label}</button>`).join('');
+  const paces = ['relax','bilanciato','intenso'].map(p=>`<button class="pace-btn" data-leg="${leg}" data-pace="${p}">${PACELAB[p]}</button>`).join('');
+  el.innerHTML =
+    `<div class="pref-row"><span class="pref-lab">Cosa ti va?</span><div class="pref-chips">${chips}</div></div>`+
+    `<div class="pref-row"><span class="pref-lab">Che ritmo?</span><div class="pace">${paces}</div>`+
+    `<button class="pref-reset" data-leg="${leg}">Azzera</button>`+
+    `<span class="pref-count"><b data-count="${which}">0</b> idee per voi</span></div>`;
+}
+function syncPrefUI(leg){
+  document.querySelectorAll('.pref-chip[data-leg="'+leg+'"]').forEach(c=>c.classList.toggle('on', prefs[leg].interests.has(c.dataset.th)));
+  document.querySelectorAll('.pace-btn[data-leg="'+leg+'"]').forEach(b=>b.classList.toggle('on', b.dataset.pace===prefs[leg].pace));
+}
 document.addEventListener('click',e=>{
   const chip=e.target.closest('.pref-chip');
-  if(chip){ const t=chip.dataset.th; prefs.interests.has(t)?prefs.interests.delete(t):prefs.interests.add(t); savePrefs(); syncPrefUI(); renderDays(); return; }
+  if(chip){ const leg=chip.dataset.leg, t=chip.dataset.th; prefs[leg].interests.has(t)?prefs[leg].interests.delete(t):prefs[leg].interests.add(t); savePrefs(leg); syncPrefUI(leg); renderDays(); return; }
   const pb=e.target.closest('.pace-btn');
-  if(pb){ prefs.pace=pb.dataset.pace; savePrefs(); syncPrefUI(); renderDays(); return; }
+  if(pb){ const leg=pb.dataset.leg; prefs[leg].pace=pb.dataset.pace; savePrefs(leg); syncPrefUI(leg); renderDays(); return; }
   const rs=e.target.closest('.pref-reset');
-  if(rs){ prefs.interests.clear(); prefs.pace='bilanciato'; savePrefs(); syncPrefUI(); renderDays(); return; }
+  if(rs){ const leg=rs.dataset.leg; prefs[leg].interests.clear(); prefs[leg].pace='bilanciato'; savePrefs(leg); syncPrefUI(leg); renderDays(); return; }
 });
-buildPrefBar('prefs-bg');
-buildPrefBar('prefs-pe');
-syncPrefUI();
+buildPrefBar('belgrado','prefs-bg');
+buildPrefBar('peschici','prefs-pe');
+syncPrefUI('belgrado'); syncPrefUI('peschici');
 renderDays();
 
 /* ---------- Belgrade pre-trip checklist ---------- */
@@ -796,7 +816,6 @@ buildChecks(
 
 /* ---------- Peschici / Gargano checklist ---------- */
 const PE_CHECK = [
-  ["crit","Prenotare la cena di compleanno del 17","Soprattutto Al Trabucco da Mimì va prenotato con giorni d’anticipo. Tenete pronte anche Costamarina ed Eden come alternativa."],
   ["warn","Prenotare il giro in barca tra le grotte","Per il 18 con Motobarca Vittorio (o simili): in alta stagione i posti finiscono. Chiedete orario e punto d’imbarco."],
   ["info","Confermare il check-in con l’host di Peschici","Via Gioielli 6: concordate orario d’arrivo, ritiro chiavi e — importante — dove parcheggiare vicino al borgo."],
   ["warn","Parcheggio e ZTL del borgo","Il centro storico è ZTL con vicoli stretti: individuate il posteggio a monte, scaricate i bagagli e lasciate l’auto fuori."],
@@ -945,7 +964,7 @@ const PE_EAT = [
   ["Al Trabucco da Mimì","€€€","Cena sospesa sul mare su un vero trabucco, pesce freschissimo. Iconico: prenotate.","gid","ChIJ9UeQGhOxNxMRlsEsYM8aYVM"],
   ["Costamarina","€€","Pesce e vista su borgo e mare, sopra il porto di Peschici.","gid","ChIJq6BUVZ-xNxMRWIsiM_ZljvM"],
   ["Eden","€€","Frutti di mare sulla spiaggia di Peschici, atmosfera scalza al tramonto.","gid","ChIJ8U2GD6KxNxMReE1zzbOGVgM"],
-  ["Porta di Basso","€€€","Cucina ricercata affacciata sulla scogliera del borgo: cena con vista da ricordare.","q","Porta di Basso Peschici"],
+  ["Osteria nel borgo","€€","Tavola schietta del Gargano tra i vicoli: orecchiette, pesce e prodotti locali.","q","osteria Peschici centro storico"],
   ["Paposcia nel borgo","€","Lo street food del Gargano: focaccia soffice farcita, da mangiare passeggiando.","q","paposcia Peschici centro storico"],
   ["Gelateria del centro","€","Pausa dolce tra i vicoli, perfetta dopo la spiaggia o la passeggiata serale.","q","gelateria Peschici centro storico"]
 ];
