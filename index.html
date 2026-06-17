@@ -319,10 +319,21 @@
   .check.pk{align-items:center;}
   .check.pk .ct{flex:1; min-width:0;}
   .pk-act{display:flex; gap:5px; flex:none; align-self:center;}
-  .pk-edit,.pk-del{flex:none; width:30px; height:30px; display:grid; place-items:center; border:1px solid var(--line); background:var(--card); border-radius:8px; color:var(--ink-soft); cursor:pointer; transition:.16s; padding:0;}
-  .pk-edit svg,.pk-del svg{width:15px; height:15px;}
-  .pk-edit:hover{border-color:var(--pine-2); color:var(--pine);}
-  .pk-del:hover{border-color:var(--clay); color:var(--clay);}
+  .pk-edit,.pk-del,.act-edit,.act-del{flex:none; width:25px; height:25px; display:grid; place-items:center; border:1px solid var(--line); background:var(--card); border-radius:7px; color:var(--ink-soft); cursor:pointer; transition:.16s; padding:0;}
+  .pk-edit svg,.pk-del svg,.act-edit svg,.act-del svg{width:12.5px; height:12.5px;}
+  .pk-edit:hover,.act-edit:hover{border-color:var(--pine-2); color:var(--pine);}
+  .pk-del:hover,.act-del:hover{border-color:var(--clay); color:var(--clay);}
+  /* custom day-by-day activities */
+  .idea.custom{border-style:solid; border-color:var(--pine-2); background:#fff;}
+  .idea.custom .idea-name{color:var(--pine);}
+  .thtag.added{background:var(--pine); color:#EAF2EF;}
+  .act-ctrl{display:flex; gap:5px; margin-top:9px;}
+  .act-add{display:inline-flex; align-items:center; gap:7px; margin-top:10px; cursor:pointer; font-family:inherit; font-size:12.5px; font-weight:600; color:var(--pine); background:var(--teal-wash); border:1px dashed var(--pine-2); border-radius:10px; padding:8px 13px; transition:.16s;}
+  .act-add svg{width:14px; height:14px;}
+  .act-add:hover{background:var(--pine); color:#EAF2EF; border-style:solid;}
+  .m-times{display:flex; gap:8px; flex-wrap:wrap;}
+  .m-time{cursor:pointer; font-family:inherit; font-size:12.5px; font-weight:600; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); border-radius:999px; padding:8px 13px; transition:.16s;}
+  .m-time.on{background:var(--pine); color:#EAF2EF; border-color:var(--pine);}
   .check.pk.on .pk-act{opacity:1;}
   .pk-add{display:inline-flex; align-items:center; gap:7px; margin:4px 0 6px; cursor:pointer; font-family:inherit; font-size:13px; font-weight:600; color:var(--pine); background:var(--teal-wash); border:1px dashed var(--pine-2); border-radius:10px; padding:9px 14px; transition:.16s;}
   .pk-add svg{width:15px; height:15px;}
@@ -674,7 +685,7 @@ const TRASH ='<path d="M3 6h18"/><path d="M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d=
 const PLUS  ='<path d="M12 5v14M5 12h14"/>';
 
 function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function normalizeState(){ STATE=STATE||{}; STATE.checks=STATE.checks||{}; STATE.packing=STATE.packing||{}; }
+function normalizeState(){ STATE=STATE||{}; STATE.checks=STATE.checks||{}; STATE.packing=STATE.packing||{}; STATE.activities=STATE.activities||{}; STATE.migrations=STATE.migrations||{}; }
 function loadLocal(){ try{ STATE=JSON.parse(localStorage.getItem(ROOT))||{}; }catch(e){ STATE={}; } normalizeState(); }
 function saveLocal(){ try{ localStorage.setItem(ROOT, JSON.stringify(STATE)); }catch(e){} }
 function pushState(){ if(SHARED && fsdoc){ try{ fsdoc.set(STATE); }catch(e){ console.warn('Firestore write fallita', e); } } }
@@ -685,6 +696,18 @@ function seedPacking(){
     }
   });
 }
+/* one-time data fixes on the shared state */
+function migrate(){
+  STATE.migrations=STATE.migrations||{};
+  let changed=false;
+  if(!STATE.migrations.noPermesso){
+    if(Array.isArray(STATE.packing.lui))
+      STATE.packing.lui=STATE.packing.lui.filter(it=>!/permesso di soggiorno/i.test(it.label||''));
+    STATE.migrations.noPermesso=true; changed=true;
+  }
+  return changed;
+}
+function prepareState(){ normalizeState(); seedPacking(); return migrate(); }
 function newId(k){ return k+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 
 /* ---- writes ---- */
@@ -804,6 +827,70 @@ function openItemForm(listKey, item){
   const li=ov.querySelector('#m-label'); if(li) li.focus();
 }
 
+/* ---- custom activities (day-by-day) ---- */
+function mapsLinkFrom(raw){ raw=(raw||'').trim(); if(!raw) return ''; return /^https?:\/\//i.test(raw)?raw:Q(raw); }
+function findActivity(date,id){ return ((STATE.activities&&STATE.activities[date])||[]).find(a=>a.id===id); }
+function addActivity(date,data){
+  STATE.activities=STATE.activities||{}; STATE.activities[date]=STATE.activities[date]||[];
+  STATE.activities[date].push({id:newId('act'), name:data.name, note:data.note, time:data.time, url:data.url, raw:data.raw});
+  saveLocal(); pushState(); renderAll();
+}
+function updateActivity(date,id,data){ const a=findActivity(date,id); if(!a) return; Object.assign(a,data); saveLocal(); pushState(); renderAll(); }
+function deleteActivity(date,id){
+  if(STATE.activities&&STATE.activities[date]) STATE.activities[date]=STATE.activities[date].filter(a=>a.id!==id);
+  saveLocal(); pushState(); renderAll();
+}
+function renderCustom(date, a){
+  const href=a.url||'';
+  const name = href
+    ? `<a class="idea-name" href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(a.name)} ${EXT}</a>`
+    : `<span class="idea-name">${escapeHtml(a.name)}</span>`;
+  const note = a.note?`<span class="idea-desc">${escapeHtml(a.note)}</span>`:'';
+  return `<div class="idea custom"><div class="idea-main">${name}<span class="thtag added">Aggiunta</span></div>${note}`+
+    `<div class="act-ctrl"><button type="button" class="act-edit" data-date="${escapeHtml(date)}" data-id="${escapeHtml(a.id)}" aria-label="Modifica">${ico(PENCIL)}</button>`+
+    `<button type="button" class="act-del" data-date="${escapeHtml(date)}" data-id="${escapeHtml(a.id)}" aria-label="Elimina">${ico(TRASH)}</button></div></div>`;
+}
+function openActivityForm(date, act){
+  const editing=!!act;
+  const ov=document.createElement('div'); ov.className='modal-ov';
+  ov.innerHTML=`<div class="modal" role="dialog" aria-modal="true">
+      <h3>${editing?'Modifica attività':'Aggiungi attività'}</h3>
+      <label>Cosa fare</label>
+      <input id="a-name" type="text" value="${escapeHtml(editing?act.name:'')}" placeholder="Es. Aperitivo al tramonto" autocomplete="off">
+      <label>Mappa — nome del posto (consigliato) o link</label>
+      <input id="a-map" type="text" value="${escapeHtml(editing?(act.raw||act.url||''):'')}" placeholder="Es. Trabucco da Mimì Peschici" autocomplete="off">
+      <label>Quando</label>
+      <div class="m-times">${['mattina','pomeriggio','sera'].map(t=>`<button type="button" class="m-time${(editing?(act.time||'mattina'):'mattina')===t?' on':''}" data-time="${t}">${TIMEMETA[t].lab}</button>`).join('')}</div>
+      <label>Nota (facoltativa)</label>
+      <input id="a-note" type="text" value="${escapeHtml(editing?(act.note||''):'')}" placeholder="Un dettaglio" autocomplete="off">
+      <div class="m-actions">${editing?'<button type="button" class="m-del">Elimina</button>':''}<button type="button" class="m-cancel">Annulla</button><button type="button" class="m-save">${editing?'Salva':'Aggiungi'}</button></div>
+    </div>`;
+  document.body.appendChild(ov);
+  let time=editing?(act.time||'mattina'):'mattina';
+  ov.querySelectorAll('.m-time').forEach(b=>b.addEventListener('click',()=>{ time=b.dataset.time; ov.querySelectorAll('.m-time').forEach(x=>x.classList.toggle('on',x===b)); }));
+  const close=()=>{ document.removeEventListener('keydown',onKey); ov.remove(); };
+  const onKey=e=>{ if(e.key==='Escape') close(); };
+  document.addEventListener('keydown',onKey);
+  ov.addEventListener('click',e=>{ if(e.target===ov) close(); });
+  ov.querySelector('.m-cancel').addEventListener('click',close);
+  const del=ov.querySelector('.m-del'); if(del) del.addEventListener('click',()=>{ deleteActivity(date,act.id); close(); });
+  ov.querySelector('.m-save').addEventListener('click',()=>{
+    const name=ov.querySelector('#a-name').value.trim();
+    const raw=ov.querySelector('#a-map').value.trim();
+    const note=ov.querySelector('#a-note').value.trim();
+    if(!name){ ov.querySelector('#a-name').focus(); return; }
+    const data={name,note,time,raw,url:mapsLinkFrom(raw)};
+    if(editing) updateActivity(date,act.id,data); else addActivity(date,data);
+    close();
+  });
+  const f=ov.querySelector('#a-name'); if(f) f.focus();
+}
+document.addEventListener('click',e=>{
+  const add=e.target.closest('.act-add'); if(add){ openActivityForm(add.dataset.date, null); return; }
+  const ed=e.target.closest('.act-edit'); if(ed){ const a=findActivity(ed.dataset.date, ed.dataset.id); if(a) openActivityForm(ed.dataset.date, a); return; }
+  const dl=e.target.closest('.act-del'); if(dl){ deleteActivity(dl.dataset.date, dl.dataset.id); return; }
+});
+
 /* ---- render everything that depends on shared state ---- */
 function renderAll(){
   renderCheckList(document.getElementById('checklist'),
@@ -815,6 +902,7 @@ function renderAll(){
   renderPacking('lei', document.getElementById('leilist'), document.getElementById('leifill'), document.getElementById('leicount'));
   renderPacking('lui', document.getElementById('luilist'), document.getElementById('luifill'), document.getElementById('luicount'));
   renderPacking('com', document.getElementById('comlist'), document.getElementById('comfill'), document.getElementById('comcount'));
+  if(typeof renderDays==='function') renderDays();
 }
 function setSyncState(state){
   const el=document.getElementById('syncpill'); if(!el) return;
@@ -833,20 +921,20 @@ function storeInit(){
     try{
       firebase.initializeApp(FIREBASE_CONFIG);
       fsdoc=firebase.firestore().collection('trip').doc(ROOT);
-      loadLocal(); seedPacking(); renderAll();          // istantaneo dalla cache locale
+      loadLocal(); prepareState(); renderAll(); saveLocal();   // istantaneo dalla cache locale
       setSyncState('wait');
       fsdoc.onSnapshot(snap=>{
         const remote=(snap && snap.exists)?snap.data():null;
-        if(remote && (remote.checks || remote.packing)){
-          STATE=remote; normalizeState();
-          if(!Object.keys(STATE.packing).length) seedPacking();
-        } else { normalizeState(); seedPacking(); fsdoc.set(STATE); }
+        const hadData=!!(remote && (remote.checks || remote.packing));
+        if(hadData) STATE=remote;
+        const changed=prepareState();
         saveLocal(); renderAll(); setSyncState('on');
+        if(!hadData || changed) fsdoc.set(STATE);
       }, err=>{ console.warn('Firestore non raggiungibile', err); setSyncState('err'); });
       return;
     }catch(e){ console.warn('Firebase non disponibile, modalità locale.', e); }
   }
-  loadLocal(); seedPacking(); renderAll(); setSyncState('off');
+  loadLocal(); prepareState(); renderAll(); saveLocal(); setSyncState('off');
 }
 
 /* ---------- themes (interests) ---------- */
@@ -992,6 +1080,7 @@ function renderDays(){
   let cBG=0,cPE=0;
   DAYS.forEach(day=>{
     const vis=day.slots.filter(s=>slotVisible(s, day.leg));
+    const custom=(STATE.activities&&STATE.activities[day.date])||[];
     if(day.leg==='belgrado') cBG+=vis.length; else cPE+=vis.length;
     const art=document.createElement('article');
     art.className='day'+(day.birthday?' birthday':'')+(day.date===TODAY?' today':'');
@@ -1003,16 +1092,17 @@ function renderDays(){
     if(day.fixed.length){
       sched=`<div class="block-lab">${ico(CLOCK)}In programma</div><ul class="sched">${day.fixed.map(f=>`<li>${f}</li>`).join('')}</ul>`;
     }
-    let ideas='';
-    if(vis.length){
-      const order=['mattina','pomeriggio','sera'];
-      const groups=order.filter(k=>vis.some(s=>(s.time||'mattina')===k)).map(k=>
-        `<div class="tgroup"><span class="tg-lab">${ico(TIMEMETA[k].ic)}${TIMEMETA[k].lab}</span>`+
-        vis.filter(s=>(s.time||'mattina')===k).map(renderIdea).join('')+`</div>`).join('');
-      ideas=`<div class="block-lab">${ico(STAR)}Idee per voi <span class="cnt">${vis.length}</span></div>${groups}`;
-    } else {
-      ideas=`<div class="block-lab">${ico(STAR)}Idee per voi</div><div class="day-empty">Nessuna idea con questi filtri. Tocca <b>Azzera</b> o scegli un ritmo più alto.</div>`;
-    }
+    const order=['mattina','pomeriggio','sera'];
+    const groups=order.map(k=>{
+      const sg=vis.filter(s=>(s.time||'mattina')===k);
+      const cg=custom.filter(a=>(a.time||'mattina')===k);
+      if(!sg.length && !cg.length) return '';
+      return `<div class="tgroup"><span class="tg-lab">${ico(TIMEMETA[k].ic)}${TIMEMETA[k].lab}</span>`+
+        sg.map(renderIdea).join('') + cg.map(a=>renderCustom(day.date,a)).join('') + `</div>`;
+    }).join('');
+    let ideas=`<div class="block-lab">${ico(STAR)}Idee per voi <span class="cnt">${vis.length}</span></div>`;
+    ideas += groups ? groups : `<div class="day-empty">Nessuna idea con questi filtri. Tocca <b>Azzera</b>, alza il ritmo o aggiungi un’attività qui sotto.</div>`;
+    ideas += `<button type="button" class="act-add" data-date="${day.date}">${ico(PLUS)}Aggiungi un’attività</button>`;
     art.innerHTML=head+sched+ideas;
     (day.leg==='belgrado'?tlBG:tlPE).appendChild(art);
   });
@@ -1341,7 +1431,6 @@ const LEI = [
 ];
 const LUI = [
   ["Documenti & soldi","Passaporto / carta per l’espatrio","bag3"],
-  ["Documenti & soldi","Permesso di soggiorno (se extra-UE)","bag3"],
   ["Documenti & soldi","Patente (si guida al ritorno!)","bag3"],
   ["Documenti & soldi","Carte + contanti","bag3"],
   ["Documenti & soldi","Carte d’imbarco sul telefono","bag3"],
