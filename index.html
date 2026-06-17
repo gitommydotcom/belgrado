@@ -6,7 +6,7 @@
 <title>Belgrado & Adriatico · 13–19 luglio 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
   :root{
@@ -15,6 +15,7 @@
     --pine:#0E4A43; --pine-2:#2C7A6F; --teal-wash:#E4EFEA;
     --amber:#D8913A; --amber-wash:#F6EAD3;
     --clay:#BC4F36; --clay-wash:#F4E2D8;
+    --sea:#13615A; --sea-2:#1E7E72;
     --shadow:0 1px 2px rgba(22,36,31,.04), 0 8px 24px rgba(22,36,31,.06);
   }
   *{box-sizing:border-box;}
@@ -43,12 +44,12 @@
   .vbtn{flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; white-space:nowrap; cursor:pointer;
     font-family:"Inter",sans-serif; font-size:14px; font-weight:600; color:var(--ink-soft); padding:10px 14px;
     border:1px solid var(--line); border-radius:999px; background:var(--paper-2); transition:.18s;}
-  .vbtn svg{width:16px; height:16px;}
+  .vbtn svg{width:16px; height:16px; flex:none;}
   .vbtn:hover{border-color:var(--pine-2); color:var(--pine);}
   .vbtn.active{background:var(--pine); color:#EAF2EF; border-color:var(--pine);}
-  .view.is-hidden{display:none;}
+  .view.is-hidden, .hero.is-hidden{display:none;}
 
-  /* ---- hero ticket ---- */
+  /* ---- hero ticket (Belgrado) ---- */
   header{padding:46px 0 22px;}
   .kicker{text-align:center; margin-bottom:18px;}
   .kicker .serif{font-size:15px; font-style:italic; color:var(--ink-soft);}
@@ -69,7 +70,34 @@
   .title-block{text-align:center; padding:34px 0 6px;}
   .title-block h1{font-family:"Instrument Serif",serif; font-size:clamp(40px,8vw,74px);}
   .title-block h1 em{font-style:italic; color:var(--pine-2);}
-  .title-block p{color:var(--ink-soft); max-width:540px; margin:14px auto 0;}
+  .title-block p{color:var(--ink-soft); max-width:560px; margin:14px auto 0;}
+
+  /* ---- hero road trip (Peschici) ---- */
+  .road{background:linear-gradient(125deg,#0E4A43 0%,#15665C 55%,#1E7E72 100%); color:#EAF2EF; border-radius:20px; padding:28px 30px; box-shadow:var(--shadow); position:relative; overflow:hidden;}
+  .road::after{content:""; position:absolute; right:-40px; top:-40px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle,rgba(216,145,58,.32),transparent 70%);}
+  .road-top{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; position:relative; z-index:1;}
+  .sign{text-align:center;}
+  .sign .code{font-family:"Instrument Serif",serif; font-size:46px; line-height:.9;}
+  .sign .place{font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:#A6D0C8; margin-top:6px;}
+  .road-mid{display:flex; flex-direction:column; align-items:center; min-width:128px;}
+  .road-mid .car{width:30px; height:30px; color:#F6EAD3; margin-bottom:3px;}
+  .roadline{width:100%; height:0; border-top:3px dashed rgba(216,145,58,.85); border-radius:2px;}
+  .road-mid .km{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#CFE3DD; margin-top:7px; text-align:center;}
+  .road-bottom{display:flex; flex-wrap:wrap; gap:16px 34px; margin-top:20px; padding-top:18px; border-top:1px solid rgba(234,242,239,.18); position:relative; z-index:1;}
+  .rb-item .l{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#A6D0C8;}
+  .rb-item .v{font-size:16px; margin-top:3px; color:#F2F8F6;}
+
+  /* ---- hero luggage (Valigia) ---- */
+  .lug{display:flex; align-items:stretch; gap:10px; flex-wrap:wrap;}
+  .lug-step{flex:1; min-width:200px; display:flex; align-items:center; gap:13px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:15px 17px; box-shadow:var(--shadow);}
+  .lug-ic{flex:none; width:44px; height:44px; border-radius:12px; display:grid; place-items:center; background:var(--teal-wash); color:var(--pine);}
+  .lug-ic svg{width:23px; height:23px;}
+  .lug-ic.i2{background:var(--amber-wash); color:#9A6519;}
+  .lug-ic.i3{background:var(--clay-wash); color:var(--clay);}
+  .lug-step b{display:block; font-size:15px; font-weight:600; line-height:1.25;}
+  .lug-step span{font-size:12.5px; color:var(--ink-soft);}
+  .lug-arrow{display:flex; align-items:center; color:var(--pine-2);}
+  .lug-arrow svg{width:22px; height:22px;}
 
   /* ---- section frame ---- */
   section{padding:40px 0; border-top:1px solid var(--line);}
@@ -97,34 +125,79 @@
   .check.on .box svg{opacity:1;}
   .check.on .ct{opacity:.55;}
   .check.on .ct h3{text-decoration:line-through;}
-  .ct h3{font-family:"Inter",sans-serif; font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px;}
+  .ct h3{font-family:"Inter",sans-serif; font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
   .ct .tag{font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:2px 7px; border-radius:6px;}
   .tag.crit{background:var(--clay-wash); color:var(--clay);}
   .tag.warn{background:var(--amber-wash); color:#9A6519;}
   .tag.info{background:var(--teal-wash); color:var(--pine);}
+  .tag.bag1{background:var(--teal-wash); color:var(--pine);}
+  .tag.bag2{background:var(--amber-wash); color:#9A6519;}
+  .tag.bag3{background:var(--clay-wash); color:var(--clay);}
   .ct p{margin:5px 0 0; font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+
+  /* ---- preferences bar ---- */
+  .prefs{background:var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:16px 18px; margin-bottom:24px; box-shadow:var(--shadow);}
+  .pref-row{display:flex; flex-wrap:wrap; align-items:center; gap:10px 12px;}
+  .pref-row + .pref-row{margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
+  .pref-lab{font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pine-2); min-width:104px;}
+  .pref-chips{display:flex; flex-wrap:wrap; gap:8px; flex:1;}
+  .pref-chip{display:inline-flex; align-items:center; gap:7px; cursor:pointer; font-family:inherit; font-size:13px; font-weight:500; color:var(--ink-soft); background:var(--card); border:1px solid var(--line); border-radius:999px; padding:7px 13px; transition:.16s;}
+  .pref-chip svg{width:15px; height:15px;}
+  .pref-chip:hover{border-color:var(--pine-2); color:var(--pine);}
+  .pref-chip.on{background:var(--pine); color:#EAF2EF; border-color:var(--pine);}
+  .pace{display:inline-flex; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:3px;}
+  .pace-btn{cursor:pointer; font-family:inherit; font-size:13px; font-weight:600; color:var(--ink-soft); background:transparent; border:none; border-radius:999px; padding:7px 15px; transition:.16s;}
+  .pace-btn.on{background:var(--pine); color:#EAF2EF;}
+  .pref-count{margin-left:auto; font-size:13px; color:var(--ink-soft); white-space:nowrap;}
+  .pref-count b{color:var(--pine); font-weight:700;}
+  .pref-reset{cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:999px; padding:6px 12px; transition:.16s;}
+  .pref-reset:hover{border-color:var(--clay); color:var(--clay);}
 
   /* ---- timeline ---- */
   .tl{position:relative; padding-left:30px;}
   .tl::before{content:""; position:absolute; left:7px; top:6px; bottom:6px; width:2px; background:var(--line);}
-  .day{position:relative; margin-bottom:22px;}
+  .day{position:relative; margin-bottom:24px;}
   .day::before{content:""; position:absolute; left:-30px; top:5px; width:16px; height:16px; border-radius:50%; background:var(--paper); border:3px solid var(--pine-2);}
   .day.birthday::before{border-color:var(--clay); background:var(--clay-wash);}
-  .day .dh{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .day.today::before{border-color:var(--clay); background:var(--clay); box-shadow:0 0 0 5px var(--clay-wash); animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 5px var(--clay-wash);}50%{box-shadow:0 0 0 9px rgba(188,79,54,.12);}}
+  .day .dh{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px;}
   .day .chip{font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; background:var(--pine); color:#EAF2EF; padding:4px 10px; border-radius:999px;}
-  .day.birthday .chip{background:var(--clay);}
+  .day .chip.bday-chip{background:var(--clay);}
+  .day .chip.today-chip{background:var(--clay); animation:pulse2 1.8s ease-in-out infinite;}
+  @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:.62;}}
   .day h3{font-family:"Instrument Serif",serif; font-size:24px;}
-  .day ul{margin:10px 0 0; padding:0; list-style:none;}
-  .day li{position:relative; padding-left:18px; font-size:14.5px; color:var(--ink-soft); margin-bottom:6px; line-height:1.55;}
-  .day li::before{content:""; position:absolute; left:0; top:10px; width:6px; height:6px; border-radius:50%; background:var(--amber);}
-  .day li b{color:var(--ink); font-weight:600;}
+  .spine{margin:10px 0 0; padding:0; list-style:none;}
+  .spine li{position:relative; padding-left:18px; font-size:14.5px; color:var(--ink-soft); margin-bottom:6px; line-height:1.55;}
+  .spine li::before{content:""; position:absolute; left:0; top:10px; width:6px; height:6px; border-radius:50%; background:var(--amber);}
+  .spine li b{color:var(--ink); font-weight:600;}
+
+  /* ---- tailored slots ---- */
+  .tailor{margin-top:14px;}
+  .tailor-h{font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--pine-2); margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+  .tailor-h svg{width:15px; height:15px;}
+  .tslot{margin-bottom:6px;}
+  .tslot-l{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin:8px 0 2px;}
+  .slot{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:11px 14px; margin-top:7px; transition:.18s; animation:slotin .35s ease;}
+  @keyframes slotin{from{opacity:0; transform:translateY(6px);}to{opacity:1; transform:none;}}
+  .slot:hover{border-color:var(--pine-2);}
+  .slot b{font-weight:600; font-size:14.5px;}
+  .slot a.slink{color:inherit; text-decoration:none;}
+  .slot a.slink:hover{color:var(--pine-2);}
+  .slot p{margin:5px 0 0; font-size:13px; color:var(--ink-soft); line-height:1.5;}
+  .thtag{display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px; border-radius:6px; margin-left:6px; vertical-align:middle;}
+  .th-storia,.th-relax,.th-natura{background:var(--teal-wash); color:var(--pine);}
+  .th-mare{background:#DCEAF0; color:#1C5E78;}
+  .th-cibo,.th-shopping{background:var(--amber-wash); color:#9A6519;}
+  .th-notte,.th-avventura{background:var(--clay-wash); color:var(--clay);}
+  .tailor.empty{font-size:13px; color:var(--ink-soft); background:var(--paper-2); border:1px dashed var(--line); border-radius:12px; padding:12px 14px;}
 
   /* ---- cards grid ---- */
   .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;}
   .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; transition:.2s;}
   .card:hover{transform:translateY(-2px); box-shadow:var(--shadow);}
   .card h3{font-family:"Inter",sans-serif; font-size:15.5px; font-weight:600; display:flex; align-items:center; justify-content:space-between; gap:8px;}
-  .card .price{font-size:13px; color:var(--pine-2); font-weight:600;}
+  .card .price{font-size:13px; color:var(--pine-2); font-weight:600; white-space:nowrap;}
   .card p{margin:6px 0 0; font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
   .subtle{font-size:14px; color:var(--ink-soft); margin:0 0 18px; max-width:680px;}
 
@@ -196,6 +269,21 @@
   .phrase td.it{color:var(--ink); width:40%;}
   .phrase td.sr{color:var(--pine); font-weight:500; width:32%;}
   .phrase td.pr{color:var(--ink-soft); font-style:italic; width:28%;}
+
+  /* ---- packing ---- */
+  .packing{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  .person{background:var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:18px 18px 8px;}
+  .person>h3{font-family:"Instrument Serif",serif; font-size:26px; margin-bottom:10px; display:flex; align-items:center; gap:9px;}
+  .person>h3 svg{width:22px; height:22px; color:var(--pine-2);}
+  .pcat{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pine-2); margin:18px 0 8px;}
+  .pcat:first-of-type{margin-top:6px;}
+  .baglegend{display:flex; flex-wrap:wrap; gap:10px 16px; margin:0 0 20px; font-size:13px; color:var(--ink-soft);}
+  .baglegend span{display:inline-flex; align-items:center; gap:7px;}
+  .bagkey{font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 8px; border-radius:6px;}
+  .person .check{padding:12px 14px; margin-bottom:8px;}
+  .person .check .ct h3{font-size:14px;}
+  .common{margin-top:22px;}
+
   @media (max-width:600px){ #map2{height:360px;} .phrase td{padding:9px 11px; font-size:12.5px;} }
 
   footer{padding:34px 0 56px; text-align:center; color:var(--ink-soft); font-size:13.5px; border-top:1px solid var(--line);}
@@ -206,10 +294,15 @@
 
   @media (max-width:600px){
     .ticket-top{grid-template-columns:1fr auto 1fr; padding:24px 18px 22px;}
-    .ep .code{font-size:40px;}
+    .ep .code{font-size:40px;} .sign .code{font-size:36px;}
     .ticket-bottom{padding:18px;}
     .sec-head{flex-wrap:wrap;} .sec-head .sub{margin-left:0; text-align:left; max-width:none;}
     #map{height:360px;}
+    .packing{grid-template-columns:1fr;}
+    .pref-lab{min-width:auto; width:100%;}
+    .pref-count{margin-left:0; width:100%;}
+    .lug-arrow{transform:rotate(90deg); margin:0 auto;}
+    .lug-step{min-width:0;}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important; transition:none!important; scroll-behavior:auto!important;}
@@ -221,37 +314,86 @@
 <nav><div class="wrap nav-toggle">
   <button class="vbtn active" data-v="belgrado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-.9 1.7l5.3 3.2-2.5 2.5-2.4-.5a1 1 0 0 0-.9 1.7l3 2 2 3a1 1 0 0 0 1.7-.9l-.5-2.4 2.5-2.5 3.2 5.3a1 1 0 0 0 1.7-.9Z"/></svg>Belgrado · 13–16</button>
   <button class="vbtn" data-v="peschici"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-8M9 13c0-4 1.5-7 3-7s3 3 3 7M5 21h14M3 13a4 4 0 0 1 8 0M13 13a4 4 0 0 1 8 0"/></svg>Peschici · 16–19</button>
+  <button class="vbtn" data-v="valigia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M9 11v5M15 11v5"/></svg>In valigia</button>
 </div></nav>
 
-<header><div class="wrap reveal">
-  <div class="kicker"><span class="serif">Un piccolo dossier di viaggio, per non dimenticare niente</span></div>
-  <div class="ticket">
-    <div class="ticket-top">
-      <div class="ep"><div class="code">FCO</div><div class="place">Roma Fiumicino</div></div>
-      <div class="path">
-        <svg viewBox="0 0 74 22" fill="none"><path d="M2 11 H62" stroke="#7FB3A9" stroke-width="1.5" stroke-dasharray="3 4"/><path d="M58 4 L70 11 L58 18" fill="#9FC4BC"/></svg>
-        <span>1h 40m</span>
+<header>
+  <!-- HERO BELGRADO -->
+  <div id="hero-belgrado" class="hero"><div class="wrap reveal">
+    <div class="kicker"><span class="serif">Un piccolo dossier di viaggio, per non dimenticare niente</span></div>
+    <div class="ticket">
+      <div class="ticket-top">
+        <div class="ep"><div class="code">FCO</div><div class="place">Roma Fiumicino</div></div>
+        <div class="path">
+          <svg viewBox="0 0 74 22" fill="none"><path d="M2 11 H62" stroke="#7FB3A9" stroke-width="1.5" stroke-dasharray="3 4"/><path d="M58 4 L70 11 L58 18" fill="#9FC4BC"/></svg>
+          <span>1h 40m</span>
+        </div>
+        <div class="ep"><div class="code">BEG</div><div class="place">Belgrado</div></div>
       </div>
-      <div class="ep"><div class="code">BEG</div><div class="place">Belgrado</div></div>
+      <div class="perf"></div>
+      <div class="ticket-bottom">
+        <div class="tb-item"><div class="l">Andata</div><div class="v">Lun 13 lug · 13:40</div></div>
+        <div class="tb-item"><div class="l">Ritorno</div><div class="v">Gio 16 lug · 06:50</div></div>
+        <div class="tb-item"><div class="l">Poi mare fino al</div><div class="v">Dom 19 lug</div></div>
+        <div class="tb-item"><div class="l">Passeggeri</div><div class="v">Carmela & Tomas</div></div>
+      </div>
     </div>
-    <div class="perf"></div>
-    <div class="ticket-bottom">
-      <div class="tb-item"><div class="l">Andata</div><div class="v">Lun 13 lug · 13:40</div></div>
-      <div class="tb-item"><div class="l">Ritorno</div><div class="v">Gio 16 lug · 06:50</div></div>
-      <div class="tb-item"><div class="l">Poi mare fino al</div><div class="v">Dom 19 lug</div></div>
-      <div class="tb-item"><div class="l">Passeggeri</div><div class="v">Carmela & Tomas</div></div>
+    <div class="title-block">
+      <h1>Belgrado <em>&</em> Adriatico</h1>
+      <p>Sei giorni tra la città sui fiumi e il mare di casa — con dentro il compleanno di Carmela. Tutto quello che serve, in ordine.</p>
     </div>
-  </div>
-  <div class="title-block">
-    <h1>Belgrado <em>&</em> Adriatico</h1>
-    <p>Sei giorni tra la città sui fiumi e il mare di casa — con dentro il compleanno di Carmela. Tutto quello che serve, in ordine.</p>
-  </div>
-</div></header>
+  </div></div>
+
+  <!-- HERO PESCHICI (road trip) -->
+  <div id="hero-peschici" class="hero is-hidden"><div class="wrap">
+    <div class="kicker"><span class="serif">Dal finestrino, verso il mare di casa</span></div>
+    <div class="road">
+      <div class="road-top">
+        <div class="sign"><div class="code">FCO</div><div class="place">Fiumicino · ritiro auto</div></div>
+        <div class="road-mid">
+          <svg class="car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M4 11h16v5H4z"/><circle cx="7.5" cy="16.5" r="1.5"/><circle cx="16.5" cy="16.5" r="1.5"/></svg>
+          <div class="roadline"></div>
+          <span class="km">~370 km · A14 → SS89</span>
+        </div>
+        <div class="sign"><div class="code">PSC</div><div class="place">Peschici · Gargano</div></div>
+      </div>
+      <div class="road-bottom">
+        <div class="rb-item"><div class="l">Si parte</div><div class="v">Gio 16 lug · ~09:30</div></div>
+        <div class="rb-item"><div class="l">In strada</div><div class="v">~4h 30 · sosta pranzo</div></div>
+        <div class="rb-item"><div class="l">Bagagli</div><div class="v">Mare già in auto</div></div>
+        <div class="rb-item"><div class="l">A bordo</div><div class="v">Carmela & Tomas</div></div>
+      </div>
+    </div>
+    <div class="title-block">
+      <h1>Il <em>Gargano</em></h1>
+      <p>Quattro giorni sul mare di casa, valigie già caricate e il compleanno di Carmela nel mezzo. Il bello comincia appena spegni il motore.</p>
+    </div>
+  </div></div>
+
+  <!-- HERO VALIGIA (luggage logistics) -->
+  <div id="hero-valigia" class="hero is-hidden"><div class="wrap">
+    <div class="kicker"><span class="serif">Due bagagli, un piano semplice</span></div>
+    <div class="lug">
+      <div class="lug-step"><span class="lug-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span><div><b>Valigia piccola condivisa</b><span>In aereo a Belgrado · 13–16 lug</span></div></div>
+      <div class="lug-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="lug-step"><span class="lug-ic i2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18q3 -3 6 0t6 0 6 0"/><path d="M3 13q3 -3 6 0t6 0 6 0"/><circle cx="17" cy="6" r="2.5"/></svg></span><div><b>Bagagli per il mare</b><span>Restano in auto all'aeroporto</span></div></div>
+      <div class="lug-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="lug-step"><span class="lug-ic i3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M4 11h16v5H4z"/><circle cx="7.5" cy="16.5" r="1.5"/><circle cx="16.5" cy="16.5" r="1.5"/></svg></span><div><b>Si riparte carichi</b><span>Dritti a Peschici · 16–19 lug</span></div></div>
+    </div>
+    <div class="title-block">
+      <h1>In <em>valigia</em></h1>
+      <p>Cosa portare e — soprattutto — in quale bagaglio metterlo. Spuntate man mano: resta tutto salvato sul telefono.</p>
+    </div>
+  </div></div>
+</header>
 
 <main>
 
+<!-- ===================== BELGRADO ===================== -->
+<div id="view-belgrado" class="view">
+
 <section id="prima"><div class="wrap">
-  <div class="sec-head"><h2>Prima di partire</h2><span class="sub">Una lista di cose da sistemare. Aprila quando hai un momento.</span></div>
+  <div class="sec-head"><h2>Prima di partire</h2><span class="sub">Solo per Belgrado. Aprila quando hai un momento.</span></div>
   <details class="fold" id="primaFold">
     <summary>
       <span class="s-ic" style="background:var(--clay-wash); color:var(--clay)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
@@ -270,16 +412,17 @@
   </details>
 </div></section>
 
-<div id="view-belgrado" class="view">
-
 <section><div class="wrap">
-  <div class="sec-head"><span class="sec-num">01</span><h2>Giorno per giorno</h2><span class="sub">Dalla partenza da L’Aquila a Belgrado.</span></div>
+  <div class="sec-head"><span class="sec-num">01</span><h2>Giorno per giorno</h2><span class="sub">Il vostro filo conduttore, su misura.</span></div>
+  <p class="subtle">Voli e orari sono fissi; il resto si adatta a voi. Scegliete cosa vi piace e a che ritmo: ogni giornata mette in evidenza le idee giuste, dalle più iconiche alle extra.</p>
+  <div class="prefs" id="prefs-bg"></div>
   <div class="tl" id="timeline-bg"></div>
 </div></section>
 
 <section id="belgrado"><div class="wrap">
   <div class="sec-head"><span class="sec-num">02</span><h2>Belgrado</h2><span class="sub">Tutto a piedi dall’appartamento a Stari Grad.</span></div>
-  <p class="subtle">A luglio fa caldo (30–35°C) ed è vivace fino a tardi. Ecco i punti da non perdere e qualche taverna dove si mangia bene spendendo il giusto.</p>
+  <p class="subtle">A luglio fa caldo (30–35°C) ed è vivace fino a tardi. I punti da non perdere e qualche taverna dove si mangia bene spendendo il giusto.</p>
+  <h3 class="serif" style="font-size:24px; margin:0 0 12px;">Cosa vedere</h3>
   <div class="grid" id="see"></div>
   <h3 class="serif" style="font-size:24px; margin:26px 0 12px;">Dove mangiare bene, senza svenarsi</h3>
   <div class="grid" id="eat"></div>
@@ -306,10 +449,29 @@
 
 </div><!-- /view-belgrado -->
 
+<!-- ===================== PESCHICI ===================== -->
 <div id="view-peschici" class="view is-hidden">
+
+<section id="prima-pe"><div class="wrap">
+  <div class="sec-head"><h2>Prima di scendere al mare</h2><span class="sub">Una manciata di cose per il Gargano.</span></div>
+  <details class="fold" id="peFold">
+    <summary>
+      <span class="s-ic" style="background:var(--teal-wash); color:var(--pine)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18q3 -3 6 0t6 0 6 0"/><path d="M3 12q3 -3 6 0t6 0 6 0"/><path d="M3 6q3 -3 6 0t6 0 6 0"/></svg></span>
+      <span class="s-tx"><b>Checklist del Gargano</b><span>Check-in, parcheggio nel borgo, prenotazioni, spiaggia</span></span>
+      <span class="s-count" id="pecount">0 / 7</span>
+      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </summary>
+    <div class="fold-body">
+      <div class="progress"><div class="bar"><i id="pefill"></i></div></div>
+      <div id="pechecklist"></div>
+    </div>
+  </details>
+</div></section>
 
 <section><div class="wrap">
   <div class="sec-head"><span class="sec-num">01</span><h2>Giorno per giorno</h2><span class="sub">Dal rientro all’ultimo bagno a Peschici.</span></div>
+  <p class="subtle">Le stesse preferenze di Belgrado valgono anche qui: mare, natura, sapori o avventura — il programma si adatta a voi.</p>
+  <div class="prefs" id="prefs-pe"></div>
   <div class="tl" id="timeline-pe"></div>
 </div></section>
 
@@ -326,13 +488,26 @@
     <div class="spots"><a href="https://www.google.com/maps/search/?api=1&query=Via%20Gioielli%206%20Peschici" target="_blank" rel="noopener">Apri in mappa <span class="ext">↗</span></a></div>
   </div>
 
+  <h3 class="subhead">Cosa fare sul Gargano</h3>
+  <p class="subtle">Spiagge da cartolina, borghi a picco sul mare e la frescura della foresta: scegliete in base alla giornata e al caldo.</p>
+  <div class="grid" id="pe-see"></div>
+
+  <h3 class="subhead">Dove mangiare</h3>
+  <p class="subtle">Pesce, trabucchi sospesi sull’acqua e lo street food del Gargano. Per i posti più ambiti, prenotate.</p>
+  <div class="grid" id="pe-eat"></div>
+
   <h3 class="subhead">Cena di compleanno — tre scelte per il 17</h3>
   <p class="subtle">Tre atmosfere diverse, tutte sul mare. Prenotate con qualche giorno di anticipo, soprattutto il trabucco.</p>
   <div class="grid" id="bday"></div>
 </div></section>
 
 <section><div class="wrap">
-  <div class="sec-head"><span class="sec-num">03</span><h2>La mappa del Gargano</h2><span class="sub">Tocca i punti per i dettagli.</span></div>
+  <div class="sec-head"><span class="sec-num">03</span><h2>Consigli per il Gargano</h2><span class="sub">Mare, strade e tavola. Tocca per aprire.</span></div>
+  <div id="pe-consigli"></div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>La mappa del Gargano</h2><span class="sub">Tocca i punti per i dettagli.</span></div>
   <div id="map2"></div>
   <div class="legend">
     <span><span class="dot" style="background:#0E4A43"></span>Spiagge e borghi</span>
@@ -344,6 +519,34 @@
 
 </div><!-- /view-peschici -->
 
+<!-- ===================== VALIGIA ===================== -->
+<div id="view-valigia" class="view is-hidden">
+
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>Cosa mettere in valigia</h2><span class="sub">Per lei e per lui, con la valigia giusta su ogni voce.</span></div>
+  <p class="subtle">Il piano: una valigia piccola condivisa va in aereo a Belgrado; tutto il resto per il mare resta in auto all’aeroporto e parte con voi verso Peschici. Ogni voce dice in quale bagaglio metterla.</p>
+  <div class="baglegend">
+    <span><span class="bagkey bag1">Valigia BG</span> piccola condivisa, in aereo</span>
+    <span><span class="bagkey bag2">Mare · auto</span> resta in macchina</span>
+    <span><span class="bagkey bag3">A mano</span> addosso / zaino in cabina</span>
+  </div>
+  <div class="packing">
+    <div class="person" id="pack-lei"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M12 11v10M9 21h6M8 14h8"/></svg>Per lei · Carmela</h3>
+      <div class="progress"><div class="bar"><i id="leifill"></i></div><span class="pcount" id="leicount">0 / 0</span></div>
+      <div id="leilist"></div></div>
+    <div class="person" id="pack-lui"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M12 11v10M8 21h8"/></svg>Per lui · Tomas</h3>
+      <div class="progress"><div class="bar"><i id="luifill"></i></div><span class="pcount" id="luicount">0 / 0</span></div>
+      <div id="luilist"></div></div>
+  </div>
+  <div class="common">
+    <h3 class="subhead">In comune — da caricare in auto</h3>
+    <div class="progress"><div class="bar"><i id="comfill"></i></div><span class="pcount" id="comcount">0 / 0</span></div>
+    <div id="comlist"></div>
+  </div>
+</div></section>
+
+</div><!-- /view-valigia -->
+
 </main>
 
 <footer><div class="wrap">
@@ -353,9 +556,222 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+/* ---------- helpers ---------- */
 const G = (id,name) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name||'') + '&query_place_id=' + id;
+const Q = (q) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
 const L_ = (id,label) => `<a class="dlink" href="${G(id,label)}" target="_blank" rel="noopener">${label}</a>`;
-const Ls = (q,label) => `<a class="dlink" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}" target="_blank" rel="noopener">${label}</a>`;
+const Ls = (q,label) => `<a class="dlink" href="${Q(q)}" target="_blank" rel="noopener">${label}</a>`;
+const EXT = '<span class="ext">↗</span>';
+const ico = p => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
+const CHK = '<svg viewBox="0 0 24 24" fill="none" stroke="#EAF2EF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+const _d = new Date();
+const TODAY = `${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,'0')}-${String(_d.getDate()).padStart(2,'0')}`;
+
+/* ---------- generic checklist ---------- */
+function buildChecks(host, items, key, fillEl, countEl){
+  let saved={}; try{ saved=JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+  const total=items.length;
+  function upd(){
+    const n=items.reduce((a,_,i)=>a+(saved[i]?1:0),0);
+    if(countEl) countEl.textContent = n+' / '+total;
+    if(fillEl) fillEl.style.width = (total? n/total*100:0)+'%';
+  }
+  items.forEach((it,i)=>{
+    const d=document.createElement('div');
+    d.className='check'+(saved[i]?' on':'');
+    const tag = it.tag ? `<span class="tag ${it.tag}">${it.tagLabel}</span>` : '';
+    const sub = it.sub ? `<p>${it.sub}</p>` : '';
+    d.innerHTML=`<div class="box">${CHK}</div><div class="ct"><h3>${it.label}${tag}</h3>${sub}</div>`;
+    d.addEventListener('click',()=>{
+      d.classList.toggle('on');
+      saved[i]=d.classList.contains('on');
+      try{ localStorage.setItem(key,JSON.stringify(saved)); }catch(e){}
+      upd();
+    });
+    host.appendChild(d);
+  });
+  upd();
+}
+
+/* ---------- themes (interests) ---------- */
+const THEMES = {
+  storia:{label:'Storia & arte', short:'Storia', icon:'<path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-7h6v7"/>'},
+  cibo:{label:'Cibo & taverne', short:'Cibo', icon:'<path d="M6 2v7a2 2 0 0 0 4 0V2"/><path d="M8 9v13"/><path d="M16 2c-1.4 0-2.4 1.9-2.4 4.5S14.6 11 16 11v11"/>'},
+  notte:{label:'Vita notturna', short:'Notte', icon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'},
+  relax:{label:'Relax', short:'Relax', icon:'<path d="M4 8h12v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 9h2a2.4 2.4 0 0 1 0 5h-2"/><path d="M7 2v2M10 2v2M13 2v2"/>'},
+  natura:{label:'Natura & viste', short:'Natura', icon:'<path d="M12 22v-6"/><path d="M8 8l4-5 4 5"/><path d="M6 14l6-7 6 7"/><path d="M4 20l8-9 8 9"/>'},
+  mare:{label:'Mare & spiagge', short:'Mare', icon:'<path d="M3 18q3 -3 6 0t6 0 6 0"/><path d="M3 13q3 -3 6 0t6 0 6 0"/><path d="M14 9c0-3-2-5-5-5"/>'},
+  avventura:{label:'Avventura', short:'Avventura', icon:'<circle cx="12" cy="12" r="9"/><path d="M15.6 8.4l-2.3 4.9-4.9 2.3 2.3-4.9z"/>'},
+  shopping:{label:'Shopping', short:'Shopping', icon:'<path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/>'}
+};
+const PACELAB = {relax:'Relax', bilanciato:'Bilanciato', intenso:'Intenso'};
+
+/* ---------- preferences state ---------- */
+let prefs={interests:new Set(), pace:'bilanciato'};
+try{
+  const s=JSON.parse(localStorage.getItem('bgd_prefs')||'{}');
+  if(Array.isArray(s.interests)) prefs.interests=new Set(s.interests);
+  if(s.pace) prefs.pace=s.pace;
+}catch(e){}
+function savePrefs(){
+  try{ localStorage.setItem('bgd_prefs',JSON.stringify({interests:[...prefs.interests], pace:prefs.pace})); }catch(e){}
+}
+
+/* ---------- day-by-day data ----------
+   slot: {name, desc, th:[themes], time:'mattina|pomeriggio|sera', prio:1..3, gid?, q?}
+   prio 1 = iconico (resta anche col ritmo Relax), 2 = consigliato, 3 = extra */
+const DAYS = [
+ {date:'2026-07-13', leg:'belgrado', chip:'Lun 13 lug', title:'Partenza + arrivo a Belgrado', fixed:[
+   '<b>08:30</b> — Partenza da L’Aquila in auto (margine per il traffico attorno a Roma)',
+   '<b>~10:45</b> — Parcheggio lunga sosta a Fiumicino + navetta. Qui <b>lasciate in auto i bagagli per il mare</b>: vi aspettano al ritorno',
+   '<b>13:40</b> — Volo W6 4032 Fiumicino → Belgrado (atterraggio 15:20; controlla il timbro al controllo passaporti)',
+   '<b>15:40</b> — Transfer Talixo → appartamento, Pajsijeva 4 (Stari Grad)'
+ ], slots:[
+   {name:'Tramonto a Kalemegdan', gid:'ChIJUyxcAUllWkcRstJIPZ95CxY', desc:'Confluenza di Sava e Danubio dalla fortezza, ingresso libero: il modo giusto di salutare la città il primo giorno.', th:['storia','natura','relax'], time:'sera', prio:1},
+   {name:'Cena a Skadarlija', gid:'ChIJhU_jAAB7WkcRjwGR4SZHCCI', desc:'Il vicolo acciottolato bohémien con le taverne storiche e la musica dal vivo.', th:['cibo','notte'], time:'sera', prio:1},
+   {name:'Aperitivo sui splavovi', q:'splav Sava Beograd', desc:'I locali galleggianti sul fiume: anche solo un drink sull’acqua al tramonto.', th:['notte','relax'], time:'sera', prio:2},
+   {name:'Due passi in Knez Mihailova', q:'Knez Mihailova Beograd', desc:'La via pedonale principale, viva fino a tardi tra palazzi e vetrine.', th:['shopping','relax'], time:'sera', prio:3}
+ ]},
+ {date:'2026-07-14', leg:'belgrado', chip:'Mar 14 lug', title:'Belgrado classica', fixed:[
+   '<b>Colazione</b> — Burek e yogurt in una pekara di quartiere, come si fa qui'
+ ], slots:[
+   {name:'Tempio di San Sava', gid:'ChIJj44lpwxwWkcRTDTAbxo5Eb4', desc:'Tra i più grandi templi ortodossi al mondo, mosaici dorati all’interno. Aperto 8–20, gratis.', th:['storia'], time:'mattina', prio:1},
+   {name:'Knez Mihailova & Trg Republike', q:'Trg Republike Beograd', desc:'La passeggiata pedonale e la piazza centrale, perfette al mattino con calma.', th:['shopping','relax','storia'], time:'mattina', prio:2},
+   {name:'Mercato di Kalenić', q:'Kalenić pijaca Beograd', desc:'Il mercato verde più caratteristico: frutta, formaggi, vita di quartiere.', th:['cibo','shopping'], time:'mattina', prio:3},
+   {name:'Kalemegdan con calma', gid:'ChIJUyxcAUllWkcRstJIPZ95CxY', desc:'La fortezza di giorno: parco, carri armati all’aperto e vedute sui due fiumi.', th:['storia','natura'], time:'pomeriggio', prio:1},
+   {name:'Museo di Nikola Tesla', q:'Museo Nikola Tesla Belgrado', desc:'Piccolo e curato, con dimostrazioni elettriche dal vivo. Prenotazione consigliata.', th:['storia'], time:'pomeriggio', prio:2},
+   {name:'Ada Ciganlija — bagno al lago', q:'Ada Ciganlija Beograd', desc:'L’isola-spiaggia sulla Sava: acqua, ombra e relax. La salvezza nelle ore più calde.', th:['mare','relax','natura'], time:'pomeriggio', prio:2},
+   {name:'Vista dalla Beograđanka', q:'Beograđanka Beograd', desc:'Salita al grattacielo simbolo per il panorama sui tetti della città.', th:['natura'], time:'pomeriggio', prio:3},
+   {name:'Aperitivo lungo la Sava', gid:'ChIJ6_nLR9plWkcRoKuLsCdFgd8', desc:'Passeggiata sul fiume tra caffè e locali galleggianti.', th:['notte','relax'], time:'sera', prio:1},
+   {name:'Assaggio di rakija', q:'rakia bar Beograd', desc:'Un brindisi con l’acquavite di casa in un rakia bar: tante varietà da provare.', th:['cibo','notte'], time:'sera', prio:3}
+ ]},
+ {date:'2026-07-15', leg:'belgrado', chip:'Mer 15 lug', title:'Belgrado relax + ultima sera', fixed:[
+   '<b>Pomeriggio</b> — Preparate la valigia piccola e impostate la sveglia: domani si parte all’alba'
+ ], slots:[
+   {name:'Savamala & Beton Hala', q:'Beton Hala Beograd', desc:'Il quartiere del design e della Belgrade Waterfront, con i magazzini sul fiume.', th:['storia','shopping','relax'], time:'mattina', prio:2},
+   {name:'Zemun & Torre Gardoš', q:'Gardoš Tower Zemun', desc:'Il borgo affacciato sul Danubio: salita alla torre, lungofiume e taverne di pesce.', th:['natura','relax','storia'], time:'mattina', prio:1},
+   {name:'Novi Beograd brutalista — Genex Tower', gid:'ChIJweb4QYJlWkcRB3YJ8MMTY9M', desc:'La “Porta Ovest” del 1979, icona dell’architettura jugoslava in cemento.', th:['storia'], time:'pomeriggio', prio:2},
+   {name:'Museo della Jugoslavia & Casa dei Fiori', q:'Museo della Jugoslavia Belgrado', desc:'Storia del ’900 e mausoleo di Tito, immerso nel verde. Da abbinare al brutalismo.', th:['storia','natura'], time:'pomeriggio', prio:2},
+   {name:'Museo d’Arte Contemporanea', q:'Muzej savremene umetnosti Beograd', desc:'Sul lungo Sava di Novi Beograd, edificio modernista e buona collezione.', th:['storia'], time:'pomeriggio', prio:3},
+   {name:'Cena speciale a Dvorište o Mihailo', gid:'ChIJj8N-0rp6WkcRcrsES1fUATo', desc:'L’ultima sera in grande: Mežestoran Dvorište (Michelin) o Restoran Mihailo. A letto presto.', th:['cibo'], time:'sera', prio:1},
+   {name:'Ultimo giro sui splavovi', q:'splav Beograd nightlife', desc:'Un saluto alla notte di Belgrado sull’acqua, se reggete la sveglia all’alba.', th:['notte'], time:'sera', prio:3}
+ ]},
+ {date:'2026-07-16', leg:'peschici', chip:'Gio 16 lug', title:'Ritorno + arrivo a Peschici', fixed:[
+   '<b>04:00</b> — Sveglia e transfer prenotato verso l’aeroporto',
+   '<b>06:50</b> — Volo JU 400 Belgrado → Fiumicino (Air Serbia, Terminal 2)',
+   '<b>08:25</b> — Arrivo a Fiumicino. Navetta al parcheggio e ritiro auto: <b>i bagagli per il mare sono già a bordo</b>',
+   '<b>~09:30</b> — In strada verso Peschici (~4h30), con sosta pranzo',
+   '<b>Pomeriggio</b> — Arrivo e check-in in Via Gioielli 6, primo tuffo'
+ ], slots:[
+   {name:'Primo bagno alla spiaggia di Peschici', q:'Spiaggia di Peschici', desc:'Appena scaricate le valigie, il primo tuffo per togliere la stanchezza del viaggio.', th:['mare','relax'], time:'pomeriggio', prio:2},
+   {name:'Passeggiata al tramonto nel borgo', q:'Peschici centro storico', desc:'Vicoli bianchi e scorci sul mare con la luce della sera.', th:['relax','natura'], time:'sera', prio:1},
+   {name:'Cena leggera in paese', q:'ristorante Peschici centro storico', desc:'Qualcosa di semplice e buono nel borgo, senza strafare: domani è il compleanno.', th:['cibo'], time:'sera', prio:1}
+ ]},
+ {date:'2026-07-17', leg:'peschici', chip:'Ven 17 lug', title:'Il compleanno di Carmela', birthday:true, fixed:[
+   '<b>Auguri, Carmela!</b> — Giornata libera: mare al mattino, cena speciale la sera'
+ ], slots:[
+   {name:'Baia di San Felice', gid:'ChIJ06Pg-6bHNxMRfpHGsVm3zJw', desc:'L’arco di roccia e l’acqua bassa: una delle cartoline del Gargano.', th:['mare','natura','relax'], time:'mattina', prio:1},
+   {name:'Spiaggia di Vignanotica', gid:'ChIJgSMKtITANxMRdlwjPt2L6zE', desc:'Falesie bianche a picco e mare cristallino. Portate scarpette: è a ciottoli.', th:['mare','natura'], time:'mattina', prio:1},
+   {name:'Baia di Manaccora', q:'Baia di Manaccora Peschici', desc:'Più riparata e comoda, vicina a Peschici: ottima per una mattinata tranquilla.', th:['mare','relax'], time:'mattina', prio:2},
+   {name:'Foresta Umbra — ombra e frescura', q:'Foresta Umbra Gargano', desc:'Faggete secolari e sentieri all’ombra: l’alternativa fresca nelle ore di sole forte.', th:['natura','avventura','relax'], time:'pomeriggio', prio:2},
+   {name:'Aperitivo su un trabucco', q:'trabucco Peschici aperitivo', desc:'Drink sospesi sull’acqua su un’antica macchina da pesca: scenografico e rilassante.', th:['cibo','relax','natura'], time:'pomeriggio', prio:2},
+   {name:'Cena di compleanno sul mare', gid:'ChIJ9UeQGhOxNxMRlsEsYM8aYVM', desc:'La serata speciale: Al Trabucco da Mimì (sul trabucco), Costamarina (terrazza sul porto) o Eden (piedi nella sabbia). Prenotate.', th:['cibo'], time:'sera', prio:1},
+   {name:'Passeggiata nel borgo illuminato', q:'Peschici centro storico sera', desc:'Dopo cena, due passi tra i vicoli con le luci e il fresco della sera.', th:['relax','notte'], time:'sera', prio:3}
+ ]},
+ {date:'2026-07-18', leg:'peschici', chip:'Sab 18 lug', title:'Grotte in barca + Gargano', fixed:[], slots:[
+   {name:'Giro in barca tra le grotte marine', gid:'ChIJM970AaGxNxMRtuh75o2cd4Q', desc:'Con Motobarca Vittorio (~4h): grotte, archi e calette raggiungibili solo dal mare.', th:['avventura','mare','natura'], time:'mattina', prio:1},
+   {name:'Bagno a Vignanotica dalla barca', gid:'ChIJgSMKtITANxMRdlwjPt2L6zE', desc:'Sosta-bagno sotto le falesie durante il giro: acqua trasparente e niente folla.', th:['mare','relax'], time:'mattina', prio:2},
+   {name:'Gita alle Isole Tremiti', q:'Isole Tremiti traghetto Peschici', desc:'Per chi vuole un’avventura in più: traghetto e mare aperto. Occupa l’intera giornata.', th:['avventura','mare'], time:'mattina', prio:3},
+   {name:'Vieste — vicoli & Pizzomunno', q:'Vieste centro storico', desc:'Il borgo bianco, il monolite Pizzomunno e la spiaggia. A ~40 min da Peschici.', th:['storia','mare','shopping'], time:'pomeriggio', prio:1},
+   {name:'Monte Sant’Angelo — Santuario UNESCO', q:'Monte Sant Angelo Santuario San Michele', desc:'La grotta di San Michele e i vicoli del rione Junno, patrimonio dell’umanità.', th:['storia','natura'], time:'pomeriggio', prio:3},
+   {name:'Vico del Gargano — il borgo dell’amore', q:'Vico del Gargano centro storico', desc:'Vicoli medievali tra gli aranceti, incluso il celebre “Vicolo del Bacio”.', th:['storia','relax'], time:'pomeriggio', prio:3},
+   {name:'Cena di pesce al tramonto', q:'ristorante pesce Peschici', desc:'Aperitivo con vista e poi pesce fresco per chiudere la giornata in bellezza.', th:['cibo','relax'], time:'sera', prio:1}
+ ]},
+ {date:'2026-07-19', leg:'peschici', chip:'Dom 19 lug', title:'Rientro a casa', fixed:[
+   '<b>Mattina</b> — Check-out e rientro con calma verso Montesilvano / L’Aquila'
+ ], slots:[
+   {name:'Ultimo bagno al mare', q:'Spiaggia di Peschici', desc:'Un tuffo veloce prima di chiudere le valigie: il saluto al Gargano.', th:['mare','relax'], time:'mattina', prio:1},
+   {name:'Caffè e paposcia nel borgo', q:'paposcia Peschici', desc:'La focaccia tipica del Gargano farcita, perfetta per la colazione dell’ultimo giorno.', th:['cibo','relax'], time:'mattina', prio:1},
+   {name:'Ultimo giro tra le botteghe', q:'botteghe Peschici centro storico', desc:'Olio, taralli, ceramiche: qualcosa di buono da portare a casa.', th:['shopping'], time:'mattina', prio:3}
+ ]}
+];
+
+/* ---------- preferences UI + render ---------- */
+function paceThreshold(){ return prefs.pace==='relax'?1 : prefs.pace==='intenso'?3 : 2; }
+function slotVisible(s){
+  if(s.prio > paceThreshold()) return false;
+  if(prefs.interests.size===0) return true;
+  return s.th.some(t=>prefs.interests.has(t));
+}
+function slotLink(s){
+  if(s.gid) return `<a class="slink" href="${G(s.gid,s.name)}" target="_blank" rel="noopener">${s.name} ${EXT}</a>`;
+  if(s.q)   return `<a class="slink" href="${Q(s.q)}" target="_blank" rel="noopener">${s.name} ${EXT}</a>`;
+  return s.name;
+}
+function renderSlot(s){
+  const tags = s.th.map(t=>`<span class="thtag th-${t}">${THEMES[t].short}</span>`).join('');
+  return `<div class="slot"><b>${slotLink(s)}</b>${tags}<p>${s.desc}</p></div>`;
+}
+function buildPrefBar(id){
+  const el=document.getElementById(id); if(!el) return;
+  const which = id.endsWith('pe') ? 'pe' : 'bg';
+  const chips = Object.entries(THEMES).map(([k,v])=>`<button class="pref-chip" data-th="${k}">${ico(v.icon)}${v.label}</button>`).join('');
+  const paces = ['relax','bilanciato','intenso'].map(p=>`<button class="pace-btn" data-pace="${p}">${PACELAB[p]}</button>`).join('');
+  el.innerHTML =
+    `<div class="pref-row"><span class="pref-lab">Cosa vi piace?</span><div class="pref-chips">${chips}</div></div>`+
+    `<div class="pref-row"><span class="pref-lab">Che ritmo?</span><div class="pace">${paces}</div>`+
+    `<button class="pref-reset" data-reset="1">Azzera</button>`+
+    `<span class="pref-count"><b data-count="${which}">0</b> idee su misura</span></div>`;
+}
+function syncPrefUI(){
+  document.querySelectorAll('.pref-chip').forEach(c=>c.classList.toggle('on', prefs.interests.has(c.dataset.th)));
+  document.querySelectorAll('.pace-btn').forEach(b=>b.classList.toggle('on', b.dataset.pace===prefs.pace));
+}
+const tlBG=document.getElementById('timeline-bg');
+const tlPE=document.getElementById('timeline-pe');
+function renderDays(){
+  tlBG.innerHTML=''; tlPE.innerHTML='';
+  let cBG=0,cPE=0;
+  DAYS.forEach(day=>{
+    const vis=day.slots.filter(slotVisible);
+    if(day.leg==='belgrado') cBG+=vis.length; else cPE+=vis.length;
+    const el=document.createElement('div');
+    el.className='day'+(day.birthday?' birthday':'')+(day.date===TODAY?' today':'');
+    let badges='';
+    if(day.date===TODAY) badges+='<span class="chip today-chip">Oggi</span>';
+    if(day.birthday)     badges+='<span class="chip bday-chip">🎂 Compleanno</span>';
+    const spine = day.fixed.length ? `<ul class="spine">${day.fixed.map(f=>`<li>${f}</li>`).join('')}</ul>` : '';
+    let tailor='';
+    if(vis.length){
+      const order=['mattina','pomeriggio','sera'];
+      const lab={mattina:'Mattina',pomeriggio:'Pomeriggio',sera:'Sera'};
+      const blocks=order.filter(k=>vis.some(s=>(s.time||'mattina')===k)).map(k=>
+        `<div class="tslot"><span class="tslot-l">${lab[k]}</span>`+
+        vis.filter(s=>(s.time||'mattina')===k).map(renderSlot).join('')+`</div>`).join('');
+      tailor=`<div class="tailor"><div class="tailor-h">${ico('<path d="M12 2l2.4 5 5.6.8-4 3.9 1 5.6L12 20l-5 2.3 1-5.6-4-3.9 5.6-.8z"/>')}Su misura per voi</div>${blocks}</div>`;
+    } else {
+      tailor=`<div class="tailor empty">Nessuna attività con questi filtri — allarga gli interessi o alza il ritmo.</div>`;
+    }
+    el.innerHTML=`<div class="dh">${badges}<span class="chip">${day.chip}</span><h3>${day.title}</h3></div>${spine}${tailor}`;
+    (day.leg==='belgrado'?tlBG:tlPE).appendChild(el);
+  });
+  document.querySelectorAll('[data-count="bg"]').forEach(e=>e.textContent=cBG);
+  document.querySelectorAll('[data-count="pe"]').forEach(e=>e.textContent=cPE);
+}
+document.addEventListener('click',e=>{
+  const chip=e.target.closest('.pref-chip');
+  if(chip){ const t=chip.dataset.th; prefs.interests.has(t)?prefs.interests.delete(t):prefs.interests.add(t); savePrefs(); syncPrefUI(); renderDays(); return; }
+  const pb=e.target.closest('.pace-btn');
+  if(pb){ prefs.pace=pb.dataset.pace; savePrefs(); syncPrefUI(); renderDays(); return; }
+  const rs=e.target.closest('.pref-reset');
+  if(rs){ prefs.interests.clear(); prefs.pace='bilanciato'; savePrefs(); syncPrefUI(); renderDays(); return; }
+});
+buildPrefBar('prefs-bg');
+buildPrefBar('prefs-pe');
+syncPrefUI();
+renderDays();
+
+/* ---------- Belgrade pre-trip checklist ---------- */
 const CHECK = [
   ["crit","Confermare il volo eDreams","Prenotazione 25182466511 ancora “in elaborazione”. Controlla email e app: servono i biglietti emessi. Se entro 24h non arriva la conferma, chiama eDreams. Non darlo per scontato."],
   ["crit","Documenti validi per l’espatrio","Serbia fuori UE. Carmela: carta d’identità valida per l’espatrio o passaporto non scaduti. Tomas: se cittadino UE bastano; se extra-UE residente in Italia serve passaporto + permesso di soggiorno. Verifica la scadenza ora."],
@@ -370,103 +786,68 @@ const CHECK = [
   ["info","Registrazione in Serbia (beli karton)","Ogni straniero va registrato entro 24h. Negli alloggi ufficiali la fa la struttura: chiedi all’host la conferma e tienila con te fino all’uscita."]
 ];
 const tagName = {crit:"Critico",warn:"Importante",info:"Utile"};
-const cl = document.getElementById('checklist');
-let saved = {};
-try { saved = JSON.parse(localStorage.getItem('bgd_check')||'{}'); } catch(e){}
-CHECK.forEach((it,i)=>{
-  const d = document.createElement('div');
-  d.className = 'check' + (saved[i] ? ' on' : '');
-  d.innerHTML = `<div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#EAF2EF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <div class="ct"><h3>${it[1]}<span class="tag ${it[0]}">${tagName[it[0]]}</span></h3><p>${it[2]}</p></div>`;
-  d.addEventListener('click', ()=>{
-    d.classList.toggle('on');
-    saved[i] = d.classList.contains('on');
-    try { localStorage.setItem('bgd_check', JSON.stringify(saved)); } catch(e){}
-    updateProgress();
-  });
-  cl.appendChild(d);
-});
-function updateProgress(){
-  const n = document.querySelectorAll('.check.on').length;
-  document.getElementById('pcount').textContent = n + ' / ' + CHECK.length;
-  document.getElementById('pfill').style.width = (n/CHECK.length*100) + '%';
-}
-updateProgress();
+buildChecks(
+  document.getElementById('checklist'),
+  CHECK.map(c=>({label:c[1], sub:c[2], tag:c[0], tagLabel:tagName[c[0]]})),
+  'bgd_check',
+  document.getElementById('pfill'),
+  document.getElementById('pcount')
+);
 
-const DAYS = [
-  ["Lun 13 lug","Partenza + arrivo a Belgrado",0,[
-    "<b>08:30</b> — Partenza da L’Aquila in auto (margine per il traffico attorno a Roma)",
-    "<b>~10:45</b> — Parcheggio lunga sosta a Fiumicino + navetta (~25–40 € per 3 giorni)",
-    "<b>11:40</b> — In aeroporto: bagagli e controlli, volo internazionale, con calma",
-    "<b>13:40</b> — Volo W6 4032 Fiumicino → Belgrado",
-    "<b>15:20</b> — Atterraggio. Al controllo passaporti, verifica il timbro d’ingresso",
-    "<b>15:40</b> — Transfer Talixo → appartamento, Pajsijeva 4 (Stari Grad)",
-    "<b>Sera</b> — Tramonto alla " + L_("ChIJUyxcAUllWkcRstJIPZ95CxY","Fortezza di Kalemegdan") + ", poi cena a " + L_("ChIJhU_jAAB7WkcRjwGR4SZHCCI","Skadarlija")
-  ]],
-  ["Mar 14 lug","Belgrado classica",0,[
-    "<b>Mattina</b> — " + L_("ChIJj44lpwxwWkcRTDTAbxo5Eb4","Tempio di San Sava") + " (8–20, gratis), tra i più grandi templi ortodossi al mondo",
-    "Trg Republike e la via pedonale " + Ls("Knez Mihailova Beograd","Knez Mihailova") + " per due passi e shopping",
-    "<b>Pomeriggio</b> — " + L_("ChIJUyxcAUllWkcRstJIPZ95CxY","Kalemegdan") + " con calma: confluenza di Sava e Danubio, carri armati all’aperto, vedute",
-    "<b>Sera</b> — Aperitivo sul " + L_("ChIJ6_nLR9plWkcRoKuLsCdFgd8","lungo Sava") + " o sui splavovi, i locali galleggianti sul fiume"
-  ]],
-  ["Mer 15 lug","Belgrado relax + ultima sera",0,[
-    "<b>Mattina</b> — Quartiere Savamala, Beton hala e la passeggiata della Belgrade Waterfront sulla Sava",
-    "<b>Opzionale</b> — Salto a Novi Beograd per la " + L_("ChIJweb4QYJlWkcRB3YJ8MMTY9M","Genex Tower brutalista") + ", oppure il " + Ls("Museo Nikola Tesla Belgrado","Museo di Nikola Tesla"),
-    "<b>Pomeriggio</b> — Preparate i bagagli e impostate la sveglia presto",
-    "<b>Sera</b> — Cena speciale a " + L_("ChIJj8N-0rp6WkcRcrsES1fUATo","Mezestoran Dvorište") + " o " + L_("ChIJxUWy6mN7WkcR8LeuOJ50TRI","Restoran Mihailo") + ". A letto presto!"
-  ]],
-  ["Gio 16 lug","Ritorno + arrivo a Peschici",0,[
-    "<b>04:00</b> — Sveglia e transfer prenotato verso l’aeroporto",
-    "<b>06:50</b> — Volo JU 400 Belgrado → Fiumicino (Air Serbia, Terminal 2)",
-    "<b>08:25</b> — Arrivo a Fiumicino (Terminal 3). Navetta al parcheggio, ritiro auto",
-    "<b>~09:30</b> — Partenza verso Peschici (~4h30), con sosta pranzo lungo strada",
-    "<b>Pomeriggio</b> — Arrivo e check-in, primo tuffo",
-    "<b>Sera</b> — Passeggiata al tramonto nel " + Ls("Peschici centro storico","borgo di Peschici") + ", cena leggera"
-  ]],
-  ["Ven 17 lug","Il compleanno di Carmela",1,[
-    "<b>Giornata mare</b> — A scelta: " + L_("ChIJ06Pg-6bHNxMRfpHGsVm3zJw","Baia di San Felice") + " (l’arco di roccia, acqua bassa) o " + L_("ChIJgSMKtITANxMRdlwjPt2L6zE","Vignanotica") + " (falesie bianche)",
-    "<b>Cena di compleanno — tre idee</b>: " + L_("ChIJ9UeQGhOxNxMRlsEsYM8aYVM","Al Trabucco da Mimì") + " (sospesi sul mare), " + L_("ChIJq6BUVZ-xNxMRWIsiM_ZljvM","Costamarina") + " (terrazza sul porto), " + L_("ChIJ8U2GD6KxNxMReE1zzbOGVgM","Eden") + " (piedi nella sabbia)"
-  ]],
-  ["Sab 18 lug","Grotte in barca + Vieste",0,[
-    "<b>Mattina</b> — Giro in barca tra le grotte marine con " + L_("ChIJM970AaGxNxMRtuh75o2cd4Q","Motobarca Vittorio") + " (~4h, bagno a Vignanotica)",
-    "<b>Pomeriggio</b> — " + Ls("Vieste centro storico","Vieste") + ": vicoli, il monolite " + Ls("Pizzomunno Vieste","Pizzomunno") + " e la spiaggia",
-    "<b>Sera</b> — Aperitivo al tramonto e cena di pesce"
-  ]],
-  ["Dom 19 lug","Rientro a casa",0,[
-    "Ultima mattina al mare o caffè nel borgo, poi rientro con calma verso Montesilvano / L’Aquila"
-  ]]
+/* ---------- Peschici / Gargano checklist ---------- */
+const PE_CHECK = [
+  ["crit","Prenotare la cena di compleanno del 17","Soprattutto Al Trabucco da Mimì va prenotato con giorni d’anticipo. Tenete pronte anche Costamarina ed Eden come alternativa."],
+  ["warn","Prenotare il giro in barca tra le grotte","Per il 18 con Motobarca Vittorio (o simili): in alta stagione i posti finiscono. Chiedete orario e punto d’imbarco."],
+  ["info","Confermare il check-in con l’host di Peschici","Via Gioielli 6: concordate orario d’arrivo, ritiro chiavi e — importante — dove parcheggiare vicino al borgo."],
+  ["warn","Parcheggio e ZTL del borgo","Il centro storico è ZTL con vicoli stretti: individuate il posteggio a monte, scaricate i bagagli e lasciate l’auto fuori."],
+  ["info","Benzina, spesa e ghiacciaia prima di salire","Fate rifornimento e provviste a valle: su nel borgo è più scomodo. Ghiacciaia pronta per le giornate in spiaggia."],
+  ["info","Kit spiaggia: scarpette, crema, ombrellone","Vignanotica e diverse cale sono a ciottoli e il sole è forte: scarpe da scoglio, crema alta e qualcosa per l’ombra."],
+  ["info","Controllare meduse, bandiere e orari di sole","Luglio è pieno: arrivate in spiaggia la mattina presto per i posti migliori e un mare più calmo."]
 ];
-const tlBG = document.getElementById('timeline-bg');
-const tlPE = document.getElementById('timeline-pe');
-DAYS.forEach((d,i)=>{
-  const el = document.createElement('div');
-  el.className = 'day' + (d[2] ? ' birthday' : '');
-  el.innerHTML = `<div class="dh"><span class="chip">${d[0]}</span><h3>${d[1]}</h3></div>
-    <ul>${d[3].map(x=>`<li>${x}</li>`).join('')}</ul>`;
-  (i < 3 ? tlBG : tlPE).appendChild(el);
-});
+buildChecks(
+  document.getElementById('pechecklist'),
+  PE_CHECK.map(c=>({label:c[1], sub:c[2], tag:c[0], tagLabel:tagName[c[0]]})),
+  'pe_check',
+  document.getElementById('pefill'),
+  document.getElementById('pecount')
+);
 
+/* ---------- Belgrade cards ---------- */
 const SEE = [
-  ["Fortezza di Kalemegdan","Cuore storico sulla collina dove Sava e Danubio si incontrano. Ingresso libero, tramonti memorabili.","ChIJUyxcAUllWkcRstJIPZ95CxY"],
-  ["Tempio di San Sava","Enorme e luminoso, mosaici dorati all’interno. Aperto 8–20, gratis.","ChIJj44lpwxwWkcRTDTAbxo5Eb4"],
-  ["Skadarlija","Vicolo acciottolato bohémien, taverne storiche e musica dal vivo la sera.","ChIJhU_jAAB7WkcRjwGR4SZHCCI"],
-  ["Novi Beograd brutalista","Mezza giornata tra i colossi di cemento jugoslavi: la Genex Tower (Porta Ovest, 1979) e il Museo d’Arte Contemporanea. Da non perdere per chi ama l’architettura.","ChIJweb4QYJlWkcRB3YJ8MMTY9M"],
-  ["Lungo Sava / splavovi","Passeggiata sul fiume tra caffè e locali galleggianti per aperitivo e serata.","ChIJ6_nLR9plWkcRoKuLsCdFgd8"]
+  ["Fortezza di Kalemegdan","Cuore storico sulla collina dove Sava e Danubio si incontrano. Ingresso libero, tramonti memorabili.","gid","ChIJUyxcAUllWkcRstJIPZ95CxY"],
+  ["Tempio di San Sava","Enorme e luminoso, mosaici dorati all’interno. Aperto 8–20, gratis.","gid","ChIJj44lpwxwWkcRTDTAbxo5Eb4"],
+  ["Skadarlija","Vicolo acciottolato bohémien, taverne storiche e musica dal vivo la sera.","gid","ChIJhU_jAAB7WkcRjwGR4SZHCCI"],
+  ["Knez Mihailova & Trg Republike","La via pedonale e la piazza centrale: passeggio, palazzi e vita cittadina.","q","Knez Mihailova Beograd"],
+  ["Museo di Nikola Tesla","Piccolo e curato, con dimostrazioni elettriche dal vivo. Meglio prenotare.","q","Museo Nikola Tesla Belgrado"],
+  ["Zemun & Torre Gardoš","Borgo sul Danubio con torre panoramica e taverne di pesce: aria diversa dalla capitale.","q","Gardoš Tower Zemun"],
+  ["Ada Ciganlija","L’isola-spiaggia sulla Sava: lago balneabile, ombra e relax. Perfetta col caldo.","q","Ada Ciganlija Beograd"],
+  ["Novi Beograd brutalista","I colossi di cemento jugoslavi: la Genex Tower (1979) e il Museo d’Arte Contemporanea.","gid","ChIJweb4QYJlWkcRB3YJ8MMTY9M"],
+  ["Museo della Jugoslavia","Storia del ’900 e mausoleo di Tito (Casa dei Fiori), immerso nel verde.","q","Museo della Jugoslavia Belgrado"]
 ];
 const EAT = [
-  ["Restoran Mihailo","€€","Cucina serba tradizionale nel cuore del centro, porzioni generose.","ChIJxUWy6mN7WkcR8LeuOJ50TRI"],
-  ["Konoba Akustik","€€","Atmosfera accogliente vicino al parco, piatti balcanici e vini locali.","ChIJEdo78jVlWkcRc4GDM0Eg8ME"],
-  ["Mezestoran Dvorište","€€","Mediterraneo segnalato Michelin, ottimo per la cena speciale. Chiuso il lunedì.","ChIJj8N-0rp6WkcRcrsES1fUATo"],
-  ["Zavičaj Balkanska","€€","Trattoria locale autentica, ottimo rapporto qualità-prezzo.","ChIJl7sqTql6WkcRsQp4gfsMcL0"]
+  ["Restoran Mihailo","€€","Cucina serba tradizionale nel cuore del centro, porzioni generose.","gid","ChIJxUWy6mN7WkcR8LeuOJ50TRI"],
+  ["Konoba Akustik","€€","Atmosfera accogliente vicino al parco, piatti balcanici e vini locali.","gid","ChIJEdo78jVlWkcRc4GDM0Eg8ME"],
+  ["Mežestoran Dvorište","€€","Mediterraneo segnalato Michelin, ottimo per la cena speciale. Chiuso il lunedì.","gid","ChIJj8N-0rp6WkcRcrsES1fUATo"],
+  ["Zavičaj Balkanska","€€","Trattoria locale autentica, ottimo rapporto qualità-prezzo.","gid","ChIJl7sqTql6WkcRsQp4gfsMcL0"],
+  ["Ambar","€€€","Cucina balcanica in piccole portate da condividere, a Beton Hala sul fiume.","q","Ambar Beograd Beton Hala"],
+  ["Pekara per il burek","€","La sfoglia ripiena della colazione serba: provatela appena sfornata.","q","pekara Beograd burek"]
 ];
-const EXT = '<span class="ext">↗</span>';
-const seeEl = document.getElementById('see');
-SEE.forEach(s=>{ const c=document.createElement('a'); c.className='card'; c.href=G(s[2],s[0]); c.target='_blank'; c.rel='noopener';
-  c.innerHTML = `<h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[1]}</p>`; seeEl.appendChild(c); });
-const eatEl = document.getElementById('eat');
-EAT.forEach(s=>{ const c=document.createElement('a'); c.className='card'; c.href=G(s[3],s[0]); c.target='_blank'; c.rel='noopener';
-  c.innerHTML = `<h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p>`; eatEl.appendChild(c); });
+// SEE: [name, desc, type, key]
+SEE.forEach(s=>{
+  const host=document.getElementById('see');
+  const href = s[2]==='gid'?G(s[3],s[0]):Q(s[3]);
+  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[1]}</p>`; host.appendChild(c);
+});
+// EAT: [name, price, desc, type, key]
+EAT.forEach(s=>{
+  const host=document.getElementById('eat');
+  const href = s[3]==='gid'?G(s[4],s[0]):Q(s[4]);
+  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p>`; host.appendChild(c);
+});
 
+/* ---------- Belgrade tips (accordion) ---------- */
 const CONSIGLI = [
   ["shield","È sicura come città?","Belgrado è una capitale tranquilla e i reati verso i turisti sono rari. Vale la normale attenzione ai borseggi nei luoghi affollati (mezzi, mercati) e di sera lungo i fiumi. Il centro di notte è vivo e frequentato: ci si cammina serenamente, anche in due."],
   ["taxi","Taxi senza fregature","Il raggiro classico è il taxi non ufficiale che gonfia la corsa, soprattutto vicino all’aeroporto e ai punti turistici. Usate un’app come Yandex Go o CarGo: prezzo concordato in anticipo. Se ne prendete uno su strada, sceglietene uno con il logo di una compagnia (Pink, Naxis) e il tassametro acceso."],
@@ -476,7 +857,7 @@ const CONSIGLI = [
   ["coffee","Caffè e cultura della kafana","Il caffè qui è un rito sociale: ci si siede a lungo e nessuno vi mette fretta. Provate la domaća kafa, il caffè denso «alla turca» da lasciar depositare. La kafana è la trattoria-bar tradizionale: ci si va per mangiare, bere e stare insieme per ore."],
   ["food","Cosa mangiare assolutamente","Cucina generosa e a base di carne: ćevapi (polpettine), pljeskavica (hamburger balcanico), burek (sfoglia ripiena, ottima a colazione), ajvar (crema di peperoni) e kajmak (latticino cremoso). Le porzioni sono enormi, ordinate con calma. E almeno un brindisi con la rakija, l’acquavite di casa."],
   ["music","Splavovi e vita notturna","D’estate la notte si sposta sui splavovi, i locali galleggianti sulla Sava e sul Danubio: dal drink rilassato al vero club, con musica fino all’alba. Anche solo per un aperitivo al tramonto sull’acqua, vale la passeggiata."],
-  ["droplet","Acqua e caldo","L’acqua del rubinetto è potabile. A luglio fa molto caldo (30–35°C): borraccia sempre con voi, evitate le ore centrali sotto il sole e visitate Kalemegdan e i templi la mattina presto o al tramonto."],
+  ["droplet","Acqua e caldo","L’acqua del rubinetto è potabile. A luglio fa molto caldo (30–35°C): borraccia sempre con voi, evitate le ore centrali sotto il sole e visitate Kalemegdan e i templi la mattina presto o al tramonto. Ada Ciganlija è l’oasi fresca dei belgradesi."],
   ["plug","Prese e corrente","Nessun problema per i caricabatterie italiani: corrente a 230V e prese di tipo C/F, identiche a quelle di casa. Non serve adattatore."],
   ["device","Internet, mappe e SIM","Serbia fuori UE: niente roaming gratuito e dati potenzialmente cari. Valutate una eSIM locale o la tariffa extra-UE del vostro operatore, e scaricate prima le mappe offline della città."],
   ["bus","Muoversi in città","Il centro storico si gira tutto a piedi. Per le distanze ci sono tram e bus (rete GSP) e i taxi via app, comunque economici. Per Novi Beograd (Genex Tower) conviene il taxi: è oltre il fiume."],
@@ -499,15 +880,21 @@ const CIC = {
   bus:'<rect x="4" y="4" width="16" height="12" rx="2"/><path d="M4 11h16"/><circle cx="8" cy="18" r="1.4"/><circle cx="16" cy="18" r="1.4"/>',
   church:'<path d="M12 2v6M9 5h6M12 8l6 4v9H6v-9z"/><path d="M10 21v-4a2 2 0 0 1 4 0v4"/>',
   message:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8 9 9 0 0 1-4-1L3 20l1.5-4.5A8 8 0 0 1 3.5 11 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>',
-  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/>',
+  road:'<path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M4 11h16v5H4z"/><circle cx="7.5" cy="16.5" r="1.4"/><circle cx="16.5" cy="16.5" r="1.4"/>',
+  wave:'<path d="M3 18q3 -3 6 0t6 0 6 0"/><path d="M3 13q3 -3 6 0t6 0 6 0"/><path d="M3 8q3 -3 6 0t6 0 6 0"/>',
+  boat:'<path d="M3 14h18l-2 5a2 2 0 0 1-1.8 1H6.8A2 2 0 0 1 5 19z"/><path d="M6 14V7l6-3 6 3v7"/>',
+  fish:'<path d="M16 12c-2.8 3-6.5 4-11 4 1.5-2 1.5-6 0-8 4.5 0 8.2 1 11 4z"/><path d="M16 12c1.5-1.5 3.5-2 5-2-1 1.5-1 2.5 0 4-1.5 0-3.5-.5-5-2z"/>'
 };
 const cgEl = document.getElementById('consiglilist');
 CONSIGLI.forEach(c=>{
   const d = document.createElement('details'); d.className='acc';
-  d.innerHTML = `<summary><span class="a-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CIC[c[0]]}</svg></span>${c[1]}<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></summary><p>${c[2]}</p>`;
+  d.innerHTML = `<summary><span class="a-ic">${ico(CIC[c[0]])}</span>${c[1]}<span class="chev">${ico('<polyline points="6 9 12 15 18 9"/>')}</span></summary><p>${c[2]}</p>`;
   cgEl.appendChild(d);
 });
 
+/* ---------- phrasebook ---------- */
 const PHRASES = [
   ["Buongiorno","Dobar dan","dóbar dán"],
   ["Ciao (informale)","Zdravo / Ćao","zdrávo / ciáo"],
@@ -529,6 +916,7 @@ const PHRASES = [
 document.getElementById('phrasebook').innerHTML =
   '<table><tbody>' + PHRASES.map(p=>`<tr><td class="it">${p[0]}</td><td class="sr">${p[1]}</td><td class="pr">${p[2]}</td></tr>`).join('') + '</tbody></table>';
 
+/* ---------- Peschici overview pick ---------- */
 const SEA = [
   ["Peschici · il vostro borgo","La vostra meta", true, "~4h30 da Fiumicino · ~3h da casa",
    "Il borgo bianco a picco sul mare, perla del Gargano, con spiagge spettacolari a pochi minuti: Baia di San Felice con l’arco di roccia, Vignanotica tra le falesie e il giro in barca tra le grotte.",
@@ -542,31 +930,39 @@ SEA.forEach(s=>{ const el=document.createElement('div'); el.className='pick'+(s[
     <div class="route">✈ ${s[3]}</div><p>${s[4]}</p><div class="why">${s[5]}</div>${spots}`;
   seaEl.appendChild(el); });
 
-const PINS = [
-  [44.8186,20.4566,"#BC4F36","Il vostro appartamento","Pajsijeva 4, Stari Grad. Centralissimo, a piedi da tutto."],
-  [44.8241,20.4502,"#0E4A43","Fortezza di Kalemegdan","Andateci al tramonto del 13. Sava + Danubio, ingresso libero."],
-  [44.7981,20.4690,"#0E4A43","Tempio di San Sava","Mosaici dorati. Aperto 8–20, gratis. Mattina del 14."],
-  [44.8179,20.4644,"#0E4A43","Skadarlija","Vicolo bohémien con taverne: cena della prima sera."],
-  [44.8097,20.4491,"#0E4A43","Sava Promenade","Passeggiata sul fiume e locali galleggianti."],
-  [44.8202,20.4049,"#0E4A43","Genex Tower (brutalista)","Porta Ovest di Belgrado, 1979. Icona dell’architettura jugoslava a Novi Beograd."],
-  [44.8157,20.4579,"#D8913A","Restoran Mihailo","Cucina serba tradizionale, centralissimo."],
-  [44.8195,20.4535,"#D8913A","Konoba Akustik","Piatti balcanici e vini locali, accogliente."],
-  [44.8128,20.4699,"#D8913A","Mezestoran Dvorište","Mediterraneo Michelin. Ottimo per la cena speciale. Chiuso lunedì."]
+/* ---------- Gargano: cosa fare / dove mangiare ---------- */
+const PE_SEE = [
+  ["Baia di San Felice","L’arco di roccia e l’acqua bassa, una cartolina del Gargano.","gid","ChIJ06Pg-6bHNxMRfpHGsVm3zJw"],
+  ["Spiaggia di Vignanotica","Falesie bianche a picco e mare cristallino. Scarpette consigliate (ciottoli).","gid","ChIJgSMKtITANxMRdlwjPt2L6zE"],
+  ["Giro in barca tra le grotte","Con Motobarca Vittorio: grotte, archi e calette solo dal mare (~4h).","gid","ChIJM970AaGxNxMRtuh75o2cd4Q"],
+  ["Foresta Umbra","Faggete secolari e sentieri all’ombra: la frescura nelle ore di sole forte.","q","Foresta Umbra Gargano"],
+  ["Vieste & Pizzomunno","Borgo bianco, il monolite e una bella spiaggia, a ~40 min da Peschici.","q","Vieste centro storico"],
+  ["Monte Sant’Angelo","Il Santuario di San Michele (UNESCO) e i vicoli del rione Junno.","q","Monte Sant Angelo Santuario San Michele"],
+  ["Vico del Gargano","Il “borgo dell’amore” tra aranceti e vicoli medievali.","q","Vico del Gargano centro storico"],
+  ["San Menaio & Calenella","Spiagge di sabbia tra le pinete, comode e family: alternativa morbida ai ciottoli.","q","San Menaio spiaggia"]
 ];
-const map = L.map('map',{scrollWheelZoom:false}).setView([44.816,20.459],14);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-  maxZoom:19, attribution:'&copy; OpenStreetMap'
-}).addTo(map);
-const group = [];
-PINS.forEach(p=>{
-  const m = L.circleMarker([p[0],p[1]],{
-    radius:9, color:'#fff', weight:2, fillColor:p[2], fillOpacity:1
-  }).addTo(map).bindPopup(`<b>${p[3]}</b><br>${p[4]}`);
-  group.push(m);
+const PE_EAT = [
+  ["Al Trabucco da Mimì","€€€","Cena sospesa sul mare su un vero trabucco, pesce freschissimo. Iconico: prenotate.","gid","ChIJ9UeQGhOxNxMRlsEsYM8aYVM"],
+  ["Costamarina","€€","Pesce e vista su borgo e mare, sopra il porto di Peschici.","gid","ChIJq6BUVZ-xNxMRWIsiM_ZljvM"],
+  ["Eden","€€","Frutti di mare sulla spiaggia di Peschici, atmosfera scalza al tramonto.","gid","ChIJ8U2GD6KxNxMReE1zzbOGVgM"],
+  ["Porta di Basso","€€€","Cucina ricercata affacciata sulla scogliera del borgo: cena con vista da ricordare.","q","Porta di Basso Peschici"],
+  ["Paposcia nel borgo","€","Lo street food del Gargano: focaccia soffice farcita, da mangiare passeggiando.","q","paposcia Peschici centro storico"],
+  ["Gelateria del centro","€","Pausa dolce tra i vicoli, perfetta dopo la spiaggia o la passeggiata serale.","q","gelateria Peschici centro storico"]
+];
+PE_SEE.forEach(s=>{
+  const host=document.getElementById('pe-see');
+  const href=s[2]==='gid'?G(s[3],s[0]):Q(s[3]);
+  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[1]}</p>`; host.appendChild(c);
 });
-const boundsBG = L.featureGroup(group).getBounds().pad(0.18);
-map.fitBounds(boundsBG);
+PE_EAT.forEach(s=>{
+  const host=document.getElementById('pe-eat');
+  const href=s[3]==='gid'?G(s[4],s[0]):Q(s[4]);
+  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p>`; host.appendChild(c);
+});
 
+/* ---------- birthday dinners ---------- */
 const BDAY = [
   ["Al Trabucco da Mimì","Sul trabucco","Cena sospesa sul mare su un vero trabucco, pesce freschissimo. Iconico: prenotate.","ChIJ9UeQGhOxNxMRlsEsYM8aYVM"],
   ["Costamarina","Terrazza sul porto","Pesce e vista su borgo e mare, sopra il porto di Peschici.","ChIJq6BUVZ-xNxMRWIsiM_ZljvM"],
@@ -576,11 +972,151 @@ const bdayEl = document.getElementById('bday');
 BDAY.forEach(s=>{ const c=document.createElement('a'); c.className='card'; c.href=G(s[3],s[0]); c.target='_blank'; c.rel='noopener';
   c.innerHTML = `<span class="ltag">${s[1]}</span><h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[2]}</p>`; bdayEl.appendChild(c); });
 
+/* ---------- Gargano tips ---------- */
+const PE_CONSIGLI = [
+  ["road","Le strade del Gargano","Tornanti, curve e tratti panoramici: si guida con calma e ci si mette più del previsto. Belle ma impegnative di sera; attenzione anche ad animali e ciclisti."],
+  ["car","ZTL e parcheggio nel borgo","Il centro storico di Peschici è a traffico limitato, con vicoli strettissimi. Lasciate l’auto nei posteggi a monte del paese e scendete a piedi: chiedete all’host il punto migliore."],
+  ["wave","Spiagge: libere, lidi e ciottoli","Si alternano spiagge libere e lidi attrezzati. Alcune (Vignanotica) sono a ciottoli: scarpette da scoglio comodissime. Arrivate presto in alta stagione per trovare posto."],
+  ["sun","Sole forte e meduse","Il sole picchia: crema alta, cappello e acqua. Capita di vedere meduse: niente panico, basta spostarsi. Controllate le bandiere per mare e vento."],
+  ["boat","Barca e Isole Tremiti","Il giro in barca tra le grotte è il must: prenotate per tempo. Per le Tremiti mettete in conto l’intera giornata e il meteo del mare."],
+  ["food","Sapori del Gargano","Pesce e frutti di mare, ma anche caciocavallo podolico, olio e l’imperdibile paposcia. Tra i primi: troccoli e orecchiette. Chiudete con un limoncello del posto."],
+  ["fish","I trabucchi","Antiche macchine da pesca in legno sospese sull’acqua: oggi alcuni sono ristoranti o punti per l’aperitivo. Cenare o bere su un trabucco al tramonto è un’esperienza."],
+  ["droplet","Spesa, ghiacciaia e acqua","Fate provviste a valle prima di salire al borgo. Una ghiacciaia in auto con acqua e frutta rende le giornate in spiaggia molto più comode."]
+];
+CIC.car = '<path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M4 11h16v5H4z"/><circle cx="7.5" cy="16.5" r="1.4"/><circle cx="16.5" cy="16.5" r="1.4"/>';
+const peCg = document.getElementById('pe-consigli');
+PE_CONSIGLI.forEach(c=>{
+  const icon = CIC[c[0]] || CIC.sun;
+  const d=document.createElement('details'); d.className='acc';
+  d.innerHTML=`<summary><span class="a-ic">${ico(icon)}</span>${c[1]}<span class="chev">${ico('<polyline points="6 9 12 15 18 9"/>')}</span></summary><p>${c[2]}</p>`;
+  peCg.appendChild(d);
+});
+
+/* ---------- packing (per person, grouped by category) ----------
+   item: [category, label, bag('bag1'|'bag2'|'bag3'), note?] */
+const BAGLAB = {bag1:'Valigia BG', bag2:'Mare · auto', bag3:'A mano'};
+function buildPacking(host, items, key, fillEl, countEl){
+  let saved={}; try{ saved=JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+  const total=items.length;
+  function upd(){
+    const n=items.reduce((a,_,i)=>a+(saved[i]?1:0),0);
+    if(countEl) countEl.textContent=n+' / '+total;
+    if(fillEl) fillEl.style.width=(total?n/total*100:0)+'%';
+  }
+  let lastCat=null;
+  items.forEach((it,i)=>{
+    if(it[0]!==lastCat){ const h=document.createElement('div'); h.className='pcat'; h.textContent=it[0]; host.appendChild(h); lastCat=it[0]; }
+    const d=document.createElement('div'); d.className='check'+(saved[i]?' on':'');
+    const note=it[3]?`<p>${it[3]}</p>`:'';
+    d.innerHTML=`<div class="box">${CHK}</div><div class="ct"><h3>${it[1]}<span class="tag ${it[2]}">${BAGLAB[it[2]]}</span></h3>${note}</div>`;
+    d.addEventListener('click',()=>{ d.classList.toggle('on'); saved[i]=d.classList.contains('on'); try{localStorage.setItem(key,JSON.stringify(saved));}catch(e){} upd(); });
+    host.appendChild(d);
+  });
+  upd();
+}
+const LEI = [
+  ["Documenti & soldi","Carta d’identità/passaporto per l’espatrio","bag3"],
+  ["Documenti & soldi","Tessera sanitaria + polizza viaggio","bag3"],
+  ["Documenti & soldi","Carte + un po’ di contanti","bag3"],
+  ["Documenti & soldi","Carte d’imbarco sul telefono","bag3"],
+  ["Belgrado · città","2–3 completi leggeri per la città","bag1"],
+  ["Belgrado · città","Felpa/cardigan leggero (aria condizionata, sera)","bag1"],
+  ["Belgrado · città","Scarpe comode da camminata","bag1"],
+  ["Belgrado · città","Intimo e calze per 3 giorni","bag1"],
+  ["Belgrado · città","Pigiama","bag1"],
+  ["Belgrado · città","Mini-necessaire da viaggio","bag1"],
+  ["Mare & spiaggia","Costumi da bagno (x2)","bag2"],
+  ["Mare & spiaggia","Pareo / copricostume","bag2"],
+  ["Mare & spiaggia","Cappello di paglia + occhiali da sole","bag2"],
+  ["Mare & spiaggia","Crema solare alta + doposole","bag2"],
+  ["Mare & spiaggia","Telo mare + borsa da spiaggia","bag2"],
+  ["Mare & spiaggia","Sandali / infradito","bag2"],
+  ["Mare & spiaggia","Scarpette da scoglio","bag2"],
+  ["Mare & spiaggia","Abiti leggeri e shorts per il mare","bag2"],
+  ["Compleanno & sera","Un vestito carino per la cena del 17","bag2"],
+  ["Compleanno & sera","Sandali eleganti","bag2"],
+  ["Beauty & salute","Necessaire trucco/skincare","bag2","Un minimo anche nella valigia di Belgrado"],
+  ["Beauty & salute","Spazzola, elastici, igiene personale","bag2"],
+  ["Beauty & salute","Farmaci personali","bag3"],
+  ["Beauty & salute","Repellente zanzare","bag2"],
+  ["Tech","Caricabatterie telefono","bag1"],
+  ["Tech","Power bank","bag3"]
+];
+const LUI = [
+  ["Documenti & soldi","Passaporto / carta per l’espatrio","bag3"],
+  ["Documenti & soldi","Permesso di soggiorno (se extra-UE)","bag3"],
+  ["Documenti & soldi","Patente (si guida al ritorno!)","bag3"],
+  ["Documenti & soldi","Carte + contanti","bag3"],
+  ["Documenti & soldi","Carte d’imbarco sul telefono","bag3"],
+  ["Belgrado · città","3 t-shirt + 1–2 camicie leggere","bag1"],
+  ["Belgrado · città","Pantaloni lunghi leggeri","bag1"],
+  ["Belgrado · città","Felpa leggera per la sera","bag1"],
+  ["Belgrado · città","Scarpe comode da camminata","bag1"],
+  ["Belgrado · città","Intimo e calze per 3 giorni","bag1"],
+  ["Belgrado · città","Pigiama / boxer notte","bag1"],
+  ["Mare & spiaggia","Costumi (x2)","bag2"],
+  ["Mare & spiaggia","Shorts mare + t-shirt leggere","bag2"],
+  ["Mare & spiaggia","Cappello/berretto + occhiali da sole","bag2"],
+  ["Mare & spiaggia","Crema solare alta","bag2"],
+  ["Mare & spiaggia","Telo mare","bag2"],
+  ["Mare & spiaggia","Infradito / sandali","bag2"],
+  ["Mare & spiaggia","Scarpette da scoglio","bag2"],
+  ["Mare & spiaggia","Maschera/snorkel (per le grotte)","bag2"],
+  ["Compleanno & sera","Camicia bella per la cena del 17","bag2"],
+  ["Compleanno & sera","Pantaloni/scarpe da sera","bag2"],
+  ["Beauty & salute","Necessaire (rasoio, spazzolino, deodorante)","bag2","Un minimo anche nella valigia di Belgrado"],
+  ["Beauty & salute","Farmaci / cerotti","bag3"],
+  ["Tech","Caricabatterie + cavi","bag1"],
+  ["Tech","Power bank + cuffie","bag3"],
+  ["Tech","Macchina fotografica (opzionale)","bag1"]
+];
+const COM = [
+  ["In comune","Ombrellone da spiaggia","bag2"],
+  ["In comune","2 teli mare grandi / stuoia","bag2"],
+  ["In comune","Ghiacciaia + borsa frigo (acqua, frutta)","bag2"],
+  ["In comune","Kit auto: triangolo, giubbotti, libretto","bag3"],
+  ["In comune","Caricabatterie da auto","bag2"],
+  ["In comune","Salviette, sacchetti, fazzoletti","bag2"],
+  ["In comune","Borracce e snack per il viaggio","bag2"],
+  ["In comune","Mini kit pronto soccorso","bag2"]
+];
+buildPacking(document.getElementById('leilist'), LEI, 'pack_lei', document.getElementById('leifill'), document.getElementById('leicount'));
+buildPacking(document.getElementById('luilist'), LUI, 'pack_lui', document.getElementById('luifill'), document.getElementById('luicount'));
+buildPacking(document.getElementById('comlist'), COM, 'pack_com', document.getElementById('comfill'), document.getElementById('comcount'));
+
+/* ---------- Belgrade map ---------- */
+const PINS = [
+  [44.8186,20.4566,"#BC4F36","Il vostro appartamento","Pajsijeva 4, Stari Grad. Centralissimo, a piedi da tutto."],
+  [44.8241,20.4502,"#0E4A43","Fortezza di Kalemegdan","Andateci al tramonto del 13. Sava + Danubio, ingresso libero."],
+  [44.7981,20.4690,"#0E4A43","Tempio di San Sava","Mosaici dorati. Aperto 8–20, gratis. Mattina del 14."],
+  [44.8179,20.4644,"#0E4A43","Skadarlija","Vicolo bohémien con taverne: cena della prima sera."],
+  [44.8167,20.4577,"#0E4A43","Knez Mihailova","Via pedonale e Trg Republike, cuore del passeggio."],
+  [44.8097,20.4491,"#0E4A43","Sava Promenade","Passeggiata sul fiume e locali galleggianti."],
+  [44.7866,20.4067,"#0E4A43","Ada Ciganlija","Isola-spiaggia sul lago: bagno e ombra nelle ore calde."],
+  [44.8439,20.4128,"#0E4A43","Zemun & Torre Gardoš","Borgo sul Danubio con torre panoramica e taverne."],
+  [44.8202,20.4049,"#0E4A43","Genex Tower (brutalista)","Porta Ovest, 1979. Icona jugoslava a Novi Beograd."],
+  [44.7880,20.4520,"#0E4A43","Museo della Jugoslavia","Storia del ’900 e mausoleo di Tito (Casa dei Fiori)."],
+  [44.8157,20.4579,"#D8913A","Restoran Mihailo","Cucina serba tradizionale, centralissimo."],
+  [44.8195,20.4535,"#D8913A","Konoba Akustik","Piatti balcanici e vini locali, accogliente."],
+  [44.8128,20.4699,"#D8913A","Mežestoran Dvorište","Mediterraneo Michelin. Ottimo per la cena speciale. Chiuso lunedì."]
+];
+const map = L.map('map',{scrollWheelZoom:false}).setView([44.816,20.459],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(map);
+const gBG=[];
+PINS.forEach(p=>{ gBG.push(L.circleMarker([p[0],p[1]],{radius:9,color:'#fff',weight:2,fillColor:p[2],fillOpacity:1}).addTo(map).bindPopup(`<b>${p[3]}</b><br>${p[4]}`)); });
+const boundsBG = L.featureGroup(gBG).getBounds().pad(0.18);
+map.fitBounds(boundsBG);
+
+/* ---------- Gargano map ---------- */
 const PINS2 = [
   [41.9498,16.0112,"#0E4A43","Borgo di Peschici","Vicoli bianchi a picco sul mare e castello normanno."],
   [41.8290,16.1900,"#0E4A43","Baia di San Felice","Arco di roccia e acqua bassa, una cartolina."],
   [41.7612,16.1645,"#0E4A43","Vignanotica","Falesie bianche e ciottoli, mare cristallino."],
+  [41.8260,16.1100,"#0E4A43","Foresta Umbra","Faggete e sentieri all’ombra: la frescura del Gargano."],
   [41.8830,16.1800,"#0E4A43","Vieste","Centro storico e Pizzomunno, a ~40 min da Peschici."],
+  [41.7080,15.9560,"#0E4A43","Monte Sant’Angelo","Santuario di San Michele (UNESCO) e rione Junno."],
+  [41.8970,15.9560,"#0E4A43","Vico del Gargano","Il borgo dell’amore tra aranceti e vicoli."],
+  [41.9230,15.9200,"#0E4A43","San Menaio","Spiaggia di sabbia tra le pinete, comoda e family."],
   [41.9489,16.0121,"#D8913A","La vostra casa","Appartamento in Via Gioielli 6, centro storico di Peschici."],
   [41.9476,16.0304,"#BC4F36","Al Trabucco da Mimì","Cena sul trabucco — opzione compleanno."],
   [41.9489,16.0113,"#BC4F36","Costamarina / Eden","Pesce vista mare in paese — opzioni compleanno."],
@@ -588,23 +1124,29 @@ const PINS2 = [
 ];
 const map2 = L.map('map2',{scrollWheelZoom:false}).setView([41.9,16.05],10);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(map2);
-const g2 = [];
-PINS2.forEach(p=>{
-  const m = L.circleMarker([p[0],p[1]],{radius:9, color:'#fff', weight:2, fillColor:p[2], fillOpacity:1})
-    .addTo(map2).bindPopup(`<b>${p[3]}</b><br>${p[4]}`);
-  g2.push(m);
-});
-const boundsPE = L.featureGroup(g2).getBounds().pad(0.15);
+const gPE=[];
+PINS2.forEach(p=>{ gPE.push(L.circleMarker([p[0],p[1]],{radius:9,color:'#fff',weight:2,fillColor:p[2],fillOpacity:1}).addTo(map2).bindPopup(`<b>${p[3]}</b><br>${p[4]}`)); });
+const boundsPE = L.featureGroup(gPE).getBounds().pad(0.15);
 map2.fitBounds(boundsPE);
 
-const views = {belgrado:document.getElementById('view-belgrado'), peschici:document.getElementById('view-peschici')};
+/* ---------- view + hero toggle ---------- */
+const views = {
+  belgrado:document.getElementById('view-belgrado'),
+  peschici:document.getElementById('view-peschici'),
+  valigia:document.getElementById('view-valigia')
+};
+const heroes = {
+  belgrado:document.getElementById('hero-belgrado'),
+  peschici:document.getElementById('hero-peschici'),
+  valigia:document.getElementById('hero-valigia')
+};
 const vbtns = document.querySelectorAll('.vbtn');
 function showView(v){
-  Object.keys(views).forEach(k=>views[k].classList.toggle('is-hidden', k!==v));
+  Object.keys(views).forEach(k=>{ views[k].classList.toggle('is-hidden', k!==v); heroes[k].classList.toggle('is-hidden', k!==v); });
   vbtns.forEach(b=>b.classList.toggle('active', b.dataset.v===v));
   setTimeout(()=>{
     if(v==='belgrado'){ map.invalidateSize(); map.fitBounds(boundsBG); }
-    else { map2.invalidateSize(); map2.fitBounds(boundsPE); }
+    else if(v==='peschici'){ map2.invalidateSize(); map2.fitBounds(boundsPE); }
   },70);
   window.scrollTo({top:0, behavior:'smooth'});
 }
