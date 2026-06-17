@@ -333,6 +333,7 @@
   .syncpill::before{content:""; width:8px; height:8px; border-radius:50%; background:currentColor; flex:none;}
   .syncpill.on{background:var(--teal-wash); color:var(--pine);}
   .syncpill.off{background:var(--amber-wash); color:#9A6519;}
+  .syncpill.err{background:var(--clay-wash); color:var(--clay);}
 
   /* ---- add / edit modal ---- */
   .modal-ov{position:fixed; inset:0; z-index:1000; background:rgba(22,36,31,.5); backdrop-filter:blur(3px); display:grid; place-items:center; padding:18px; animation:fade .18s ease;}
@@ -656,10 +657,12 @@ const TODAY = `${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,'0')}-${
    Usa "Cloud Firestore" (già attivo nel tuo progetto). Finché i campi
    restano vuoti, il sito funziona in locale (solo su questo dispositivo).    */
 const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  appId: ""
+  apiKey: "AIzaSyDL2Hy-NMjs4YkYym8PUa2l3JyDnqZiQCY",
+  authDomain: "belgrado-gargano.firebaseapp.com",
+  projectId: "belgrado-gargano",
+  storageBucket: "belgrado-gargano.firebasestorage.app",
+  messagingSenderId: "1066850443022",
+  appId: "1:1066850443022:web:9d25ddc288f51b7ab4015f"
 };
 const ROOT = 'belgrado2026';
 const SHARED = !!(FIREBASE_CONFIG.projectId && FIREBASE_CONFIG.apiKey && typeof firebase !== 'undefined');
@@ -813,10 +816,17 @@ function renderAll(){
   renderPacking('lui', document.getElementById('luilist'), document.getElementById('luifill'), document.getElementById('luicount'));
   renderPacking('com', document.getElementById('comlist'), document.getElementById('comfill'), document.getElementById('comcount'));
 }
-function setSyncState(on){
+function setSyncState(state){
   const el=document.getElementById('syncpill'); if(!el) return;
-  el.className='syncpill '+(on?'on':'off');
-  el.textContent=on?'Sincronizzato tra tutti i dispositivi':'Solo su questo dispositivo';
+  const map={
+    on:['on','Sincronizzato tra tutti i dispositivi'],
+    off:['off','Solo su questo dispositivo'],
+    wait:['off','Collegamento in corso…'],
+    err:['err','Sync non attiva — controlla le Regole di Firestore']
+  };
+  const v=map[state]||map.off;
+  el.className='syncpill '+v[0];
+  el.textContent=v[1];
 }
 function storeInit(){
   if(SHARED){
@@ -824,19 +834,19 @@ function storeInit(){
       firebase.initializeApp(FIREBASE_CONFIG);
       fsdoc=firebase.firestore().collection('trip').doc(ROOT);
       loadLocal(); seedPacking(); renderAll();          // istantaneo dalla cache locale
+      setSyncState('wait');
       fsdoc.onSnapshot(snap=>{
         const remote=(snap && snap.exists)?snap.data():null;
         if(remote && (remote.checks || remote.packing)){
           STATE=remote; normalizeState();
           if(!Object.keys(STATE.packing).length) seedPacking();
         } else { normalizeState(); seedPacking(); fsdoc.set(STATE); }
-        saveLocal(); renderAll();
-      }, err=>{ console.warn('Firestore non raggiungibile', err); });
-      setSyncState(true);
+        saveLocal(); renderAll(); setSyncState('on');
+      }, err=>{ console.warn('Firestore non raggiungibile', err); setSyncState('err'); });
       return;
     }catch(e){ console.warn('Firebase non disponibile, modalità locale.', e); }
   }
-  loadLocal(); seedPacking(); renderAll(); setSyncState(false);
+  loadLocal(); seedPacking(); renderAll(); setSyncState('off');
 }
 
 /* ---------- themes (interests) ---------- */
