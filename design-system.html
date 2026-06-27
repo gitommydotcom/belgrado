@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale di stile · Belgrado &amp; Adriatico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F0E6; --paper-2:#FBF8F1; --card:#FFFFFF;
+    --ink:#16241F; --ink-soft:#4A5953; --line:#E2DACB;
+    --pine:#0E4A43; --pine-2:#2C7A6F; --teal-wash:#E4EFEA;
+    --amber:#D8913A; --amber-wash:#F6EAD3;
+    --clay:#BC4F36; --clay-wash:#F4E2D8;
+    --shadow:0 1px 2px rgba(22,36,31,.04), 0 8px 24px rgba(22,36,31,.06);
+  }
+  *{box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Inter",system-ui,sans-serif; font-size:16px; line-height:1.6;}
+  .wrap{max-width:980px; margin:0 auto; padding:0 24px;}
+  h1,h2,h3,h4{font-weight:400; margin:0; line-height:1.1;}
+  .serif{font-family:"Instrument Serif",Georgia,serif;}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px;}
+  .eyebrow{font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--pine-2);}
+
+  header.cover{background:var(--pine); color:#EAF2EF; border-radius:20px; padding:34px 32px; margin:28px 0 8px; box-shadow:var(--shadow);}
+  header.cover .eyebrow{color:#9FC4BC;}
+  header.cover h1{font-family:"Instrument Serif",serif; font-size:clamp(34px,6vw,58px); margin-top:8px;}
+  header.cover p{color:#CFE3DD; max-width:620px; margin:12px 0 0;}
+
+  .tip{background:var(--amber-wash); border:1px solid #E8D2A6; border-radius:13px; padding:13px 16px; margin:18px 0 0; font-size:13.5px; color:#7A4F12;}
+  .tip b{color:#6A4410;}
+
+  section{padding:34px 0; border-top:1px solid var(--line); margin-top:30px;}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:20px;}
+  .sec-num{font-family:"Instrument Serif",serif; font-size:28px; color:var(--pine-2);}
+  .sec-head h2{font-family:"Instrument Serif",serif; font-size:clamp(26px,4vw,36px);}
+  .lead{color:var(--ink-soft); font-size:14px; max-width:680px; margin:0 0 20px;}
+  h3.block{font-family:"Instrument Serif",serif; font-size:21px; margin:24px 0 12px;}
+
+  /* swatches */
+  .swatches{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:14px;}
+  .sw{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--card); box-shadow:var(--shadow);}
+  .sw .chip{height:92px; border-bottom:1px solid var(--line);}
+  .sw .meta{padding:11px 13px;}
+  .sw .meta b{font-size:13.5px; font-weight:600; display:block;}
+  .sw .meta .vals{margin-top:5px; font-size:11.5px; color:var(--ink-soft); line-height:1.5;}
+  .sw .meta .vals code{font-size:11.5px;}
+  .grad{height:120px; border-radius:14px; border:1px solid var(--line); box-shadow:var(--shadow); margin-bottom:8px;}
+  .grad-cap{font-size:12.5px; color:var(--ink-soft); margin-bottom:18px;}
+  .ondark{background:var(--pine); border-radius:14px; padding:16px 18px; display:flex; flex-wrap:wrap; gap:10px;}
+  .ondark .pip{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; color:#EAF2EF;}
+  .ondark .dot{width:22px; height:22px; border-radius:6px; border:1px solid rgba(255,255,255,.25);}
+
+  /* type */
+  .specimen{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; box-shadow:var(--shadow); margin-bottom:14px;}
+  .specimen .big{font-family:"Instrument Serif",serif; font-size:56px; line-height:1.05;}
+  .specimen .big em{font-style:italic; color:var(--pine-2);}
+  .specimen .row{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; border-top:1px dashed var(--line); padding:12px 0; margin-top:6px;}
+  .specimen .row:first-of-type{border-top:none;}
+  .specimen .tag-sz{font-size:11px; font-weight:600; color:var(--pine-2); letter-spacing:.08em; text-transform:uppercase; min-width:120px;}
+  .weights span{display:inline-block; margin-right:18px;}
+  table.scale{width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; font-size:13px;}
+  table.scale th, table.scale td{padding:9px 13px; text-align:left; border-top:1px solid var(--line); vertical-align:top;}
+  table.scale th{background:var(--paper-2); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--pine-2);}
+  table.scale tr:first-child td{border-top:none;}
+
+  /* component examples */
+  .demo{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px;}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow);}
+  .panel h4{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pine-2); margin-bottom:12px;}
+  .tag{font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:6px; display:inline-block; margin:0 6px 6px 0;}
+  .tag.crit{background:var(--clay-wash); color:var(--clay);}
+  .tag.warn{background:var(--amber-wash); color:#9A6519;}
+  .tag.info{background:var(--teal-wash); color:var(--pine);}
+  .thtag{font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 8px; border-radius:6px; display:inline-block; margin:0 5px 6px 0;}
+  .th-storia{background:var(--teal-wash); color:var(--pine);}
+  .th-mare{background:#DCEAF0; color:#1C5E78;}
+  .th-cibo{background:var(--amber-wash); color:#9A6519;}
+  .th-notte{background:var(--clay-wash); color:var(--clay);}
+  .datapill{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:var(--pine); color:#EAF2EF; padding:4px 11px; border-radius:999px; display:inline-block;}
+  .datapill.bday{background:var(--clay);}
+  .navbtn{display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:var(--ink-soft); padding:9px 14px; border:1px solid var(--line); border-radius:999px; background:var(--paper-2); margin:0 6px 6px 0;}
+  .navbtn.active{background:var(--pine); color:#EAF2EF; border-color:var(--pine);}
+  .card-demo{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px;}
+  .card-demo h3{font-family:"Inter"; font-size:15.5px; font-weight:600; display:flex; justify-content:space-between; gap:8px;}
+  .card-demo .price{color:var(--pine-2); font-size:13px; font-weight:600;}
+  .card-demo p{margin:6px 0 0; font-size:13.5px; color:var(--ink-soft);}
+  .check{display:flex; gap:13px; align-items:flex-start; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:13px 15px;}
+  .check .box{width:24px; height:24px; border-radius:7px; border:2px solid #C9CFC9; flex:none; display:grid; place-items:center;}
+  .check.on .box{background:var(--pine); border-color:var(--pine);}
+  .check .box svg{width:14px; height:14px;}
+  .check h3{font-size:14px; font-weight:600;}
+  .day{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 18px; box-shadow:var(--shadow);}
+  .day .when{display:flex; gap:8px; align-items:center; margin-bottom:8px;}
+  .day .title{font-family:"Instrument Serif",serif; font-size:24px;}
+  .blocklab{display:flex; align-items:center; gap:7px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pine-2); margin:14px 0 8px;}
+  .blocklab svg{width:15px; height:15px;}
+  .sched{margin:0; padding:0; list-style:none; background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px;}
+  .sched li{position:relative; padding-left:18px; font-size:14px; color:var(--ink-soft); margin-bottom:7px;}
+  .sched li:last-child{margin-bottom:0;}
+  .sched li::before{content:""; position:absolute; left:1px; top:8px; width:6px; height:6px; border-radius:50%; background:var(--amber);}
+  .sched li b{color:var(--ink);}
+  .idea{background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:11px 14px; margin-top:8px;}
+  .idea .main{display:flex; justify-content:space-between; gap:10px; align-items:center;}
+  .idea b{font-size:14.5px;}
+  .idea p{margin:4px 0 0; font-size:13px; color:var(--ink-soft);}
+  .ticket{background:var(--pine); color:#EAF2EF; border-radius:18px; padding:22px 24px;}
+  .ticket .codes{display:flex; align-items:center; justify-content:space-between; gap:12px;}
+  .ticket .code{font-family:"Instrument Serif",serif; font-size:40px; line-height:.9;}
+  .ticket .place{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9FC4BC; margin-top:4px;}
+  .ticket .arrow{color:#7FB3A9;}
+  .board{color:#F2F8F6; border-radius:18px; padding:22px 24px; background:linear-gradient(150deg,#0E4A43 0%,#15756B 58%,#1E8C82 100%);}
+  .board .eyebrow{color:#A6D0C8;}
+  .board h3{font-family:"Instrument Serif",serif; font-size:40px; margin-top:4px;}
+  .board p{color:#DCEEE9; font-size:13.5px; margin:8px 0 0; max-width:440px;}
+  .board.warm{background:linear-gradient(150deg,#D8913A 0%,#C9722F 55%,#B7472F 100%); color:#FBF3E6;}
+  .board.warm .eyebrow{color:#F6E2C8;}
+  .acc{border:1px solid var(--line); border-radius:13px; background:var(--card); padding:14px 16px; display:flex; align-items:center; gap:12px; font-weight:600; font-size:15px;}
+  .acc svg{width:19px; height:19px; color:var(--pine-2);}
+  .markers{display:flex; flex-wrap:wrap; gap:16px;}
+  .marker{display:inline-flex; align-items:center; gap:8px; font-size:13px; color:var(--ink-soft);}
+  .marker .m{width:16px; height:16px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px var(--line);}
+  .icons{display:flex; flex-wrap:wrap; gap:14px;}
+  .icons .ic{width:46px; height:46px; border:1px solid var(--line); border-radius:11px; background:var(--card); display:grid; place-items:center; color:var(--pine);}
+  .icons .ic svg{width:22px; height:22px;}
+
+  footer{padding:30px 0 60px; color:var(--ink-soft); font-size:12.5px; border-top:1px solid var(--line); margin-top:30px;}
+
+  @media print{
+    body{background:#fff;}
+    .no-print{display:none!important;}
+    section, .panel, .sw, .specimen, .day, .ticket, .board{break-inside:avoid;}
+    a[href]:after{content:"";}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="cover">
+    <div class="eyebrow">Manuale di stile · per la stampa</div>
+    <h1 class="serif">Belgrado <em>&amp;</em> Adriatico</h1>
+    <p>Campionario visivo per ricreare il design del sito in un fotolibro. Riquadri di colore campionabili col contagocce, specimen dei caratteri ed esempi reali dei componenti.</p>
+  </header>
+
+  <div class="tip no-print"><b>Come usarlo.</b> Apri nel browser: campiona i colori con un contagocce direttamente dai riquadri. Per il PDF: <b>Stampa → Salva come PDF</b> (attiva “Grafica di sfondo”). I CMYK sono indicativi: fai sempre un soft-proof.</div>
+
+  <!-- COLORI -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2 class="serif">Colori</h2></div>
+    <p class="lead">HEX e RGB esatti; CMYK indicativi (da rifinire in soft-proof). Sotto ogni riquadro c’è il valore da campionare.</p>
+
+    <h3 class="block">Neutri</h3>
+    <div class="swatches" id="sw-neutri"></div>
+    <h3 class="block">Accenti</h3>
+    <div class="swatches" id="sw-accenti"></div>
+    <h3 class="block">Wash · sfondi delle etichette</h3>
+    <div class="swatches" id="sw-wash"></div>
+
+    <h3 class="block">Gradienti degli header</h3>
+    <div class="grad" style="background:linear-gradient(150deg,#0E4A43 0%,#15756B 58%,#1E8C82 100%)"></div>
+    <div class="grad-cap"><b>Gargano (mare)</b> — lineare 150° · <code>#0E4A43</code> 0% · <code>#15756B</code> 58% · <code>#1E8C82</code> 100%</div>
+    <div class="grad" style="background:linear-gradient(150deg,#D8913A 0%,#C9722F 55%,#B7472F 100%)"></div>
+    <div class="grad-cap"><b>Valigia (caldo)</b> — lineare 150° · <code>#D8913A</code> 0% · <code>#C9722F</code> 55% · <code>#B7472F</code> 100%</div>
+
+    <h3 class="block">Testo &amp; etichette su fondo scuro</h3>
+    <div class="ondark">
+      <span class="pip"><span class="dot" style="background:#EAF2EF"></span>#EAF2EF testo chiaro</span>
+      <span class="pip"><span class="dot" style="background:#9FC4BC"></span>#9FC4BC etichetta (pino)</span>
+      <span class="pip"><span class="dot" style="background:#A6D0C8"></span>#A6D0C8 etichetta (mare)</span>
+      <span class="pip"><span class="dot" style="background:#F6E2C8"></span>#F6E2C8 etichetta (valigia)</span>
+    </div>
+  </section>
+
+  <!-- TIPOGRAFIA -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2 class="serif">Tipografia</h2></div>
+    <p class="lead">Due famiglie, gratuite (Google Fonts, SIL OFL 1.1). <b>Instrument Serif</b> per titoli e numeri; <b>Inter</b> per tutto il resto.</p>
+
+    <div class="specimen">
+      <div class="eyebrow">Instrument Serif — display</div>
+      <div class="big">Belgrado <em>&amp;</em> Adriatico</div>
+      <div class="row"><span class="tag-sz">54 px · codici</span><span class="serif" style="font-size:54px">FCO · BEG</span></div>
+      <div class="row"><span class="tag-sz">40 px · titolo</span><span class="serif" style="font-size:40px">Giorno per giorno</span></div>
+      <div class="row"><span class="tag-sz">24 px · sottotitolo</span><span class="serif" style="font-size:24px">La vostra casa a Peschici</span></div>
+    </div>
+
+    <div class="specimen">
+      <div class="eyebrow">Inter — testo &amp; UI</div>
+      <div class="weights" style="margin-top:12px; font-size:19px;">
+        <span style="font-weight:400">Regular 400</span>
+        <span style="font-weight:500">Medium 500</span>
+        <span style="font-weight:600">Semibold 600</span>
+        <span style="font-weight:700">Bold 700</span>
+      </div>
+      <p style="margin:14px 0 0; font-size:14px; color:var(--ink-soft); max-width:560px;">A luglio fa caldo ed è vivace fino a tardi. Ecco i punti da non perdere e qualche taverna dove si mangia bene spendendo il giusto.</p>
+      <div style="margin-top:14px;"><span class="eyebrow">Occhiello · maiuscoletto · tracking .16em</span></div>
+    </div>
+
+    <table class="scale">
+      <tr><th>Elemento</th><th>Font</th><th>Dim.</th><th>Peso</th><th>Note</th></tr>
+      <tr><td>Titolone copertina</td><td>Instrument Serif</td><td>40–74</td><td>400</td><td>em in pine-2</td></tr>
+      <tr><td>Titolo sezione</td><td>Instrument Serif</td><td>28–40</td><td>400</td><td>—</td></tr>
+      <tr><td>Numero sezione</td><td>Instrument Serif</td><td>30</td><td>400</td><td>pine-2</td></tr>
+      <tr><td>Titolo card/giornata</td><td>Instrument Serif</td><td>24–26</td><td>400</td><td>—</td></tr>
+      <tr><td>Corpo testo</td><td>Inter</td><td>14–16</td><td>400</td><td>interlinea 1.55–1.65</td></tr>
+      <tr><td>Titolo card</td><td>Inter</td><td>15.5</td><td>600</td><td>—</td></tr>
+      <tr><td>Testo card / didascalia</td><td>Inter</td><td>13.5</td><td>400</td><td>ink-soft</td></tr>
+      <tr><td>Occhiello (eyebrow)</td><td>Inter</td><td>12</td><td>600</td><td>maiuscolo · .16em</td></tr>
+      <tr><td>Etichetta blocco</td><td>Inter</td><td>11</td><td>700</td><td>maiuscolo · .10em</td></tr>
+      <tr><td>Tag / badge</td><td>Inter</td><td>9.5–10</td><td>700</td><td>maiuscolo · .04–.06em</td></tr>
+    </table>
+  </section>
+
+  <!-- COMPONENTI -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2 class="serif">Componenti</h2></div>
+    <p class="lead">Esempi resi a video: campionali per misure, raggi e colori. Card su fondo bianco, bordi sottili <code>#E2DACB</code>, ombre morbide, pillole a raggio pieno.</p>
+
+    <div class="demo">
+      <div class="panel">
+        <h4>Tag semantici</h4>
+        <span class="tag crit">Critico</span><span class="tag warn">Importante</span><span class="tag info">Utile</span>
+        <div style="margin-top:8px;"></div>
+        <span class="thtag th-storia">Storia</span><span class="thtag th-mare">Mare</span><span class="thtag th-cibo">Cibo</span><span class="thtag th-notte">Notte</span>
+      </div>
+      <div class="panel">
+        <h4>Pill &amp; pulsanti</h4>
+        <span class="datapill">Lun 13 lug</span> <span class="datapill bday">🎂 Compleanno</span>
+        <div style="margin-top:12px;"><span class="navbtn active">Belgrado</span><span class="navbtn">Peschici</span><span class="navbtn">In valigia</span></div>
+      </div>
+      <div class="panel">
+        <h4>Card</h4>
+        <div class="card-demo"><h3><span>Tempio di San Sava</span><span class="price">€€</span></h3><p>Enorme e luminoso, mosaici dorati. Aperto 8–20, gratis.</p></div>
+      </div>
+      <div class="panel">
+        <h4>Riga checklist</h4>
+        <div class="check on"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#EAF2EF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><h3>Documenti per l’espatrio <span class="tag crit">Critico</span></h3></div></div>
+      </div>
+      <div class="panel">
+        <h4>Accordion (consigli)</h4>
+        <div class="acc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>È sicura come città?</div>
+      </div>
+      <div class="panel">
+        <h4>Marker mappa</h4>
+        <div class="markers">
+          <span class="marker"><span class="m" style="background:#BC4F36"></span>Casa base</span>
+          <span class="marker"><span class="m" style="background:#0E4A43"></span>Da vedere</span>
+          <span class="marker"><span class="m" style="background:#D8913A"></span>Mangiare</span>
+          <span class="marker"><span class="m" style="background:#2C7A6F"></span>In barca</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="block">Card “giornata”</h3>
+    <div class="day">
+      <div class="when"><span class="datapill">Mar 14 lug</span></div>
+      <div class="title serif">Belgrado classica</div>
+      <div class="blocklab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>In programma</div>
+      <ul class="sched"><li><b>Mattina</b> — Tempio di San Sava, poi Knez Mihailova</li><li><b>Sera</b> — Aperitivo lungo la Sava</li></ul>
+      <div class="blocklab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 5 5.6.8-4 3.9 1 5.6L12 20l-5 2.3 1-5.6-4-3.9 5.6-.8z"/></svg>Idee per voi</div>
+      <div class="idea"><div class="main"><b>Ada Ciganlija — bagno al lago</b><span class="thtag th-mare">Mare</span></div><p>L’isola-spiaggia sulla Sava: ombra e relax nelle ore calde.</p></div>
+    </div>
+
+    <h3 class="block">Header</h3>
+    <div class="demo">
+      <div class="ticket">
+        <div class="codes">
+          <div><div class="code serif">FCO</div><div class="place">Roma Fiumicino</div></div>
+          <div class="arrow">✈</div>
+          <div style="text-align:right"><div class="code serif">BEG</div><div class="place">Belgrado</div></div>
+        </div>
+      </div>
+      <div class="board">
+        <div class="eyebrow">Gargano · Puglia</div>
+        <h3 class="serif">Peschici</h3>
+        <p>Quattro giorni sul mare di casa, valigie già caricate.</p>
+      </div>
+      <div class="board warm">
+        <div class="eyebrow">Bagagli · cosa portare</div>
+        <h3 class="serif">In valigia</h3>
+        <p>Per lei e per lui, con la valigia giusta su ogni voce.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ICONE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2 class="serif">Icone</h2></div>
+    <p class="lead">Tratto 24×24, spessore 2 px, estremità arrotondate, senza riempimento — stile <b>Lucide / Feather</b>. Usa quelle per ricreare il set.</p>
+    <div class="icons" id="icons"></div>
+  </section>
+
+  <footer>
+    Estratto dal CSS del sito “Belgrado &amp; Adriatico · 13–19 luglio 2026”. HEX/RGB esatti; CMYK indicativi.
+    Font: Instrument Serif &amp; Inter (Google Fonts, SIL OFL 1.1). Icone: Lucide. Mappe: © OpenStreetMap contributors.
+  </footer>
+
+</div>
+
+<script>
+const SW={
+  'sw-neutri':[
+    ['paper','#F4F0E6','244, 240, 230','0 · 2 · 6 · 4'],
+    ['paper-2','#FBF8F1','251, 248, 241','0 · 1 · 4 · 2'],
+    ['card','#FFFFFF','255, 255, 255','0 · 0 · 0 · 0'],
+    ['ink','#16241F','22, 36, 31','39 · 0 · 14 · 86'],
+    ['ink-soft','#4A5953','74, 89, 83','17 · 0 · 7 · 65'],
+    ['line','#E2DACB','226, 218, 203','0 · 4 · 10 · 11']
+  ],
+  'sw-accenti':[
+    ['pine','#0E4A43','14, 74, 67','81 · 0 · 9 · 71'],
+    ['pine-2','#2C7A6F','44, 122, 111','64 · 0 · 9 · 52'],
+    ['amber','#D8913A','216, 145, 58','0 · 33 · 73 · 15'],
+    ['clay','#BC4F36','188, 79, 54','0 · 58 · 71 · 26'],
+    ['sea-2','#1E8C82','30, 140, 130','79 · 0 · 7 · 45']
+  ],
+  'sw-wash':[
+    ['teal-wash','#E4EFEA','228, 239, 234','5 · 0 · 2 · 6'],
+    ['amber-wash','#F6EAD3','246, 234, 211','0 · 5 · 14 · 4'],
+    ['clay-wash','#F4E2D8','244, 226, 216','0 · 7 · 11 · 4']
+  ]
+};
+Object.entries(SW).forEach(([id,arr])=>{
+  const host=document.getElementById(id); if(!host) return;
+  arr.forEach(c=>{
+    const el=document.createElement('div'); el.className='sw';
+    el.innerHTML='<div class="chip" style="background:'+c[1]+'"></div>'+
+      '<div class="meta"><b>'+c[0]+'</b><div class="vals"><code>'+c[1]+'</code><br>RGB '+c[2]+'<br>CMYK '+c[3]+'</div></div>';
+    host.appendChild(el);
+  });
+});
+const ICONS=[
+  '<path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-.9 1.7l5.3 3.2-2.5 2.5-2.4-.5a1 1 0 0 0-.9 1.7l3 2 2 3a1 1 0 0 0 1.7-.9l-.5-2.4 2.5-2.5 3.2 5.3a1 1 0 0 0 1.7-.9Z"/>',
+  '<path d="M12 21v-8M9 13c0-4 1.5-7 3-7s3 3 3 7M5 21h14M3 13a4 4 0 0 1 8 0M13 13a4 4 0 0 1 8 0"/>',
+  '<rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M9 11v5M15 11v5"/>',
+  '<path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M4 11h16v5H4z"/><circle cx="7.5" cy="16.5" r="1.4"/><circle cx="16.5" cy="16.5" r="1.4"/>',
+  '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  '<path d="M12 2l2.4 5 5.6.8-4 3.9 1 5.6L12 20l-5 2.3 1-5.6-4-3.9 5.6-.8z"/>',
+  '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/>',
+  '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+  '<polyline points="20 6 9 17 4 12"/>',
+  '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  '<path d="M3 6h18"/><path d="M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/>',
+  '<path d="M12 5v14M5 12h14"/>'
+];
+const ih=document.getElementById('icons');
+ICONS.forEach(p=>{ const d=document.createElement('div'); d.className='ic';
+  d.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; ih.appendChild(d); });
+</script>
+</body>
+</html>
