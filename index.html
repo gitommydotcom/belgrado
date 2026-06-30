@@ -187,22 +187,20 @@
   .tgroup:last-child{margin-bottom:0;}
   .tg-lab{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
   .tg-lab svg{width:14px; height:14px; color:var(--amber); flex:none;}
-  .idea{display:flex; gap:12px; align-items:stretch; text-decoration:none; color:inherit; background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:11px 14px; margin-bottom:8px; transition:.16s;}
+  .idea{display:block; text-decoration:none; color:inherit; background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:11px 14px; margin-bottom:8px; transition:.16s;}
   .idea:last-child{margin-bottom:0;}
   a.idea:hover{border-color:var(--pine-2); background:#fff;}
-  .idea-body{flex:1; min-width:0;}
   .idea-main{display:flex; align-items:center; justify-content:space-between; gap:10px;}
   .idea-name{font-weight:600; font-size:14.5px; display:inline-flex; align-items:center; gap:6px;}
   .idea-name .ext{flex:none;}
   .idea-desc{display:block; margin-top:4px; font-size:13px; color:var(--ink-soft); line-height:1.5;}
-  .idea .imgwrap{flex:none; width:62px; min-height:58px; border-radius:9px;}
   .day-empty{font-size:13.5px; color:var(--ink-soft); background:var(--paper-2); border:1px dashed var(--line); border-radius:12px; padding:13px 15px;}
   /* activity images */
   .imgwrap{position:relative; overflow:hidden; background:linear-gradient(135deg,var(--pine),var(--pine-2));}
   .imgwrap.cat-food{background:linear-gradient(135deg,#C9722F,#D8913A);}
   .imgwrap.cat-sea{background:linear-gradient(135deg,#15756B,#1E8C82);}
-  .imgwrap .ph{position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.42);}
-  .imgwrap .ph svg{width:32px; height:32px;}
+  .imgwrap .ph{position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.5); background:radial-gradient(circle at 50% 42%, rgba(255,255,255,.10), transparent 62%);}
+  .imgwrap .ph svg{width:44px; height:44px;}
   .imgwrap img{position:relative; width:100%; height:100%; object-fit:cover; display:block;}
   .imgwrap img:not([src]){visibility:hidden;}
   .imgwrap img.imgfail{display:none;}
@@ -857,16 +855,15 @@ function deleteActivity(date,id){
   if(STATE.activities&&STATE.activities[date]) STATE.activities[date]=STATE.activities[date].filter(a=>a.id!==id);
   saveLocal(); pushState(); renderAll();
 }
-function renderCustom(date, a, leg){
+function renderCustom(date, a){
   const href=a.url||'';
   const name = href
     ? `<a class="idea-name" href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(a.name)} ${EXT}</a>`
     : `<span class="idea-name">${escapeHtml(a.name)}</span>`;
   const note = a.note?`<span class="idea-desc">${escapeHtml(a.note)}</span>`:'';
-  const img = imgHtml(a.raw || a.name, leg==='peschici'?'sea':'city', a.name);
-  return `<div class="idea custom">${img}<div class="idea-body"><div class="idea-main">${name}<span class="thtag added">Aggiunta</span></div>${note}`+
+  return `<div class="idea custom"><div class="idea-main">${name}<span class="thtag added">Aggiunta</span></div>${note}`+
     `<div class="act-ctrl"><button type="button" class="act-edit" data-date="${escapeHtml(date)}" data-id="${escapeHtml(a.id)}" aria-label="Modifica">${ico(PENCIL)}</button>`+
-    `<button type="button" class="act-del" data-date="${escapeHtml(date)}" data-id="${escapeHtml(a.id)}" aria-label="Elimina">${ico(TRASH)}</button></div></div></div>`;
+    `<button type="button" class="act-del" data-date="${escapeHtml(date)}" data-id="${escapeHtml(a.id)}" aria-label="Elimina">${ico(TRASH)}</button></div></div>`;
 }
 function openActivityForm(date, act){
   const editing=!!act;
@@ -1142,16 +1139,14 @@ function slotVisible(s, leg){
   return s.th.some(t=>prefs[leg].interests.has(t));
 }
 function ideaHref(s){ return s.gid ? G(s.gid,s.name) : s.q ? Q(s.q) : null; }
-function ideaCat(s, leg){ return s.th && s.th.indexOf('cibo')>=0 ? 'food' : (leg==='peschici'?'sea':'city'); }
-function renderIdea(s, leg){
+function renderIdea(s){
   const href = ideaHref(s);
   const tag  = `<span class="thtag th-${s.th[0]}">${THEMES[s.th[0]].short}</span>`;
   const name = `<span class="idea-name">${s.name}${href?(' '+EXT):''}</span>`;
-  const img  = imgHtml(s.q || s.name, ideaCat(s,leg), s.name);
-  const body = `<div class="idea-body"><span class="idea-main">${name}${tag}</span><span class="idea-desc">${s.desc}</span></div>`;
+  const inner= `<span class="idea-main">${name}${tag}</span><span class="idea-desc">${s.desc}</span>`;
   return href
-    ? `<a class="idea" href="${href}" target="_blank" rel="noopener">${img}${body}</a>`
-    : `<div class="idea">${img}${body}</div>`;
+    ? `<a class="idea" href="${href}" target="_blank" rel="noopener">${inner}</a>`
+    : `<div class="idea">${inner}</div>`;
 }
 const tlBG=document.getElementById('timeline-bg');
 const tlPE=document.getElementById('timeline-pe');
@@ -1178,7 +1173,7 @@ function renderDays(){
       const cg=custom.filter(a=>(a.time||'mattina')===k);
       if(!sg.length && !cg.length) return '';
       return `<div class="tgroup"><span class="tg-lab">${ico(TIMEMETA[k].ic)}${TIMEMETA[k].lab}</span>`+
-        sg.map(s=>renderIdea(s,day.leg)).join('') + cg.map(a=>renderCustom(day.date,a,day.leg)).join('') + `</div>`;
+        sg.map(renderIdea).join('') + cg.map(a=>renderCustom(day.date,a)).join('') + `</div>`;
     }).join('');
     let ideas=`<div class="block-lab">${ico(STAR)}Idee per voi <span class="cnt">${vis.length}</span></div>`;
     ideas += groups ? groups : `<div class="day-empty">Nessuna idea con questi filtri. Tocca <b>Azzera</b>, alza il ritmo o aggiungi un’attività qui sotto.</div>`;
@@ -1274,8 +1269,8 @@ SEE.forEach(s=>{
 EAT.forEach(s=>{
   const host=document.getElementById('eat');
   const href = s[3]==='gid'?G(s[4],s[0]):Q(s[4]);
-  const c=document.createElement('a'); c.className='card hasimg'; c.href=href; c.target='_blank'; c.rel='noopener';
-  c.innerHTML=imgHtml(s[0],'food',s[0])+`<div class="card-body"><h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p></div>`; host.appendChild(c);
+  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p>`; host.appendChild(c);
 });
 
 /* ---------- Belgrade tips (accordion) ---------- */
@@ -1389,8 +1384,8 @@ PE_SEE.forEach(s=>{
 PE_EAT.forEach(s=>{
   const host=document.getElementById('pe-eat');
   const href=s[3]==='gid'?G(s[4],s[0]):Q(s[4]);
-  const c=document.createElement('a'); c.className='card hasimg'; c.href=href; c.target='_blank'; c.rel='noopener';
-  c.innerHTML=imgHtml(s[0],'food',s[0])+`<div class="card-body"><h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p></div>`; host.appendChild(c);
+  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p>`; host.appendChild(c);
 });
 
 /* ---------- birthday dinners ---------- */
@@ -1400,8 +1395,8 @@ const BDAY = [
   ["Eden","Piedi nella sabbia","Frutti di mare sulla spiaggia di Peschici, atmosfera scalza al tramonto.","ChIJ8U2GD6KxNxMReE1zzbOGVgM"]
 ];
 const bdayEl = document.getElementById('bday');
-BDAY.forEach(s=>{ const c=document.createElement('a'); c.className='card hasimg'; c.href=G(s[3],s[0]); c.target='_blank'; c.rel='noopener';
-  c.innerHTML = imgHtml(s[0],'food',s[0])+`<div class="card-body"><span class="ltag">${s[1]}</span><h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[2]}</p></div>`; bdayEl.appendChild(c); });
+BDAY.forEach(s=>{ const c=document.createElement('a'); c.className='card'; c.href=G(s[3],s[0]); c.target='_blank'; c.rel='noopener';
+  c.innerHTML = `<span class="ltag">${s[1]}</span><h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[2]}</p>`; bdayEl.appendChild(c); });
 
 /* ---------- parking ---------- */
 const PARKING = [
