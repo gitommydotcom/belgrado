@@ -147,13 +147,7 @@
   /* ---- preferences bar ---- */
   .prefs{background:var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:16px 18px; margin-bottom:24px; box-shadow:var(--shadow);}
   .pref-row{display:flex; flex-wrap:wrap; align-items:center; gap:10px 12px;}
-  .pref-row + .pref-row{margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
   .pref-lab{font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pine-2); min-width:104px;}
-  .pref-chips{display:flex; flex-wrap:wrap; gap:8px; flex:1;}
-  .pref-chip{display:inline-flex; align-items:center; gap:7px; cursor:pointer; font-family:inherit; font-size:13px; font-weight:500; color:var(--ink-soft); background:var(--card); border:1px solid var(--line); border-radius:999px; padding:7px 13px; transition:.16s;}
-  .pref-chip svg{width:15px; height:15px;}
-  .pref-chip:hover{border-color:var(--pine-2); color:var(--pine);}
-  .pref-chip.on{background:var(--pine); color:#EAF2EF; border-color:var(--pine);}
   .pace{display:inline-flex; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:3px;}
   .pace-btn{cursor:pointer; font-family:inherit; font-size:13px; font-weight:600; color:var(--ink-soft); background:transparent; border:none; border-radius:999px; padding:7px 15px; transition:.16s;}
   .pace-btn.on{background:var(--pine); color:#EAF2EF;}
@@ -164,17 +158,30 @@
 
   /* ---- day cards (giorno per giorno) ---- */
   .daylist{display:block;}
-  .day{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:16px; box-shadow:var(--shadow);}
+  .day{background:var(--card); border:1px solid var(--line); border-radius:16px; margin-bottom:14px; box-shadow:var(--shadow); overflow:hidden;}
   .day.birthday{border-color:#E6C2B3;}
   .day.today{border-color:var(--clay); box-shadow:0 0 0 2px var(--clay-wash), var(--shadow);}
-  .day-when{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;}
+  .day>summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:13px; padding:15px 20px;}
+  .day>summary::-webkit-details-marker{display:none;}
+  .day>summary:focus-visible{outline:2px solid var(--pine-2); outline-offset:-2px;}
+  .day[open]>summary{border-bottom:1px solid var(--line);}
+  .day-ic{flex:none; width:42px; height:42px; border-radius:11px; display:grid; place-items:center; background:var(--teal-wash); color:var(--pine);}
+  .day.birthday .day-ic{background:var(--clay-wash); color:var(--clay);}
+  .day-ic svg{width:21px; height:21px; display:block;}
+  .day-sx{flex:1; min-width:0;}
+  .day-when{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;}
   .day-date{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:var(--pine); color:#EAF2EF; padding:4px 11px; border-radius:999px;}
   .day.birthday .day-date{background:var(--clay);}
   .badge-bday,.badge-today{font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:4px 10px; border-radius:999px;}
   .badge-bday{background:var(--clay-wash); color:var(--clay);}
   .badge-today{background:var(--clay); color:#fff; animation:pulse2 1.8s ease-in-out infinite;}
   @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:.6;}}
-  .day-title{font-family:"Instrument Serif",serif; font-size:26px; line-height:1.05;}
+  .day-title{font-family:"Instrument Serif",serif; font-size:19px; line-height:1.2; display:block;}
+  .day-teaser{font-size:12.5px; color:var(--ink-soft); margin-top:2px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .day .chev{flex:none; color:var(--ink-soft); transition:transform .25s;}
+  .day .chev svg{width:18px; height:18px; display:block;}
+  .day[open]>summary .chev{transform:rotate(180deg);}
+  .day-body{padding:2px 20px 20px;}
   .block-lab{display:flex; align-items:center; gap:7px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--pine-2); margin:17px 0 9px;}
   .block-lab svg{width:15px; height:15px; flex:none;}
   .block-lab .cnt{margin-left:2px; background:var(--teal-wash); color:var(--pine); border-radius:999px; padding:1px 9px; font-size:11px; letter-spacing:0;}
@@ -506,7 +513,7 @@
 
 <section><div class="wrap">
   <div class="sec-head"><span class="sec-num">01</span><h2>Giorno per giorno</h2><span class="sub">Il vostro filo conduttore, su misura.</span></div>
-  <p class="subtle">Voli e orari sono fissi; il resto si adatta a voi. Scegliete cosa vi piace e a che ritmo: ogni giornata mette in evidenza le idee giuste, dalle più iconiche alle extra.</p>
+  <p class="subtle">Voli e orari sono fissi; il resto si adatta al ritmo che scegliete. Tocca una giornata per aprirla: dentro trovi il programma e le idee, dalle più iconiche alle extra.</p>
   <div class="prefs" id="prefs-bg"></div>
   <div class="daylist" id="timeline-bg"></div>
 </div></section>
@@ -562,7 +569,7 @@
 
 <section><div class="wrap">
   <div class="sec-head"><span class="sec-num">01</span><h2>Giorno per giorno</h2><span class="sub">Dal rientro all’ultimo bagno a Peschici.</span></div>
-  <p class="subtle">Qui scegliete in autonomia cosa vi va di fare sul Gargano e a che ritmo: queste preferenze sono indipendenti da quelle di Belgrado.</p>
+  <p class="subtle">Il ritmo qui è indipendente da quello di Belgrado. Tocca una giornata per aprirla e vedere il programma completo.</p>
   <div class="prefs" id="prefs-pe"></div>
   <div class="daylist" id="timeline-pe"></div>
 </div></section>
@@ -1012,44 +1019,33 @@ function storeInit(){
   loadLocal(); prepareState(); renderAll(); saveLocal(); setSyncState('off');
 }
 
-/* ---------- themes (interests) ---------- */
+/* ---------- theme tags shown on each idea ---------- */
 const THEMES = {
-  storia:{label:'Storia & arte', short:'Storia', icon:'<path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-7h6v7"/>'},
-  cibo:{label:'Cibo & taverne', short:'Cibo', icon:'<path d="M6 2v7a2 2 0 0 0 4 0V2"/><path d="M8 9v13"/><path d="M16 2c-1.4 0-2.4 1.9-2.4 4.5S14.6 11 16 11v11"/>'},
-  notte:{label:'Vita notturna', short:'Notte', icon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'},
-  relax:{label:'Relax', short:'Relax', icon:'<path d="M4 8h12v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 9h2a2.4 2.4 0 0 1 0 5h-2"/><path d="M7 2v2M10 2v2M13 2v2"/>'},
-  natura:{label:'Natura & viste', short:'Natura', icon:'<path d="M12 22v-6"/><path d="M8 8l4-5 4 5"/><path d="M6 14l6-7 6 7"/><path d="M4 20l8-9 8 9"/>'},
-  mare:{label:'Mare & spiagge', short:'Mare', icon:'<path d="M3 18q3 -3 6 0t6 0 6 0"/><path d="M3 13q3 -3 6 0t6 0 6 0"/><path d="M14 9c0-3-2-5-5-5"/>'},
-  avventura:{label:'Avventura', short:'Avventura', icon:'<circle cx="12" cy="12" r="9"/><path d="M15.6 8.4l-2.3 4.9-4.9 2.3 2.3-4.9z"/>'},
-  shopping:{label:'Shopping', short:'Shopping', icon:'<path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/>'}
+  storia:'Storia', cibo:'Cibo', notte:'Notte', relax:'Relax',
+  natura:'Natura', mare:'Mare', avventura:'Avventura', shopping:'Shopping'
 };
 const PACELAB = {relax:'Relax', bilanciato:'Bilanciato', intenso:'Intenso'};
 
 /* ---------- preferences state (independent per location) ---------- */
-const PREF_THEMES = {
-  belgrado: ['storia','cibo','notte','relax','natura','shopping'],
-  peschici: ['mare','natura','relax','avventura','cibo','storia','shopping']
-};
 const prefs = {
-  belgrado:{interests:new Set(), pace:'bilanciato'},
-  peschici:{interests:new Set(), pace:'bilanciato'}
+  belgrado:{pace:'bilanciato'},
+  peschici:{pace:'bilanciato'}
 };
 ['belgrado','peschici'].forEach(leg=>{
   try{
     const s=JSON.parse(localStorage.getItem('prefs_'+leg)||'{}');
-    if(Array.isArray(s.interests)) prefs[leg].interests=new Set(s.interests);
     if(s.pace) prefs[leg].pace=s.pace;
   }catch(e){}
 });
 function savePrefs(leg){
-  try{ localStorage.setItem('prefs_'+leg, JSON.stringify({interests:[...prefs[leg].interests], pace:prefs[leg].pace})); }catch(e){}
+  try{ localStorage.setItem('prefs_'+leg, JSON.stringify({pace:prefs[leg].pace})); }catch(e){}
 }
 
 /* ---------- day-by-day data ----------
    slot: {name, desc, th:[themes], time:'mattina|pomeriggio|sera', prio:1..3, gid?, q?}
    prio 1 = iconico (resta anche col ritmo Relax), 2 = consigliato, 3 = extra */
 const DAYS = [
- {date:'2026-07-13', leg:'belgrado', chip:'Lun 13 lug', title:'Partenza + arrivo a Belgrado', fixed:[
+ {date:'2026-07-13', leg:'belgrado', chip:'Lun 13 lug', title:'Partenza + arrivo a Belgrado', icon:'plane', teaser:'Si parte: volo, arrivo e primo tramonto a Kalemegdan.', fixed:[
    '<b>08:30</b> — Partenza da L’Aquila in auto (margine per il traffico attorno a Roma)',
    '<b>~10:45</b> — Parcheggio lunga sosta a Fiumicino + navetta. Qui <b>lasciate in auto i bagagli per il mare</b>: vi aspettano al ritorno',
    '<b>13:40</b> — Volo W6 4032 Fiumicino → Belgrado (atterraggio 15:20; controlla il timbro al controllo passaporti)',
@@ -1060,7 +1056,7 @@ const DAYS = [
    {name:'Aperitivo sui splavovi', q:'splav Sava Beograd', desc:'I locali galleggianti sul fiume: anche solo un drink sull’acqua al tramonto.', th:['notte','relax'], time:'sera', prio:2},
    {name:'Due passi in Knez Mihailova', q:'Knez Mihailova Beograd', desc:'La via pedonale principale, viva fino a tardi tra palazzi e vetrine.', th:['shopping','relax'], time:'sera', prio:3}
  ]},
- {date:'2026-07-14', leg:'belgrado', chip:'Mar 14 lug', title:'Belgrado classica', fixed:[
+ {date:'2026-07-14', leg:'belgrado', chip:'Mar 14 lug', title:'Belgrado classica', icon:'city', teaser:'San Sava al mattino, Kalemegdan e aperitivo sulla Sava.', fixed:[
    '<b>Colazione</b> — Burek e yogurt in una pekara di quartiere, come si fa qui'
  ], slots:[
    {name:'Tempio di San Sava', gid:'ChIJj44lpwxwWkcRTDTAbxo5Eb4', desc:'Tra i più grandi templi ortodossi al mondo, mosaici dorati all’interno. Aperto 8–20, gratis.', th:['storia'], time:'mattina', prio:1},
@@ -1073,7 +1069,7 @@ const DAYS = [
    {name:'Aperitivo lungo la Sava', gid:'ChIJ6_nLR9plWkcRoKuLsCdFgd8', desc:'Passeggiata sul fiume tra caffè e locali galleggianti.', th:['notte','relax'], time:'sera', prio:1},
    {name:'Assaggio di rakija', q:'rakia bar Beograd', desc:'Un brindisi con l’acquavite di casa in un rakia bar: tante varietà da provare.', th:['cibo','notte'], time:'sera', prio:3}
  ]},
- {date:'2026-07-15', leg:'belgrado', chip:'Mer 15 lug', title:'Belgrado relax + ultima sera', fixed:[
+ {date:'2026-07-15', leg:'belgrado', chip:'Mer 15 lug', title:'Belgrado relax + ultima sera', icon:'moon', teaser:'Relax in città, poi la cena speciale dell’ultima sera.', fixed:[
    '<b>Pomeriggio</b> — Preparate la valigia piccola e impostate la sveglia: domani si parte all’alba'
  ], slots:[
    {name:'Savamala & Beton Hala', q:'Beton Hala Beograd', desc:'Il quartiere del design e della Belgrade Waterfront, con i magazzini sul fiume.', th:['storia','shopping','relax'], time:'mattina', prio:2},
@@ -1084,7 +1080,7 @@ const DAYS = [
    {name:'Cena speciale a Dvorište o Mihailo', gid:'ChIJj8N-0rp6WkcRcrsES1fUATo', desc:'L’ultima sera in grande: Mežestoran Dvorište (Michelin) o Restoran Mihailo. A letto presto.', th:['cibo'], time:'sera', prio:1},
    {name:'Ultimo giro sui splavovi', q:'splav Beograd nightlife', desc:'Un saluto alla notte di Belgrado sull’acqua, se reggete la sveglia all’alba.', th:['notte'], time:'sera', prio:3}
  ]},
- {date:'2026-07-16', leg:'peschici', chip:'Gio 16 lug', title:'Ritorno + arrivo a Peschici', fixed:[
+ {date:'2026-07-16', leg:'peschici', chip:'Gio 16 lug', title:'Ritorno + arrivo a Peschici', icon:'car', teaser:'Si torna, si riparte in auto: si dorme già a Peschici.', fixed:[
    '<b>04:00</b> — Sveglia e transfer prenotato verso l’aeroporto',
    '<b>06:50</b> — Volo JU 400 Belgrado → Fiumicino (Air Serbia, Terminal 2)',
    '<b>08:25</b> — Arrivo a Fiumicino. Navetta al parcheggio e ritiro auto: <b>i bagagli per il mare sono già a bordo</b>',
@@ -1095,7 +1091,7 @@ const DAYS = [
    {name:'Passeggiata al tramonto nel borgo', q:'Peschici centro storico', desc:'Vicoli bianchi e scorci sul mare con la luce della sera.', th:['relax','natura'], time:'sera', prio:1},
    {name:'Cena leggera in paese', q:'ristorante Peschici centro storico', desc:'Qualcosa di semplice e buono nel borgo, senza strafare: domani è il compleanno.', th:['cibo'], time:'sera', prio:1}
  ]},
- {date:'2026-07-17', leg:'peschici', chip:'Ven 17 lug', title:'Il compleanno di Carmela', birthday:true, fixed:[
+ {date:'2026-07-17', leg:'peschici', chip:'Ven 17 lug', title:'Il compleanno di Carmela', birthday:true, icon:'cake', teaser:'Il compleanno di Carmela: mare al mattino, sorpresa a cena.', fixed:[
    '<b>Auguri, Carmela!</b> — Giornata libera: mare al mattino, cena speciale la sera'
  ], slots:[
    {name:'Baia di San Felice', gid:'ChIJ06Pg-6bHNxMRfpHGsVm3zJw', desc:'L’arco di roccia e l’acqua bassa: una delle cartoline del Gargano.', th:['mare','natura','relax'], time:'mattina', prio:1},
@@ -1106,7 +1102,7 @@ const DAYS = [
    {name:'Cena di compleanno sul mare', gid:'ChIJ9UeQGhOxNxMRlsEsYM8aYVM', desc:'La serata speciale: Al Trabucco da Mimì (sul trabucco), Costamarina (terrazza sul porto) o Eden (piedi nella sabbia). Prenotate.', th:['cibo'], time:'sera', prio:1},
    {name:'Passeggiata nel borgo illuminato', q:'Peschici centro storico sera', desc:'Dopo cena, due passi tra i vicoli con le luci e il fresco della sera.', th:['relax','notte'], time:'sera', prio:3}
  ]},
- {date:'2026-07-18', leg:'peschici', chip:'Sab 18 lug', title:'Grotte in barca + Gargano', fixed:[], slots:[
+ {date:'2026-07-18', leg:'peschici', chip:'Sab 18 lug', title:'Grotte in barca + Gargano', icon:'boat', teaser:'Grotte in barca al mattino, Vieste nel pomeriggio.', fixed:[], slots:[
    {name:'Giro in barca tra le grotte marine', gid:'ChIJM970AaGxNxMRtuh75o2cd4Q', desc:'Con Motobarca Vittorio (~4h): grotte, archi e calette raggiungibili solo dal mare.', th:['avventura','mare','natura'], time:'mattina', prio:1},
    {name:'Bagno a Vignanotica dalla barca', gid:'ChIJgSMKtITANxMRdlwjPt2L6zE', desc:'Sosta-bagno sotto le falesie durante il giro: acqua trasparente e niente folla.', th:['mare','relax'], time:'mattina', prio:2},
    {name:'Gita alle Isole Tremiti', q:'Isole Tremiti traghetto Peschici', desc:'Per chi vuole un’avventura in più: traghetto e mare aperto. Occupa l’intera giornata.', th:['avventura','mare'], time:'mattina', prio:3},
@@ -1115,7 +1111,7 @@ const DAYS = [
    {name:'Vico del Gargano — il borgo dell’amore', q:'Vico del Gargano centro storico', desc:'Vicoli medievali tra gli aranceti, incluso il celebre “Vicolo del Bacio”.', th:['storia','relax'], time:'pomeriggio', prio:3},
    {name:'Cena di pesce al tramonto', q:'ristorante pesce Peschici', desc:'Aperitivo con vista e poi pesce fresco per chiudere la giornata in bellezza.', th:['cibo','relax'], time:'sera', prio:1}
  ]},
- {date:'2026-07-19', leg:'peschici', chip:'Dom 19 lug', title:'Rientro a casa', fixed:[
+ {date:'2026-07-19', leg:'peschici', chip:'Dom 19 lug', title:'Rientro a casa', icon:'home', teaser:'Ultimo bagno, ultimo caffè, si torna a casa.', fixed:[
    '<b>Mattina</b> — Check-out e rientro con calma verso Montesilvano / L’Aquila'
  ], slots:[
    {name:'Ultimo bagno al mare', q:'Spiaggia di Peschici', desc:'Un tuffo veloce prima di chiudere le valigie: il saluto al Gargano.', th:['mare','relax'], time:'mattina', prio:1},
@@ -1132,16 +1128,21 @@ const TIMEMETA = {
 };
 const STAR = '<path d="M12 2l2.4 5 5.6.8-4 3.9 1 5.6L12 20l-5 2.3 1-5.6-4-3.9 5.6-.8z"/>';
 const CLOCK = '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>';
+const DAYICONS = {
+  plane:'<path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-.9 1.7l5.3 3.2-2.5 2.5-2.4-.5a1 1 0 0 0-.9 1.7l3 2 2 3a1 1 0 0 0 1.7-.9l-.5-2.4 2.5-2.5 3.2 5.3a1 1 0 0 0 1.7-.9Z"/>',
+  city:'<path d="M3 21h18"/><path d="M6 21V8l6-3 6 3v13"/><path d="M10 21v-5h4v5"/>',
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+  car:'<path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/><path d="M4 11h16v5H4z"/><circle cx="7.5" cy="16.5" r="1.4"/><circle cx="16.5" cy="16.5" r="1.4"/>',
+  cake:'<path d="M12 2v4M9 6h6M4 22v-9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9z"/><path d="M4 17c1.2-1 2-1 3 0s1.8 1 3 0 2-1 3 0 1.8 1 3 0 2-1 3 0"/>',
+  boat:'<path d="M3 14h18l-2 5a2 2 0 0 1-1.8 1H6.8A2 2 0 0 1 5 19z"/><path d="M6 14V7l6-3 6 3v7"/>',
+  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>'
+};
 function paceThreshold(leg){ const p=prefs[leg].pace; return p==='relax'?1 : p==='intenso'?3 : 2; }
-function slotVisible(s, leg){
-  if(s.prio > paceThreshold(leg)) return false;
-  if(prefs[leg].interests.size===0) return true;
-  return s.th.some(t=>prefs[leg].interests.has(t));
-}
+function slotVisible(s, leg){ return s.prio <= paceThreshold(leg); }
 function ideaHref(s){ return s.gid ? G(s.gid,s.name) : s.q ? Q(s.q) : null; }
 function renderIdea(s){
   const href = ideaHref(s);
-  const tag  = `<span class="thtag th-${s.th[0]}">${THEMES[s.th[0]].short}</span>`;
+  const tag  = `<span class="thtag th-${s.th[0]}">${THEMES[s.th[0]]}</span>`;
   const name = `<span class="idea-name">${s.name}${href?(' '+EXT):''}</span>`;
   const inner= `<span class="idea-main">${name}${tag}</span><span class="idea-desc">${s.desc}</span>`;
   return href
@@ -1157,12 +1158,17 @@ function renderDays(){
     const vis=day.slots.filter(s=>slotVisible(s, day.leg));
     const custom=(STATE.activities&&STATE.activities[day.date])||[];
     if(day.leg==='belgrado') cBG+=vis.length; else cPE+=vis.length;
-    const art=document.createElement('article');
-    art.className='day'+(day.birthday?' birthday':'')+(day.date===TODAY?' today':'');
+    const det=document.createElement('details');
+    det.className='day'+(day.birthday?' birthday':'')+(day.date===TODAY?' today':'');
+    if(day.date===TODAY) det.open=true;
     let badges='';
     if(day.date===TODAY) badges+='<span class="badge-today">Oggi</span>';
     if(day.birthday)     badges+='<span class="badge-bday">🎂 Compleanno</span>';
-    const head=`<div class="day-hd"><div class="day-when"><span class="day-date">${day.chip}</span>${badges}</div><h3 class="day-title">${day.title}</h3></div>`;
+    const summary=`<summary>`+
+      `<span class="day-ic">${ico(DAYICONS[day.icon]||DAYICONS.city)}</span>`+
+      `<span class="day-sx"><span class="day-when"><span class="day-date">${day.chip}</span>${badges}</span>`+
+      `<span class="day-title">${day.title}</span><span class="day-teaser">${day.teaser||''}</span></span>`+
+      `<span class="chev">${ico('<polyline points="6 9 12 15 18 9"/>')}</span></summary>`;
     let sched='';
     if(day.fixed.length){
       sched=`<div class="block-lab">${ico(CLOCK)}In programma</div><ul class="sched">${day.fixed.map(f=>`<li>${f}</li>`).join('')}</ul>`;
@@ -1176,10 +1182,10 @@ function renderDays(){
         sg.map(renderIdea).join('') + cg.map(a=>renderCustom(day.date,a)).join('') + `</div>`;
     }).join('');
     let ideas=`<div class="block-lab">${ico(STAR)}Idee per voi <span class="cnt">${vis.length}</span></div>`;
-    ideas += groups ? groups : `<div class="day-empty">Nessuna idea con questi filtri. Tocca <b>Azzera</b>, alza il ritmo o aggiungi un’attività qui sotto.</div>`;
+    ideas += groups ? groups : `<div class="day-empty">Nessuna idea con questo ritmo. Alza il ritmo o aggiungi un’attività qui sotto.</div>`;
     ideas += `<button type="button" class="act-add" data-date="${day.date}">${ico(PLUS)}Aggiungi un’attività</button>`;
-    art.innerHTML=head+sched+ideas;
-    (day.leg==='belgrado'?tlBG:tlPE).appendChild(art);
+    det.innerHTML=summary+`<div class="day-body">${sched}${ideas}</div>`;
+    (day.leg==='belgrado'?tlBG:tlPE).appendChild(det);
   });
   document.querySelectorAll('[data-count="bg"]').forEach(e=>e.textContent=cBG);
   document.querySelectorAll('[data-count="pe"]').forEach(e=>e.textContent=cPE);
@@ -1187,25 +1193,20 @@ function renderDays(){
 function buildPrefBar(leg, id){
   const el=document.getElementById(id); if(!el) return;
   const which = leg==='belgrado'?'bg':'pe';
-  const chips = PREF_THEMES[leg].map(k=>`<button class="pref-chip" data-leg="${leg}" data-th="${k}">${ico(THEMES[k].icon)}${THEMES[k].label}</button>`).join('');
   const paces = ['relax','bilanciato','intenso'].map(p=>`<button class="pace-btn" data-leg="${leg}" data-pace="${p}">${PACELAB[p]}</button>`).join('');
   el.innerHTML =
-    `<div class="pref-row"><span class="pref-lab">Cosa ti va?</span><div class="pref-chips">${chips}</div></div>`+
     `<div class="pref-row"><span class="pref-lab">Che ritmo?</span><div class="pace">${paces}</div>`+
     `<button class="pref-reset" data-leg="${leg}">Azzera</button>`+
     `<span class="pref-count"><b data-count="${which}">0</b> idee per voi</span></div>`;
 }
 function syncPrefUI(leg){
-  document.querySelectorAll('.pref-chip[data-leg="'+leg+'"]').forEach(c=>c.classList.toggle('on', prefs[leg].interests.has(c.dataset.th)));
   document.querySelectorAll('.pace-btn[data-leg="'+leg+'"]').forEach(b=>b.classList.toggle('on', b.dataset.pace===prefs[leg].pace));
 }
 document.addEventListener('click',e=>{
-  const chip=e.target.closest('.pref-chip');
-  if(chip){ const leg=chip.dataset.leg, t=chip.dataset.th; prefs[leg].interests.has(t)?prefs[leg].interests.delete(t):prefs[leg].interests.add(t); savePrefs(leg); syncPrefUI(leg); renderDays(); return; }
   const pb=e.target.closest('.pace-btn');
   if(pb){ const leg=pb.dataset.leg; prefs[leg].pace=pb.dataset.pace; savePrefs(leg); syncPrefUI(leg); renderDays(); return; }
   const rs=e.target.closest('.pref-reset');
-  if(rs){ const leg=rs.dataset.leg; prefs[leg].interests.clear(); prefs[leg].pace='bilanciato'; savePrefs(leg); syncPrefUI(leg); renderDays(); return; }
+  if(rs){ const leg=rs.dataset.leg; prefs[leg].pace='bilanciato'; savePrefs(leg); syncPrefUI(leg); renderDays(); return; }
 });
 buildPrefBar('belgrado','prefs-bg');
 buildPrefBar('peschici','prefs-pe');
