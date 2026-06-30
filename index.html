@@ -187,14 +187,25 @@
   .tgroup:last-child{margin-bottom:0;}
   .tg-lab{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
   .tg-lab svg{width:14px; height:14px; color:var(--amber); flex:none;}
-  .idea{display:block; text-decoration:none; color:inherit; background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:11px 14px; margin-bottom:8px; transition:.16s;}
+  .idea{display:flex; gap:12px; align-items:stretch; text-decoration:none; color:inherit; background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:11px 14px; margin-bottom:8px; transition:.16s;}
   .idea:last-child{margin-bottom:0;}
   a.idea:hover{border-color:var(--pine-2); background:#fff;}
+  .idea-body{flex:1; min-width:0;}
   .idea-main{display:flex; align-items:center; justify-content:space-between; gap:10px;}
   .idea-name{font-weight:600; font-size:14.5px; display:inline-flex; align-items:center; gap:6px;}
   .idea-name .ext{flex:none;}
   .idea-desc{display:block; margin-top:4px; font-size:13px; color:var(--ink-soft); line-height:1.5;}
+  .idea .imgwrap{flex:none; width:62px; min-height:58px; border-radius:9px;}
   .day-empty{font-size:13.5px; color:var(--ink-soft); background:var(--paper-2); border:1px dashed var(--line); border-radius:12px; padding:13px 15px;}
+  /* activity images */
+  .imgwrap{position:relative; overflow:hidden; background:linear-gradient(135deg,var(--pine),var(--pine-2));}
+  .imgwrap.cat-food{background:linear-gradient(135deg,#C9722F,#D8913A);}
+  .imgwrap.cat-sea{background:linear-gradient(135deg,#15756B,#1E8C82);}
+  .imgwrap .ph{position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.42);}
+  .imgwrap .ph svg{width:32px; height:32px;}
+  .imgwrap img{position:relative; width:100%; height:100%; object-fit:cover; display:block;}
+  .imgwrap img:not([src]){visibility:hidden;}
+  .imgwrap img.imgfail{display:none;}
   .thtag{display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 8px; border-radius:6px; vertical-align:middle; flex:none;}
   .th-storia,.th-relax,.th-natura{background:var(--teal-wash); color:var(--pine);}
   .th-mare{background:#DCEAF0; color:#1C5E78;}
@@ -209,6 +220,9 @@
   .card .price{font-size:13px; color:var(--pine-2); font-weight:600; white-space:nowrap;}
   .card p{margin:6px 0 0; font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
   .subtle{font-size:14px; color:var(--ink-soft); margin:0 0 18px; max-width:680px;}
+  .card.hasimg{padding:0; overflow:hidden;}
+  .card.hasimg .imgwrap{height:152px;}
+  .card .card-body{padding:14px 18px 16px;}
 
   /* ---- map ---- */
   #map{height:440px; border-radius:16px; border:1px solid var(--line); box-shadow:var(--shadow); margin-top:6px; z-index:1;}
@@ -231,6 +245,9 @@
   /* ---- beach & parking info cards ---- */
   .beachgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(258px,1fr)); gap:14px;}
   .beachcard{display:block; text-decoration:none; color:inherit; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; transition:.2s;}
+  .beachcard.hasimg{padding:0; overflow:hidden;}
+  .beachcard.hasimg .imgwrap{height:140px;}
+  .beachcard .bc-body{padding:15px 18px 16px;}
   .beachcard:hover{transform:translateY(-2px); box-shadow:var(--shadow); border-color:var(--pine-2);}
   .bc-head{display:flex; align-items:center; justify-content:space-between; gap:8px;}
   .bc-head h4{font-family:"Inter",sans-serif; font-size:15.5px; font-weight:600; margin:0; display:inline-flex; align-items:center; gap:6px;}
@@ -840,15 +857,16 @@ function deleteActivity(date,id){
   if(STATE.activities&&STATE.activities[date]) STATE.activities[date]=STATE.activities[date].filter(a=>a.id!==id);
   saveLocal(); pushState(); renderAll();
 }
-function renderCustom(date, a){
+function renderCustom(date, a, leg){
   const href=a.url||'';
   const name = href
     ? `<a class="idea-name" href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(a.name)} ${EXT}</a>`
     : `<span class="idea-name">${escapeHtml(a.name)}</span>`;
   const note = a.note?`<span class="idea-desc">${escapeHtml(a.note)}</span>`:'';
-  return `<div class="idea custom"><div class="idea-main">${name}<span class="thtag added">Aggiunta</span></div>${note}`+
+  const img = imgHtml(a.raw || a.name, leg==='peschici'?'sea':'city', a.name);
+  return `<div class="idea custom">${img}<div class="idea-body"><div class="idea-main">${name}<span class="thtag added">Aggiunta</span></div>${note}`+
     `<div class="act-ctrl"><button type="button" class="act-edit" data-date="${escapeHtml(date)}" data-id="${escapeHtml(a.id)}" aria-label="Modifica">${ico(PENCIL)}</button>`+
-    `<button type="button" class="act-del" data-date="${escapeHtml(date)}" data-id="${escapeHtml(a.id)}" aria-label="Elimina">${ico(TRASH)}</button></div></div>`;
+    `<button type="button" class="act-del" data-date="${escapeHtml(date)}" data-id="${escapeHtml(a.id)}" aria-label="Elimina">${ico(TRASH)}</button></div></div></div>`;
 }
 function openActivityForm(date, act){
   const editing=!!act;
@@ -891,6 +909,65 @@ document.addEventListener('click',e=>{
   const dl=e.target.closest('.act-del'); if(dl){ deleteActivity(dl.dataset.date, dl.dataset.id); return; }
 });
 
+/* ---- activity images (foto reali da Wikipedia, lato client, con cache) ---- */
+let IMGC={}; try{ IMGC=JSON.parse(localStorage.getItem('img_cache')||'{}'); }catch(e){}
+function saveImgCache(){ try{ localStorage.setItem('img_cache', JSON.stringify(IMGC)); }catch(e){} }
+const CATIC={
+  city:'<path d="M3 21h18"/><path d="M6 21V8l6-3 6 3v13"/><path d="M10 21v-5h4v5"/>',
+  food:'<path d="M6 2v7a2 2 0 0 0 4 0V2"/><path d="M8 9v13"/><path d="M16 2c-1.4 0-2.4 1.9-2.4 4.5S14.6 11 16 11v11"/>',
+  sea:'<path d="M3 17q3 -3 6 0t6 0 6 0"/><path d="M3 12q3 -3 6 0t6 0 6 0"/><path d="M3 7q3 -3 6 0t6 0 6 0"/>'
+};
+const GENERIC=/(aperitivo|cena|colazione|pranzo|caffe|caffè|ristorant|trattoria|osteria|passeggiat|bagno|giro|gita|assaggio|tramonto|serata)/i;
+function imgPlaceholder(cat){ return `<div class="imgwrap cat-${cat}"><span class="ph">${ico(CATIC[cat]||CATIC.city)}</span></div>`; }
+function imgHtml(q, cat, alt){
+  // foto reali solo per luoghi veri; ristoranti e voci generiche → segnaposto a tema
+  if(cat==='food' || !q || GENERIC.test(q)) return imgPlaceholder(cat);
+  const src=IMGC[q];
+  const s=src ? ` src="${escapeHtml(src)}"` : '';
+  return `<div class="imgwrap cat-${cat}" data-q="${escapeHtml(q)}"><span class="ph">${ico(CATIC[cat]||CATIC.city)}</span>`+
+    `<img loading="lazy" alt="${escapeHtml(alt||'')}"${s} onerror="this.classList.add('imgfail')"></div>`;
+}
+function wikiThumb(query){
+  if(typeof fetch==='undefined') return Promise.resolve(null);
+  const hosts=['it.wikipedia.org','en.wikipedia.org'];
+  const tryHost=i=>{
+    if(i>=hosts.length) return Promise.resolve(null);
+    const u='https://'+hosts[i]+'/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch='+
+      encodeURIComponent(query)+'&gsrlimit=1&gsrnamespace=0&prop=pageimages&piprop=thumbnail&pithumbsize=800&redirects=1';
+    return fetch(u).then(r=>r.json()).then(j=>{
+      const pages=j&&j.query&&j.query.pages;
+      if(pages){ const p=Object.values(pages)[0]; if(p&&p.thumbnail&&p.thumbnail.source) return p.thumbnail.source; }
+      return tryHost(i+1);
+    }).catch(()=>tryHost(i+1));
+  };
+  return tryHost(0);
+}
+function applySrc(q,url){
+  document.querySelectorAll('.imgwrap[data-q]').forEach(w=>{
+    if(w.dataset.q===q){ const im=w.querySelector('img'); if(im && !im.getAttribute('src')) im.src=url; }
+  });
+}
+function hydrateImages(){
+  const els=document.querySelectorAll('.imgwrap[data-q]');
+  const need=[]; const seen={};
+  els.forEach(w=>{
+    const q=w.dataset.q, im=w.querySelector('img');
+    if(q in IMGC){ if(IMGC[q] && im && !im.getAttribute('src')) im.src=IMGC[q]; }
+    else if(!seen[q]){ seen[q]=1; need.push(q); }
+  });
+  if(!need.length || typeof fetch==='undefined') return;
+  let i=0, active=0, dirty=false;
+  const pump=()=>{
+    while(active<5 && i<need.length){
+      const q=need[i++]; active++;
+      wikiThumb(q).then(url=>{ IMGC[q]=url||''; dirty=true; if(url) applySrc(q,url); })
+        .catch(()=>{ IMGC[q]=''; dirty=true; })
+        .finally(()=>{ active--; if(i<need.length) pump(); else if(active===0 && dirty) saveImgCache(); });
+    }
+  };
+  pump();
+}
+
 /* ---- render everything that depends on shared state ---- */
 function renderAll(){
   renderCheckList(document.getElementById('checklist'),
@@ -903,6 +980,7 @@ function renderAll(){
   renderPacking('lui', document.getElementById('luilist'), document.getElementById('luifill'), document.getElementById('luicount'));
   renderPacking('com', document.getElementById('comlist'), document.getElementById('comfill'), document.getElementById('comcount'));
   if(typeof renderDays==='function') renderDays();
+  hydrateImages();
 }
 function setSyncState(state){
   const el=document.getElementById('syncpill'); if(!el) return;
@@ -1064,14 +1142,16 @@ function slotVisible(s, leg){
   return s.th.some(t=>prefs[leg].interests.has(t));
 }
 function ideaHref(s){ return s.gid ? G(s.gid,s.name) : s.q ? Q(s.q) : null; }
-function renderIdea(s){
+function ideaCat(s, leg){ return s.th && s.th.indexOf('cibo')>=0 ? 'food' : (leg==='peschici'?'sea':'city'); }
+function renderIdea(s, leg){
   const href = ideaHref(s);
   const tag  = `<span class="thtag th-${s.th[0]}">${THEMES[s.th[0]].short}</span>`;
   const name = `<span class="idea-name">${s.name}${href?(' '+EXT):''}</span>`;
-  const inner= `<span class="idea-main">${name}${tag}</span><span class="idea-desc">${s.desc}</span>`;
+  const img  = imgHtml(s.q || s.name, ideaCat(s,leg), s.name);
+  const body = `<div class="idea-body"><span class="idea-main">${name}${tag}</span><span class="idea-desc">${s.desc}</span></div>`;
   return href
-    ? `<a class="idea" href="${href}" target="_blank" rel="noopener">${inner}</a>`
-    : `<div class="idea">${inner}</div>`;
+    ? `<a class="idea" href="${href}" target="_blank" rel="noopener">${img}${body}</a>`
+    : `<div class="idea">${img}${body}</div>`;
 }
 const tlBG=document.getElementById('timeline-bg');
 const tlPE=document.getElementById('timeline-pe');
@@ -1098,7 +1178,7 @@ function renderDays(){
       const cg=custom.filter(a=>(a.time||'mattina')===k);
       if(!sg.length && !cg.length) return '';
       return `<div class="tgroup"><span class="tg-lab">${ico(TIMEMETA[k].ic)}${TIMEMETA[k].lab}</span>`+
-        sg.map(renderIdea).join('') + cg.map(a=>renderCustom(day.date,a)).join('') + `</div>`;
+        sg.map(s=>renderIdea(s,day.leg)).join('') + cg.map(a=>renderCustom(day.date,a,day.leg)).join('') + `</div>`;
     }).join('');
     let ideas=`<div class="block-lab">${ico(STAR)}Idee per voi <span class="cnt">${vis.length}</span></div>`;
     ideas += groups ? groups : `<div class="day-empty">Nessuna idea con questi filtri. Tocca <b>Azzera</b>, alza il ritmo o aggiungi un’attività qui sotto.</div>`;
@@ -1187,15 +1267,15 @@ const EAT = [
 SEE.forEach(s=>{
   const host=document.getElementById('see');
   const href = s[2]==='gid'?G(s[3],s[0]):Q(s[3]);
-  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
-  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[1]}</p>`; host.appendChild(c);
+  const c=document.createElement('a'); c.className='card hasimg'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=imgHtml(s[0],'city',s[0])+`<div class="card-body"><h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[1]}</p></div>`; host.appendChild(c);
 });
 // EAT: [name, price, desc, type, key]
 EAT.forEach(s=>{
   const host=document.getElementById('eat');
   const href = s[3]==='gid'?G(s[4],s[0]):Q(s[4]);
-  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
-  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p>`; host.appendChild(c);
+  const c=document.createElement('a'); c.className='card hasimg'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=imgHtml(s[0],'food',s[0])+`<div class="card-body"><h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p></div>`; host.appendChild(c);
 });
 
 /* ---------- Belgrade tips (accordion) ---------- */
@@ -1303,14 +1383,14 @@ const PE_EAT = [
 PE_SEE.forEach(s=>{
   const host=document.getElementById('pe-see');
   const href=s[2]==='gid'?G(s[3],s[0]):Q(s[3]);
-  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
-  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[1]}</p>`; host.appendChild(c);
+  const c=document.createElement('a'); c.className='card hasimg'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=imgHtml(s[0],'sea',s[0])+`<div class="card-body"><h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[1]}</p></div>`; host.appendChild(c);
 });
 PE_EAT.forEach(s=>{
   const host=document.getElementById('pe-eat');
   const href=s[3]==='gid'?G(s[4],s[0]):Q(s[4]);
-  const c=document.createElement('a'); c.className='card'; c.href=href; c.target='_blank'; c.rel='noopener';
-  c.innerHTML=`<h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p>`; host.appendChild(c);
+  const c=document.createElement('a'); c.className='card hasimg'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=imgHtml(s[0],'food',s[0])+`<div class="card-body"><h3><span class="nm">${s[0]} ${EXT}</span><span class="price">${s[1]}</span></h3><p>${s[2]}</p></div>`; host.appendChild(c);
 });
 
 /* ---------- birthday dinners ---------- */
@@ -1320,8 +1400,8 @@ const BDAY = [
   ["Eden","Piedi nella sabbia","Frutti di mare sulla spiaggia di Peschici, atmosfera scalza al tramonto.","ChIJ8U2GD6KxNxMReE1zzbOGVgM"]
 ];
 const bdayEl = document.getElementById('bday');
-BDAY.forEach(s=>{ const c=document.createElement('a'); c.className='card'; c.href=G(s[3],s[0]); c.target='_blank'; c.rel='noopener';
-  c.innerHTML = `<span class="ltag">${s[1]}</span><h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[2]}</p>`; bdayEl.appendChild(c); });
+BDAY.forEach(s=>{ const c=document.createElement('a'); c.className='card hasimg'; c.href=G(s[3],s[0]); c.target='_blank'; c.rel='noopener';
+  c.innerHTML = imgHtml(s[0],'food',s[0])+`<div class="card-body"><span class="ltag">${s[1]}</span><h3><span class="nm">${s[0]} ${EXT}</span></h3><p>${s[2]}</p></div>`; bdayEl.appendChild(c); });
 
 /* ---------- parking ---------- */
 const PARKING = [
@@ -1371,10 +1451,10 @@ const beachEl = document.getElementById('beaches');
 BEACHES.forEach(b=>{
   const href = b.gid ? G(b.gid,b.n) : Q(b.q);
   const li=(icon,txt)=>`<li>${ico(icon)}<span>${txt}</span></li>`;
-  const c=document.createElement('a'); c.className='beachcard'; c.href=href; c.target='_blank'; c.rel='noopener';
-  c.innerHTML=`<div class="bc-head"><h4>${b.n} ${EXT}</h4><span class="bc-badge ${b.cls}">${b.t}</span></div>`+
+  const c=document.createElement('a'); c.className='beachcard hasimg'; c.href=href; c.target='_blank'; c.rel='noopener';
+  c.innerHTML=imgHtml(b.q||b.n,'sea',b.n)+`<div class="bc-body"><div class="bc-head"><h4>${b.n} ${EXT}</h4><span class="bc-badge ${b.cls}">${b.t}</span></div>`+
     `<ul class="bc-facts">${li(BIC.car,b.dist)}${li(BIC.wave,b.fond)}${li(BIC.umb,b.cost)}${li(BIC.park,b.park)}</ul>`+
-    `<p class="bc-note">${b.note}</p>`;
+    `<p class="bc-note">${b.note}</p></div>`;
   beachEl.appendChild(c);
 });
 
@@ -1540,6 +1620,7 @@ vbtns.forEach(b=>b.addEventListener('click',()=>showView(b.dataset.v)));
 
 /* boot the shared store (Firebase if configured, else local) */
 storeInit();
+hydrateImages();
 </script>
 </body>
 </html>
