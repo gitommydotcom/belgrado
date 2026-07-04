@@ -230,7 +230,8 @@
   .card .card-body{padding:14px 18px 16px;}
 
   /* ---- map ---- */
-  #map{height:440px; border-radius:16px; border:1px solid var(--line); box-shadow:var(--shadow); margin-top:6px; z-index:1;}
+  .map-embed{height:440px; border-radius:16px; border:1px solid var(--line); box-shadow:var(--shadow); margin-top:6px; overflow:hidden;}
+  .map-embed iframe{width:100%; height:100%; display:block; border:0;}
   .legend{display:flex; flex-wrap:wrap; gap:14px 20px; margin-top:14px; font-size:13px; color:var(--ink-soft);}
   .legend span{display:inline-flex; align-items:center; gap:7px;}
   .dot{width:12px; height:12px; border-radius:50%; flex:none;}
@@ -402,7 +403,7 @@
     .ep .code{font-size:40px;} .sign .code{font-size:36px;}
     .ticket-bottom{padding:18px;}
     .sec-head{flex-wrap:wrap;} .sec-head .sub{margin-left:0; text-align:left; max-width:none;}
-    #map{height:360px;}
+    .map-embed{height:360px;}
     .packing{grid-template-columns:1fr;}
     .pref-lab{min-width:auto; width:100%;}
     .pref-count{margin-left:0; width:100%;}
@@ -538,12 +539,7 @@
 
 <section id="mappa"><div class="wrap">
   <div class="sec-head"><span class="sec-num">04</span><h2>La mappa</h2><span class="sub">Tocca i punti per i dettagli. Funziona anche da telefono.</span></div>
-  <div id="map"></div>
-  <div class="legend">
-    <span><span class="dot" style="background:#BC4F36"></span>Casa base</span>
-    <span><span class="dot" style="background:#0E4A43"></span>Da vedere</span>
-    <span><span class="dot" style="background:#D8913A"></span>Dove mangiare</span>
-  </div>
+  <div class="map-embed"><iframe src="https://www.google.com/maps/d/u/0/embed?mid=1QTMPjc4511z2DkJiw4LnxMeROyaoUBM&ehbc=2E312F&noprof=1" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mappa di Belgrado"></iframe></div>
 </div></section>
 
 </div><!-- /view-belgrado -->
@@ -1544,29 +1540,6 @@ const COM = [
 ];
 const PACK_SEED = {lei:LEI, lui:LUI, com:COM};
 
-/* ---------- Belgrade map ---------- */
-const PINS = [
-  [44.8186,20.4566,"#BC4F36","Il vostro appartamento","Pajsijeva 4, Stari Grad. Centralissimo, a piedi da tutto."],
-  [44.8241,20.4502,"#0E4A43","Fortezza di Kalemegdan","Andateci al tramonto del 13. Sava + Danubio, ingresso libero."],
-  [44.7981,20.4690,"#0E4A43","Tempio di San Sava","Mosaici dorati. Aperto 8–20, gratis. Mattina del 14."],
-  [44.8179,20.4644,"#0E4A43","Skadarlija","Vicolo bohémien con taverne: cena della prima sera."],
-  [44.8167,20.4577,"#0E4A43","Knez Mihailova","Via pedonale e Trg Republike, cuore del passeggio."],
-  [44.8097,20.4491,"#0E4A43","Sava Promenade","Passeggiata sul fiume e locali galleggianti."],
-  [44.7866,20.4067,"#0E4A43","Ada Ciganlija","Isola-spiaggia sul lago: bagno e ombra nelle ore calde."],
-  [44.8439,20.4128,"#0E4A43","Zemun & Torre Gardoš","Borgo sul Danubio con torre panoramica e taverne."],
-  [44.8202,20.4049,"#0E4A43","Genex Tower (brutalista)","Porta Ovest, 1979. Icona jugoslava a Novi Beograd."],
-  [44.7880,20.4520,"#0E4A43","Museo della Jugoslavia","Storia del ’900 e mausoleo di Tito (Casa dei Fiori)."],
-  [44.8157,20.4579,"#D8913A","Restoran Mihailo","Cucina serba tradizionale, centralissimo."],
-  [44.8195,20.4535,"#D8913A","Konoba Akustik","Piatti balcanici e vini locali, accogliente."],
-  [44.8128,20.4699,"#D8913A","Mežestoran Dvorište","Mediterraneo Michelin. Ottimo per la cena speciale. Chiuso lunedì."]
-];
-const map = L.map('map',{scrollWheelZoom:false}).setView([44.816,20.459],13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(map);
-const gBG=[];
-PINS.forEach(p=>{ gBG.push(L.circleMarker([p[0],p[1]],{radius:9,color:'#fff',weight:2,fillColor:p[2],fillOpacity:1}).addTo(map).bindPopup(`<b>${p[3]}</b><br>${p[4]}`)); });
-const boundsBG = L.featureGroup(gBG).getBounds().pad(0.18);
-map.fitBounds(boundsBG);
-
 /* ---------- Gargano map ---------- */
 const PINS2 = [
   [41.9498,16.0112,"#0E4A43","Borgo di Peschici","Vicoli bianchi a picco sul mare e castello normanno."],
@@ -1607,8 +1580,7 @@ function showView(v){
   Object.keys(views).forEach(k=>{ views[k].classList.toggle('is-hidden', k!==v); heroes[k].classList.toggle('is-hidden', k!==v); });
   vbtns.forEach(b=>b.classList.toggle('active', b.dataset.v===v));
   setTimeout(()=>{
-    if(v==='belgrado'){ map.invalidateSize(); map.fitBounds(boundsBG); }
-    else if(v==='peschici'){ map2.invalidateSize(); map2.fitBounds(boundsPE); }
+    if(v==='peschici'){ map2.invalidateSize(); map2.fitBounds(boundsPE); }
   },70);
   window.scrollTo({top:0, behavior:'smooth'});
 }
